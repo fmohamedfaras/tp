@@ -50,7 +50,7 @@ public class ItemList {
 	 * @param index Zero-based index of the item.
 	 * @return The task at that item.
 	 */
-	public Item getIask(int index) {
+	public Item getItem(int index) {
 		return items.get(index);
 	}
 	
