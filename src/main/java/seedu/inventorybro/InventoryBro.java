@@ -22,10 +22,11 @@ public class InventoryBro {
             switch (ch) {
             case '\r':
                 break;
+            case -1: // EOF
             case '\n': {
                 System.out.println("Command received: " + currentCommand);
                 currentCommand = new String();
-                break;
+                return;
             }
             default: {
                 currentCommand += (char) ch;
