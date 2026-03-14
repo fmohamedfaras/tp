@@ -2,13 +2,8 @@ package seedu.inventorybro;
 
 public class Parser {
     public static void parse(String line, ItemList items) {
-        if (line.equalsIgnoreCase("list")) {
-            parseList(items);
-            return;
-        }
-
-        if (line.toLowerCase().startsWith("transact")) {
-            transact(line, items);
+        if (line.toLowerCase().startsWith("add")) {
+            parseAdd(line, items);
             return;
         }
 
@@ -17,14 +12,29 @@ public class Parser {
             return;
         }
 
-        if (line.toLowerCase().startsWith("add")) {
-            parseAdd(line, items);
+        if (line.toLowerCase().startsWith("edit")) {
+            parseEdit(line, items);
             return;
         }
+
+        if (line.toLowerCase().startsWith("transact")) {
+            transact(line, items);
+            return;
+        }
+
+        if (line.equalsIgnoreCase("list")) {
+            parseList(items);
+            return;
+        }
+
+        if (line.toLowerCase().startsWith("exit")) {
+            exit();
+            return;
+        }
+
         System.out.println("Invalid command, please try add, delete, edit, transact, list, exit");
 
     }
-
 
     private static void transact(String text, ItemList items) {
         try {
@@ -104,6 +114,12 @@ public class Parser {
     }
 
     private static void parseAdd(String text, ItemList items) {
+    }
+
+    private static void parseEdit(String text, ItemList items) {
+    }
+
+    private static void exit() {
     }
 }
 
