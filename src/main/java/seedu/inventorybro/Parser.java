@@ -1,5 +1,8 @@
 package seedu.inventorybro;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Parser {
     public static void parse(String line, ItemList items) {
         if (line.toLowerCase().startsWith("add")) {
@@ -119,7 +122,17 @@ public class Parser {
     private static void parseDelete(String text, ItemList items) {
     }
 
-    private static void parseAdd(String text, ItemList items) {
+    static void parseAdd(String text, ItemList items) {
+        Pattern pattern = Pattern.compile("^addItem d/(.*?) q/(\\d+)$");
+        Matcher matcher = pattern.matcher(text);
+        if (!matcher.matches()) {
+            throw new IllegalArgumentException(
+                "Invalid addItem format! Use: addItem d/NAME q/INITIAL_QUANTITY"
+            );
+        }
+        String name = matcher.group(1);
+        int quantity = Integer.parseInt(matcher.group(2));
+        items.addItem(new Item(name, quantity));
     }
 
     private static void parseEdit(String text, ItemList items) {
