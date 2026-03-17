@@ -2,6 +2,7 @@ package seedu.inventorybro;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import org.junit.jupiter.api.Test;
 
@@ -120,6 +121,80 @@ class ParserTest {
 
         assertEquals(50, items.getItem(0).getQuantity());
     }
+  
+    @Test
+    void parseEdit_validInput_updatesItemCorrectly() {
+        ItemList items = new ItemList();
+        items.addItem(new Item("Apple", 10));
+
+        Parser.parse("edit 1 d/Orange q/20", items);
+
+        assertEquals("Orange", items.getItem(0).getDescription());
+        assertEquals(20, items.getItem(0).getQuantity());
+    }
+
+    @Test
+    void parseEdit_secondItem_updatesCorrectly() {
+        ItemList items = new ItemList();
+        items.addItem(new Item("Apple", 10));
+        items.addItem(new Item("Banana", 5));
+
+        Parser.parse("edit 2 d/Mango q/7", items);
+
+        assertEquals("Mango", items.getItem(1).getDescription());
+        assertEquals(7, items.getItem(1).getQuantity());
+    }
+
+    @Test
+    void parseEdit_indexOutOfBounds_doesNotCrash() {
+        ItemList items = new ItemList();
+        items.addItem(new Item("Apple", 10));
+
+        // Should print error, not throw
+        assertDoesNotThrow(() -> Parser.parse("edit 99 d/Ghost q/0", items));
+    }
+
+    @Test
+    void parseEdit_zeroIndex_doesNotCrash() {
+        ItemList items = new ItemList();
+        items.addItem(new Item("Apple", 10));
+
+        assertDoesNotThrow(() -> Parser.parse("edit 0 d/Apple q/5", items));
+    }
+
+    @Test
+    void parseEdit_nonNumericIndex_doesNotCrash() {
+        ItemList items = new ItemList();
+        items.addItem(new Item("Apple", 10));
+
+        assertDoesNotThrow(() -> Parser.parse("edit abc d/Apple q/5", items));
+    }
+
+    @Test
+    void parseEdit_nonNumericQuantity_doesNotCrash() {
+        ItemList items = new ItemList();
+        items.addItem(new Item("Apple", 10));
+
+        assertDoesNotThrow(() -> Parser.parse("edit 1 d/Apple q/abc", items));
+    }
+
+    @Test
+    void parseEdit_doesNotAffectOtherItems() {
+        ItemList items = new ItemList();
+        items.addItem(new Item("Apple", 10));
+        items.addItem(new Item("Banana", 5));
+
+        Parser.parse("edit 1 d/Orange q/99", items);
+
+        // Item 2 harus tetap sama
+        assertEquals("Banana", items.getItem(1).getDescription());
+        assertEquals(5, items.getItem(1).getQuantity());
+    }
+
+    @Test
+    void exit_validCommand_callsSystemExit() {
+        assertThrows(Exception.class, () -> Parser.parse("exit", new ItemList()));
+    }
 
     @Test
     void parseDelete_validIndex_itemRemoved() {
@@ -169,5 +244,4 @@ class ParserTest {
         );
         assertEquals(1, items.size());
     }
-
 }

@@ -11,6 +11,7 @@ public class InventoryBro {
         System.out.println("InventoryBRO");
         System.out.println("How can I help you today, bro?");
         String currentCommand = new String();
+        ItemList items = new ItemList();
         while (true) {
             int ch;
             try {
@@ -24,6 +25,7 @@ public class InventoryBro {
                 break;
             case -1: // EOF
             case '\n': {
+                Parser.parse(currentCommand, items);
                 System.out.println("Command received: " + currentCommand);
                 currentCommand = new String();
                 return;
