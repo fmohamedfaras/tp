@@ -56,7 +56,7 @@ public class TransactCommand implements Command {
             item.setQuantity(newQuantity);
             ui.showMessage("Transaction recorded.\n" + item.getDescription() + " new quantity: " + newQuantity);
         } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
         }
     }
 

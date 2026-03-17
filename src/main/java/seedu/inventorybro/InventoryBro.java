@@ -1,7 +1,5 @@
 package seedu.inventorybro;
 
-import java.util.NoSuchElementException;
-
 public class InventoryBro {
     private Ui ui;
     private ItemList items;
@@ -15,13 +13,8 @@ public class InventoryBro {
         ui.showWelcome();
 
         while (true) {
-            String fullCommand = "";
 
-            try {
-                fullCommand = ui.readCommand();
-            } catch (NoSuchElementException e) {
-                ui.showError("No line found");
-            }
+            String fullCommand = ui.readCommand();
 
             if (fullCommand.isEmpty()) {
                 continue;

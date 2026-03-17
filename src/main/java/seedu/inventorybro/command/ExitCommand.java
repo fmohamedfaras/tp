@@ -3,7 +3,6 @@ package seedu.inventorybro.command;
 import seedu.inventorybro.ItemList;
 import seedu.inventorybro.Ui;
 
-
 /**
  * Terminates the application.
  */
