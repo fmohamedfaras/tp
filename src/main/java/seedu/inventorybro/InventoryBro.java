@@ -13,6 +13,7 @@ public class InventoryBro {
         ui.showWelcome();
 
         while (true) {
+
             String fullCommand = ui.readCommand();
 
             if (fullCommand.isEmpty()) {

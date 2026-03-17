@@ -22,7 +22,10 @@ public class Ui {
 
     public String readCommand() {
         System.out.print("> ");
-        return in.nextLine().trim();
+        while (in.hasNextLine()) {
+            return in.nextLine().trim();
+        }
+        return "";
     }
 
     public void showMessage(String message) {
@@ -30,6 +33,6 @@ public class Ui {
     }
 
     public void showError(String message) {
-        System.out.println("ERROR: " + message);
+        System.out.println("ERROR - " + message);
     }
 }

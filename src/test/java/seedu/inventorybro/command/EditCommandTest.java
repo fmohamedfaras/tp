@@ -1,7 +1,7 @@
 package seedu.inventorybro.command;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -44,47 +44,71 @@ class EditCommandTest {
     }
 
     /**
-     * Verifies that an out-of-bounds index is handled without throwing.
+     * Verifies that an out-of-bounds index is rejected without changing the list.
      */
     @Test
-    void execute_indexOutOfBounds_doesNotCrash() {
+    void execute_indexOutOfBounds_throwsException() {
         ItemList items = new ItemList();
         items.addItem(new Item("Apple", 10));
 
-        assertDoesNotThrow(() -> new EditCommand("edit 99 d/Ghost q/0").execute(items, ui));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new EditCommand("edit 99 d/Ghost q/0").execute(items, ui)
+        );
+
+        assertEquals("Apple", items.getItem(0).getDescription());
+        assertEquals(10, items.getItem(0).getQuantity());
     }
 
     /**
-     * Verifies that zero as an index is handled without throwing.
+     * Verifies that zero as an index is rejected without changing the list.
      */
     @Test
-    void execute_zeroIndex_doesNotCrash() {
+    void execute_zeroIndex_throwsException() {
         ItemList items = new ItemList();
         items.addItem(new Item("Apple", 10));
 
-        assertDoesNotThrow(() -> new EditCommand("edit 0 d/Apple q/5").execute(items, ui));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new EditCommand("edit 0 d/Apple q/5").execute(items, ui)
+        );
+
+        assertEquals("Apple", items.getItem(0).getDescription());
+        assertEquals(10, items.getItem(0).getQuantity());
     }
 
     /**
-     * Verifies that a non-numeric index is handled without throwing.
+     * Verifies that a non-numeric index is rejected without changing the list.
      */
     @Test
-    void execute_nonNumericIndex_doesNotCrash() {
+    void execute_nonNumericIndex_throwsException() {
         ItemList items = new ItemList();
         items.addItem(new Item("Apple", 10));
 
-        assertDoesNotThrow(() -> new EditCommand("edit abc d/Apple q/5").execute(items, ui));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new EditCommand("edit abc d/Apple q/5").execute(items, ui)
+        );
+
+        assertEquals("Apple", items.getItem(0).getDescription());
+        assertEquals(10, items.getItem(0).getQuantity());
     }
 
     /**
-     * Verifies that a non-numeric quantity is handled without throwing.
+     * Verifies that a non-numeric quantity is rejected without changing the list.
      */
     @Test
-    void execute_nonNumericQuantity_doesNotCrash() {
+    void execute_nonNumericQuantity_throwsException() {
         ItemList items = new ItemList();
         items.addItem(new Item("Apple", 10));
 
-        assertDoesNotThrow(() -> new EditCommand("edit 1 d/Apple q/abc").execute(items, ui));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new EditCommand("edit 1 d/Apple q/abc").execute(items, ui)
+        );
+
+        assertEquals("Apple", items.getItem(0).getDescription());
+        assertEquals(10, items.getItem(0).getQuantity());
     }
 
     /**

@@ -1,1 +1,23 @@
-hi
+add
+addItem
+addItem d/apples q/233
+addItem d/oranges q/42
+addItem d/mangoes q/53
+addItem d/bananas q/65
+list
+delete
+deleteItem 0
+deleteItem 23
+deleteItem s
+deleteItem 3
+edit
+edit 90 d/newName q/newQ
+edit 2 d/newName q/newQ
+edit 2 d/newName q/39
+transact
+transact t q/80
+transact 1 q/50
+transact 2 q/-40
+transact 2 q/-39
+invalidCommand
+exit

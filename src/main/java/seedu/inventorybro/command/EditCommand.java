@@ -4,7 +4,6 @@ import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
 import seedu.inventorybro.Ui;
 
-
 /**
  * Updates an existing item's description and quantity.
  */
@@ -50,9 +49,9 @@ public class EditCommand implements Command {
 
             ui.showMessage("Item updated: " + item);
         } catch (NumberFormatException e) {
-            System.out.println("Index and quantity must be numbers.");
+            throw new IllegalArgumentException("Index and quantity must be numbers.");
         } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
         }
     }
 }
