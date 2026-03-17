@@ -3,13 +3,26 @@ package seedu.inventorybro.command;
 import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
 
+/**
+ * Adjusts an item's quantity by a signed transaction amount.
+ */
 public class TransactCommand implements Command {
     private final String input;
 
+    /**
+     * Creates a transact command from the raw user input.
+     *
+     * @param input The full transact command string.
+     */
     public TransactCommand(String input) {
         this.input = input;
     }
 
+    /**
+     * Parses the transact command input and updates the targeted item's quantity.
+     *
+     * @param items The inventory item list to update.
+     */
     @Override
     public void execute(ItemList items) {
         try {
@@ -47,6 +60,11 @@ public class TransactCommand implements Command {
         }
     }
 
+    /**
+     * Ensures that the provided string contains only digit characters.
+     *
+     * @param digits The string to validate.
+     */
     private void checkIfDigit(String digits) {
         for (char digit : digits.toCharArray()) {
             if (!Character.isDigit(digit)) {
@@ -55,6 +73,11 @@ public class TransactCommand implements Command {
         }
     }
 
+    /**
+     * Ensures that the provided string is either a positive integer or a negative integer.
+     *
+     * @param digits The signed numeric string to validate.
+     */
     private void checkIfSignedDigit(String digits) {
         if (digits.isEmpty()) {
             throw new IllegalArgumentException("Invalid transact. Quantity cannot be empty.");

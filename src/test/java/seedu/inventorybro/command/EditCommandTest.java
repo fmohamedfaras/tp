@@ -8,8 +8,14 @@ import org.junit.jupiter.api.Test;
 import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
 
+/**
+ * Tests for {@link EditCommand}.
+ */
 class EditCommandTest {
 
+    /**
+     * Verifies that a valid edit command updates the targeted item.
+     */
     @Test
     void execute_validInput_updatesItemCorrectly() {
         ItemList items = new ItemList();
@@ -21,6 +27,9 @@ class EditCommandTest {
         assertEquals(20, items.getItem(0).getQuantity());
     }
 
+    /**
+     * Verifies that editing works correctly for a later item in the list.
+     */
     @Test
     void execute_secondItem_updatesCorrectly() {
         ItemList items = new ItemList();
@@ -33,6 +42,9 @@ class EditCommandTest {
         assertEquals(7, items.getItem(1).getQuantity());
     }
 
+    /**
+     * Verifies that an out-of-bounds index is handled without throwing.
+     */
     @Test
     void execute_indexOutOfBounds_doesNotCrash() {
         ItemList items = new ItemList();
@@ -41,6 +53,9 @@ class EditCommandTest {
         assertDoesNotThrow(() -> new EditCommand("edit 99 d/Ghost q/0").execute(items));
     }
 
+    /**
+     * Verifies that zero as an index is handled without throwing.
+     */
     @Test
     void execute_zeroIndex_doesNotCrash() {
         ItemList items = new ItemList();
@@ -49,6 +64,9 @@ class EditCommandTest {
         assertDoesNotThrow(() -> new EditCommand("edit 0 d/Apple q/5").execute(items));
     }
 
+    /**
+     * Verifies that a non-numeric index is handled without throwing.
+     */
     @Test
     void execute_nonNumericIndex_doesNotCrash() {
         ItemList items = new ItemList();
@@ -57,6 +75,9 @@ class EditCommandTest {
         assertDoesNotThrow(() -> new EditCommand("edit abc d/Apple q/5").execute(items));
     }
 
+    /**
+     * Verifies that a non-numeric quantity is handled without throwing.
+     */
     @Test
     void execute_nonNumericQuantity_doesNotCrash() {
         ItemList items = new ItemList();
@@ -65,6 +86,9 @@ class EditCommandTest {
         assertDoesNotThrow(() -> new EditCommand("edit 1 d/Apple q/abc").execute(items));
     }
 
+    /**
+     * Verifies that editing one item does not modify the others.
+     */
     @Test
     void execute_doesNotAffectOtherItems() {
         ItemList items = new ItemList();

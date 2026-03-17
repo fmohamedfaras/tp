@@ -8,8 +8,14 @@ import org.junit.jupiter.api.Test;
 import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
 
+/**
+ * Tests for {@link AddCommand}.
+ */
 class AddCommandTest {
 
+    /**
+     * Verifies that a valid add command creates a new item with the expected values.
+     */
     @Test
     void execute_validCommand_itemAdded() {
         ItemList items = new ItemList();
@@ -22,6 +28,9 @@ class AddCommandTest {
         assertEquals(10, item.getQuantity());
     }
 
+    /**
+     * Verifies that an item description may contain multiple words.
+     */
     @Test
     void execute_multiWordName() {
         ItemList items = new ItemList();
@@ -34,6 +43,9 @@ class AddCommandTest {
         assertEquals(25, item.getQuantity());
     }
 
+    /**
+     * Verifies that malformed add input is rejected.
+     */
     @Test
     void execute_invalidFormat_throwsException() {
         ItemList items = new ItemList();

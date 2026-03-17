@@ -3,13 +3,26 @@ package seedu.inventorybro.command;
 import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
 
+/**
+ * Updates an existing item's description and quantity.
+ */
 public class EditCommand implements Command {
     private final String input;
 
+    /**
+     * Creates an edit command from the raw user input.
+     *
+     * @param input The full edit command string.
+     */
     public EditCommand(String input) {
         this.input = input;
     }
 
+    /**
+     * Parses the edit command input and updates the targeted item.
+     *
+     * @param items The inventory item list to update.
+     */
     @Override
     public void execute(ItemList items) {
         try {
