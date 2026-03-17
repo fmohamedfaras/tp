@@ -2,6 +2,7 @@ package seedu.inventorybro.command;
 
 import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
+import seedu.inventorybro.Ui;
 
 /**
  * Removes an item from the inventory using a one-based index.
@@ -24,7 +25,7 @@ public class DeleteCommand implements Command {
      * @param items The inventory item list to update.
      */
     @Override
-    public void execute(ItemList items) {
+    public void execute(ItemList items, Ui ui) {
         String[] words = input.split(" ");
 
         if (words.length != 2 || !words[0].equalsIgnoreCase("deleteItem")) {
@@ -40,9 +41,9 @@ public class DeleteCommand implements Command {
 
             Item removedItem = items.deleteItem(index);
 
-            System.out.println("Noted, BRO. I've removed this item:");
-            System.out.println("  " + removedItem);
-            System.out.println("Now you have " + items.size() + " items in the list.");
+            ui.showMessage("Noted, BRO. I've removed this item:\n  " + removedItem +
+                    "\nNow you have " + items.size() + " items in the list.");
+
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("The index must be a number! Use: deleteItem INDEX");
         }

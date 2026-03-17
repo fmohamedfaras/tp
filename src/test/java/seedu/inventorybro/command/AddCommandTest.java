@@ -7,12 +7,14 @@ import org.junit.jupiter.api.Test;
 
 import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
+import seedu.inventorybro.Ui;
 
 /**
  * Tests for {@link AddCommand}.
  */
 class AddCommandTest {
 
+    private final Ui ui = new Ui();
     /**
      * Verifies that a valid add command creates a new item with the expected values.
      */
@@ -20,7 +22,7 @@ class AddCommandTest {
     void execute_validCommand_itemAdded() {
         ItemList items = new ItemList();
 
-        new AddCommand("addItem d/Apple q/10").execute(items);
+        new AddCommand("addItem d/Apple q/10").execute(items, ui);
 
         Item item = items.getItems().get(0);
 
@@ -35,7 +37,7 @@ class AddCommandTest {
     void execute_multiWordName() {
         ItemList items = new ItemList();
 
-        new AddCommand("addItem d/Green Apple q/25").execute(items);
+        new AddCommand("addItem d/Green Apple q/25").execute(items, ui);
 
         Item item = items.getItems().get(0);
 
@@ -52,7 +54,7 @@ class AddCommandTest {
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new AddCommand("addItem Apple 10").execute(items)
+                () -> new AddCommand("addItem Apple 10").execute(items, ui)
         );
     }
 }

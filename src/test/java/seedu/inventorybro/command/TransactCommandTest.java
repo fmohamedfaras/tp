@@ -6,12 +6,13 @@ import org.junit.jupiter.api.Test;
 
 import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
+import seedu.inventorybro.Ui;
 
 /**
  * Tests for {@link TransactCommand}.
  */
 class TransactCommandTest {
-
+    private final Ui ui = new Ui();
     /**
      * Verifies that a valid negative quantity transaction decreases stock.
      */
@@ -20,7 +21,7 @@ class TransactCommandTest {
         ItemList items = new ItemList();
         items.addItem(new Item("Coke Can", 50));
 
-        new TransactCommand("transact 1 q/-5").execute(items);
+        new TransactCommand("transact 1 q/-5").execute(items, ui);
 
         assertEquals(45, items.getItem(0).getQuantity());
     }
@@ -33,7 +34,7 @@ class TransactCommandTest {
         ItemList items = new ItemList();
         items.addItem(new Item("Sprite Bottle", 30));
 
-        new TransactCommand("transact 1 q/10").execute(items);
+        new TransactCommand("transact 1 q/10").execute(items, ui);
 
         assertEquals(40, items.getItem(0).getQuantity());
     }
@@ -46,7 +47,7 @@ class TransactCommandTest {
         ItemList items = new ItemList();
         items.addItem(new Item("Coke Can", 50));
 
-        new TransactCommand("transact 1 q/-50").execute(items);
+        new TransactCommand("transact 1 q/-50").execute(items, ui);
 
         assertEquals(0, items.getItem(0).getQuantity());
     }
@@ -59,7 +60,7 @@ class TransactCommandTest {
         ItemList items = new ItemList();
         items.addItem(new Item("Coke Can", 50));
 
-        new TransactCommand("transact 1 q/-999").execute(items);
+        new TransactCommand("transact 1 q/-999").execute(items, ui);
 
         assertEquals(50, items.getItem(0).getQuantity());
     }
@@ -72,7 +73,7 @@ class TransactCommandTest {
         ItemList items = new ItemList();
         items.addItem(new Item("Coke Can", 50));
 
-        new TransactCommand("transact 99 q/10").execute(items);
+        new TransactCommand("transact 99 q/10").execute(items, ui);
 
         assertEquals(50, items.getItem(0).getQuantity());
     }
@@ -85,16 +86,16 @@ class TransactCommandTest {
         ItemList items = new ItemList();
         items.addItem(new Item("Coke Can", 50));
 
-        new TransactCommand("transact 1 10").execute(items);
+        new TransactCommand("transact 1 10").execute(items, ui);
         assertEquals(50, items.getItem(0).getQuantity());
 
-        new TransactCommand("transact abc q/10").execute(items);
+        new TransactCommand("transact abc q/10").execute(items, ui);
         assertEquals(50, items.getItem(0).getQuantity());
 
-        new TransactCommand("transact 1 q/-").execute(items);
+        new TransactCommand("transact 1 q/-").execute(items, ui);
         assertEquals(50, items.getItem(0).getQuantity());
 
-        new TransactCommand("transact 1 q/abc").execute(items);
+        new TransactCommand("transact 1 q/abc").execute(items, ui);
         assertEquals(50, items.getItem(0).getQuantity());
     }
 
@@ -106,7 +107,7 @@ class TransactCommandTest {
         ItemList items = new ItemList();
         items.addItem(new Item("Coke Can", 50));
 
-        new TransactCommand("transact 1 q/0").execute(items);
+        new TransactCommand("transact 1 q/0").execute(items, ui);
 
         assertEquals(50, items.getItem(0).getQuantity());
     }

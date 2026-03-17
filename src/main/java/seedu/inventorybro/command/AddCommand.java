@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
+import seedu.inventorybro.Ui;
 
 /**
  * Adds a new item to the inventory.
@@ -29,7 +30,7 @@ public class AddCommand implements Command {
      * @param items The inventory item list to update.
      */
     @Override
-    public void execute(ItemList items) {
+    public void execute(ItemList items, Ui ui) {
         Matcher matcher = ADD_COMMAND_PATTERN.matcher(input);
         if (!matcher.matches()) {
             throw new IllegalArgumentException(
@@ -39,6 +40,9 @@ public class AddCommand implements Command {
 
         String name = matcher.group(1);
         int quantity = Integer.parseInt(matcher.group(2));
-        items.addItem(new Item(name, quantity));
+        Item newItem = new Item(name, quantity);
+        items.addItem(newItem);
+
+        ui.showMessage("Added: " + newItem);
     }
 }

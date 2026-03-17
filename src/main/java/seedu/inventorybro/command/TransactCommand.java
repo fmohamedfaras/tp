@@ -2,6 +2,7 @@ package seedu.inventorybro.command;
 
 import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
+import seedu.inventorybro.Ui;
 
 /**
  * Adjusts an item's quantity by a signed transaction amount.
@@ -24,7 +25,7 @@ public class TransactCommand implements Command {
      * @param items The inventory item list to update.
      */
     @Override
-    public void execute(ItemList items) {
+    public void execute(ItemList items, Ui ui) {
         try {
             String[] words = input.split(" ", 2);
             if (words.length < 2 || words[1].isEmpty() || !words[0].equalsIgnoreCase("transact")) {
@@ -53,8 +54,7 @@ public class TransactCommand implements Command {
             }
 
             item.setQuantity(newQuantity);
-            System.out.println("Transaction recorded.");
-            System.out.println(item.getDescription() + " new quantity: " + newQuantity);
+            ui.showMessage("Transaction recorded.\n" + item.getDescription() + " new quantity: " + newQuantity);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }

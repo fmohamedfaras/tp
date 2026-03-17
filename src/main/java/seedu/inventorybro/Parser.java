@@ -9,19 +9,16 @@ import seedu.inventorybro.command.ListCommand;
 import seedu.inventorybro.command.TransactCommand;
 
 public class Parser {
-    public static void parse(String line, ItemList items) {
+    public static void parse(String line, ItemList items, Ui ui) {
         Command command = parseCommand(line);
         if (command == null) {
             System.out.println("Invalid command, please try add, delete, edit, transact, list, exit");
             return;
         }
 
-        command.execute(items);
+        command.execute(items, ui);
     }
 
-    static void parseAdd(String text, ItemList items) {
-        new AddCommand(text).execute(items);
-    }
 
     private static Command parseCommand(String line) {
         String trimmedLine = line.trim();

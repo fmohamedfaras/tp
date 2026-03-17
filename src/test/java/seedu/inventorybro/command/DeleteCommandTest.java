@@ -7,12 +7,15 @@ import org.junit.jupiter.api.Test;
 
 import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
+import seedu.inventorybro.Ui;
+
 
 /**
  * Tests for {@link DeleteCommand}.
  */
 class DeleteCommandTest {
 
+    private final Ui ui = new Ui();
     /**
      * Verifies that deleting a valid index removes the correct item.
      */
@@ -22,7 +25,7 @@ class DeleteCommandTest {
         items.addItem(new Item("Apple", 10));
         items.addItem(new Item("Banana", 5));
 
-        new DeleteCommand("deleteItem 1").execute(items);
+        new DeleteCommand("deleteItem 1").execute(items, ui);
 
         assertEquals(1, items.size());
         assertEquals("Banana", items.getItem(0).getDescription());
@@ -38,12 +41,12 @@ class DeleteCommandTest {
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new DeleteCommand("deleteItem 99").execute(items)
+                () -> new DeleteCommand("deleteItem 99").execute(items, ui)
         );
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new DeleteCommand("deleteItem 0").execute(items)
+                () -> new DeleteCommand("deleteItem 0").execute(items, ui)
         );
 
         assertEquals(1, items.size());
@@ -60,12 +63,12 @@ class DeleteCommandTest {
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new DeleteCommand("deleteItem").execute(items)
+                () -> new DeleteCommand("deleteItem").execute(items, ui)
         );
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new DeleteCommand("deleteItem abc").execute(items)
+                () -> new DeleteCommand("deleteItem abc").execute(items, ui)
         );
 
         assertEquals(1, items.size());

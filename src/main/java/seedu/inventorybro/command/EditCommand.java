@@ -2,6 +2,8 @@ package seedu.inventorybro.command;
 
 import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
+import seedu.inventorybro.Ui;
+
 
 /**
  * Updates an existing item's description and quantity.
@@ -24,7 +26,7 @@ public class EditCommand implements Command {
      * @param items The inventory item list to update.
      */
     @Override
-    public void execute(ItemList items) {
+    public void execute(ItemList items, Ui ui) {
         try {
             String[] words = input.split(" ", 2);
             if (words.length < 2) {
@@ -46,7 +48,7 @@ public class EditCommand implements Command {
             item.setDescription(newName);
             item.setQuantity(newQuantity);
 
-            System.out.println("Item updated: " + item);
+            ui.showMessage("Item updated: " + item);
         } catch (NumberFormatException e) {
             System.out.println("Index and quantity must be numbers.");
         } catch (IllegalArgumentException e) {

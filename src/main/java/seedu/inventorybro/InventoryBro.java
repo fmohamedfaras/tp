@@ -1,40 +1,37 @@
 package seedu.inventorybro;
 
-import java.io.IOException;
-
 public class InventoryBro {
+    private Ui ui;
+    private ItemList items;
 
-    /**
-     * Main entry-point for the java.seedu.inventorybro.InventoryBro application.
-     */
-    public static void main(String[] args) {
-        System.out.println("InventoryBRO");
-        System.out.println("How can I help you today, bro?");
-        String currentCommand = new String();
-        ItemList items = new ItemList();
+    public InventoryBro() {
+        ui = new Ui();
+        items = new ItemList();
+    }
+
+    public void run() {
+        ui.showWelcome();
+
         while (true) {
-            int ch;
+            String fullCommand = ui.readCommand();
+
+            if (fullCommand.isEmpty()) {
+                continue;
+            }
+
+            ui.showLine();
             try {
-                ch = System.in.read();
-            } catch (IOException e) {
-                System.out.println("Error when parsing characters!");
-                break;
+                // Pass the ui object into the parser so the commands can use it to print!
+                Parser.parse(fullCommand, items, ui);
+            } catch (IllegalArgumentException e) {
+                // Catches all the exceptions thrown by your various Commands!
+                ui.showError(e.getMessage());
             }
-            switch (ch) {
-            case '\r':
-                break;
-            case -1: // EOF
-            case '\n': {
-                Parser.parse(currentCommand, items);
-                System.out.println("Command received: " + currentCommand);
-                currentCommand = new String();
-                return;
-            }
-            default: {
-                currentCommand += (char) ch;
-                break;
-            }
-            }
+            ui.showLine();
         }
+    }
+
+    public static void main(String[] args) {
+        new InventoryBro().run();
     }
 }
