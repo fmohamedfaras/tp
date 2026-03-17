@@ -28,6 +28,15 @@ public class Item {
     }
 
     /**
+     * Sets the item description.
+     *
+     * @param description The updated item description.
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
      * Returns the quantity of item.
      *
      * @return The quantity of item.

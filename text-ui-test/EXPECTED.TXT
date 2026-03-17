@@ -1,2 +1,4 @@
 InventoryBRO
+How can I help you today, bro?
 Invalid command, please try add, delete, edit, transact, list, exit
+Command received: hi
