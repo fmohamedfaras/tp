@@ -1,6 +1,8 @@
 package seedu.inventorybro.command;
 
 import seedu.inventorybro.ItemList;
+import seedu.inventorybro.Ui;
+
 
 /**
  * Terminates the application.
@@ -12,8 +14,8 @@ public class ExitCommand implements Command {
      * @param items The inventory item list, unused for this command.
      */
     @Override
-    public void execute(ItemList items) {
-        System.out.println("Bye! See you next time.");
+    public void execute(ItemList items, Ui ui) {
+        ui.showMessage("Bye! See you next time.");
         System.exit(0);
     }
 }

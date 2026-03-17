@@ -1,6 +1,7 @@
 package seedu.inventorybro.command;
 
 import seedu.inventorybro.ItemList;
+import seedu.inventorybro.Ui;
 
 /**
  * Displays the current inventory items.
@@ -23,7 +24,7 @@ public class ListCommand implements Command {
      * @param items The inventory item list to display.
      */
     @Override
-    public void execute(ItemList items) {
+    public void execute(ItemList items, Ui ui) {
         String[] words = input.split(" ");
 
         if (!words[0].equalsIgnoreCase("list") || words.length > 1) {
@@ -31,10 +32,11 @@ public class ListCommand implements Command {
         }
 
         if (items.isEmpty()) {
-            System.out.println("Your inventory is empty.");
+            ui.showMessage("Your inventory is empty.");
+            return;
         }
 
-        System.out.println("Here are your current inventory items:");
+        ui.showMessage("Here are your current inventory items:");
         for (int i = 0; i < items.size(); i++) {
             int listIndex = i + 1;
             System.out.println(listIndex + ". " + items.getItem(i));
