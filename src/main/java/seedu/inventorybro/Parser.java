@@ -120,6 +120,33 @@ public class Parser {
     }
 
     private static void parseDelete(String text, ItemList items) {
+        String[] words = text.split(" ");
+
+        // Ensure they typed exactly two words (e.g., "deleteItem 1")
+        if (words.length != 2 || !words[0].equalsIgnoreCase("deleteItem")) {
+            throw new IllegalArgumentException("Invalid delete format! Use: deleteItem INDEX");
+        }
+
+        try {
+            // Convert user input (1-based) to ArrayList index (0-based)
+            int index = Integer.parseInt(words[1]) - 1;
+
+            // Prevent out-of-bounds crashes
+            if (index < 0 || index >= items.size()) {
+                throw new IllegalArgumentException("Invalid index! Please provide a valid item number.");
+            }
+
+            // Execute the deletion using the ItemList method
+            Item removedItem = items.deleteItem(index);
+
+            // Print the success message
+            System.out.println("Noted, BRO. I've removed this item:");
+            System.out.println("  " + removedItem.toString());
+            System.out.println("Now you have " + items.size() + " items in the list.");
+
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("The index must be a number! Use: deleteItem INDEX");
+        }
     }
 
     static void parseAdd(String text, ItemList items) {
