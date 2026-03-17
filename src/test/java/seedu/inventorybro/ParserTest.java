@@ -120,4 +120,54 @@ class ParserTest {
 
         assertEquals(50, items.getItem(0).getQuantity());
     }
+
+    @Test
+    void parseDelete_validIndex_itemRemoved() {
+        ItemList items = new ItemList();
+        items.addItem(new Item("Apple", 10));
+        items.addItem(new Item("Banana", 5));
+
+        Parser.parse("deleteItem 1", items);
+
+        // Apple should be gone, list size drops to 1, Banana is now at index 0
+        assertEquals(1, items.size());
+        assertEquals("Banana", items.getItem(0).getDescription());
+    }
+
+    @Test
+    void parseDelete_invalidIndex_throwsException() {
+        ItemList items = new ItemList();
+        items.addItem(new Item("Coke Can", 50));
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> Parser.parse("deleteItem 99", items)
+        );
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> Parser.parse("deleteItem 0", items)
+        );
+
+        assertEquals(1, items.size());
+        assertEquals("Coke Can", items.getItem(0).getDescription());
+    }
+
+    @Test
+    void parseDelete_invalidInputFormats_throwsException() {
+        ItemList items = new ItemList();
+        items.addItem(new Item("Coke Can", 50));
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> Parser.parse("deleteItem", items)
+        );
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> Parser.parse("deleteItem abc", items)
+        );
+        assertEquals(1, items.size());
+    }
+
 }
