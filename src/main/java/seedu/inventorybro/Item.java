@@ -71,7 +71,7 @@ public class Item {
      */
     @Override
     public String toString() {
-        return description + "(Quantity: " + quantity + ")";
+        return description + " (Quantity: " + quantity + ")";
     }
 }
 
