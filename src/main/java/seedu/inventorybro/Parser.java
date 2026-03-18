@@ -12,7 +12,7 @@ public class Parser {
     public static void parse(String line, ItemList items, Ui ui) {
         Command command = parseCommand(line);
         if (command == null) {
-            System.out.println("Invalid command, please try add, delete, edit, transact, list, exit");
+            ui.showError("Invalid command, please try add, delete, edit, transact, list, exit");
             return;
         }
 

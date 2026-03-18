@@ -3,10 +3,10 @@
   How can I help you today, bro?
 =====================================
 > --------------------------------------------------
-ERROR - Invalid addItem format! Use: addItem d/NAME q/INITIAL_QUANTITY
+ERROR: Invalid addItem format! Use: addItem d/NAME q/INITIAL_QUANTITY
 --------------------------------------------------
 > --------------------------------------------------
-ERROR - Invalid addItem format! Use: addItem d/NAME q/INITIAL_QUANTITY
+ERROR: Invalid addItem format! Use: addItem d/NAME q/INITIAL_QUANTITY
 --------------------------------------------------
 > --------------------------------------------------
 Added: apples (Quantity: 233)
@@ -28,16 +28,16 @@ Here are your current inventory items:
 4. bananas (Quantity: 65)
 --------------------------------------------------
 > --------------------------------------------------
-ERROR - Invalid delete format! Use: deleteItem INDEX
+ERROR: Invalid delete format! Use: deleteItem INDEX
 --------------------------------------------------
 > --------------------------------------------------
-ERROR - Invalid index! Please provide a valid item number.
+ERROR: Invalid index! Please provide a valid item number.
 --------------------------------------------------
 > --------------------------------------------------
-ERROR - Invalid index! Please provide a valid item number.
+ERROR: Invalid index! Please provide a valid item number.
 --------------------------------------------------
 > --------------------------------------------------
-ERROR - The index must be a number! Use: deleteItem INDEX
+ERROR: The index must be a number! Use: deleteItem INDEX
 --------------------------------------------------
 > --------------------------------------------------
 Noted, BRO. I've removed this item:
@@ -45,36 +45,36 @@ Noted, BRO. I've removed this item:
 Now you have 3 items in the list.
 --------------------------------------------------
 > --------------------------------------------------
-ERROR - Invalid edit format. Use: edit INDEX d/NEW_NAME q/NEW_QUANTITY
+ERROR: Invalid edit format. Use: edit INDEX d/NEW_NAME q/NEW_QUANTITY
 --------------------------------------------------
 > --------------------------------------------------
-ERROR - Invalid index.
+ERROR: Invalid index.
 --------------------------------------------------
 > --------------------------------------------------
-ERROR - Index and quantity must be numbers.
+ERROR: Index and quantity must be numbers.
 --------------------------------------------------
 > --------------------------------------------------
 Item updated: newName (Quantity: 39)
 --------------------------------------------------
 > --------------------------------------------------
-ERROR - Invalid transact format. Use: transact INDEX q/CHANGE_IN_QUANTITY
+ERROR: Invalid transact format. Use: transact INDEX q/CHANGE_IN_QUANTITY
 --------------------------------------------------
 > --------------------------------------------------
-ERROR - Invalid transact, Index or Quantity Must be a digit
+ERROR: Invalid transact, Index or Quantity Must be a digit
 --------------------------------------------------
 > --------------------------------------------------
 Transaction recorded.
 apples new quantity: 283
 --------------------------------------------------
 > --------------------------------------------------
-ERROR - Transaction failed. Quantity cannot go below 0.
+ERROR: Transaction failed. Quantity cannot go below 0.
 --------------------------------------------------
 > --------------------------------------------------
 Transaction recorded.
 newName new quantity: 0
 --------------------------------------------------
 > --------------------------------------------------
-Invalid command, please try add, delete, edit, transact, list, exit
+ERROR: Invalid command, please try add, delete, edit, transact, list, exit
 --------------------------------------------------
 > --------------------------------------------------
 Bye! See you next time.
