@@ -58,6 +58,8 @@ public class TransactCommand implements Command {
             }
 
             item.setQuantity(newQuantity);
+            assert item.getQuantity() >= 0 : "Quantity became negative after transaction";
+
             ui.showMessage("Transaction recorded.\n" + item.getDescription() + " new quantity: " + newQuantity);
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(e.getMessage());

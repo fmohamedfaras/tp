@@ -14,6 +14,8 @@ public class Item {
      * @param quantity    The quantity of item.
      */
     public Item(String description, int quantity) {
+        assert description != null && !description.isEmpty() : "Description should not be null or empty";
+        assert quantity >= 0 : "Quantity should not be negative: " + quantity;
         this.description = description;
         this.quantity = quantity;
     }
@@ -24,6 +26,7 @@ public class Item {
      * @param quantity The quantity of item.
      */
     public void setQuantity(int quantity) {
+        assert quantity >= 0 : "Quantity should not be negative: " + quantity;
         this.quantity = quantity;
     }
 
@@ -33,6 +36,7 @@ public class Item {
      * @param description The updated item description.
      */
     public void setDescription(String description) {
+        assert description != null && !description.isEmpty() : "Description should not be null or empty";
         this.description = description;
     }
 

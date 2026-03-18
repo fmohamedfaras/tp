@@ -10,9 +10,13 @@ import seedu.inventorybro.command.TransactCommand;
 
 public class Parser {
     public static void parse(String line, ItemList items, Ui ui) {
+        assert line != null : "Input line should not be null";
+        assert items != null : "ItemList should not be null";
+        assert ui != null : "Ui should not be null";
+
         Command command = parseCommand(line);
         if (command == null) {
-            ui.showError("Invalid command, please try add, delete, edit, transact, list, exit");
+            ui.showError("Invalid command, please try addItem, deleteItem, edit, transact, list, exit");
             return;
         }
 
