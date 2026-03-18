@@ -35,7 +35,7 @@ class ListCommandTest {
         items.addItem(new Item("Banana", 40));
         items.addItem(new Item("Orange", 30));
 
-        new ListCommand("list").execute(items, ui);
+        new ListCommand("listItems").execute(items, ui);
 
         String expectedOutput = "Here are your current inventory items:" + System.lineSeparator()
                 + "1. Apple (Quantity: 50)" + System.lineSeparator()
@@ -49,7 +49,7 @@ class ListCommandTest {
     void execute_validUserInputListEmpty_success() {
         ItemList items = new ItemList();
 
-        new ListCommand("list").execute(items, ui);
+        new ListCommand("listItems").execute(items, ui);
 
         String expectedOutput = "Your inventory is empty." + System.lineSeparator();
 
@@ -64,17 +64,24 @@ class ListCommandTest {
         items.addItem(new Item("Orange", 30));
 
         try {
-            new ListCommand("listing").execute(items, ui);
+            new ListCommand("list").execute(items, ui);
             fail();
         } catch (IllegalArgumentException e) {
-            assertEquals("Did you mean 'list'?", e.getMessage());
+            assertEquals("Did you mean 'listItems'?", e.getMessage());
         }
 
         try {
             new ListCommand("LiSt all").execute(items, ui);
             fail();
         } catch (IllegalArgumentException e) {
-            assertEquals("Did you mean 'list'?", e.getMessage());
+            assertEquals("Did you mean 'listItems'?", e.getMessage());
+        }
+
+        try {
+            new ListCommand("LiStItEms").execute(items, ui);
+            fail();
+        } catch (IllegalArgumentException e) {
+            assertEquals("Did you mean 'listItems'?", e.getMessage());
         }
     }
 }

@@ -27,8 +27,8 @@ public class ListCommand implements Command {
     public void execute(ItemList items, Ui ui) {
         String[] words = input.split(" ");
 
-        if (!words[0].equalsIgnoreCase("list") || words.length > 1) {
-            throw new IllegalArgumentException("Did you mean 'list'?");
+        if (!words[0].equals("listItems") || words.length > 1) {
+            throw new IllegalArgumentException("Did you mean 'listItems'?");
         }
 
         if (items.isEmpty()) {

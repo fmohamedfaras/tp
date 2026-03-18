@@ -5,6 +5,9 @@ addItem d/oranges q/42
 addItem d/mangoes q/53
 addItem d/bananas q/65
 list
+lIsT all
+ListItem
+listItems
 delete
 deleteItem 0
 deleteItem 23
