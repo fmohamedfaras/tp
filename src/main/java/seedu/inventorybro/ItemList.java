@@ -1,6 +1,5 @@
 package seedu.inventorybro;
 
-
 import java.util.ArrayList;
 
 /**
