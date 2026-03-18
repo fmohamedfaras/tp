@@ -16,6 +16,7 @@ public class TransactCommand implements Command {
      * @param input The full transact command string.
      */
     public TransactCommand(String input) {
+        assert input != null : "Input should not be null";
         this.input = input;
     }
 
@@ -26,6 +27,9 @@ public class TransactCommand implements Command {
      */
     @Override
     public void execute(ItemList items, Ui ui) {
+        assert items != null : "ItemList should not be null";
+        assert ui != null : "Ui should not be null";
+
         try {
             String[] words = input.split(" ", 2);
             if (words.length < 2 || words[1].isEmpty() || !words[0].equalsIgnoreCase("transact")) {
@@ -56,8 +60,7 @@ public class TransactCommand implements Command {
             item.setQuantity(newQuantity);
             ui.showMessage("Transaction recorded.\n" + item.getDescription() + " new quantity: " + newQuantity);
         } catch (IllegalArgumentException e) {
-            //throw new IllegalArgumentException(e.getMessage());
-            ui.showMessage(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
         }
     }
 
@@ -67,6 +70,7 @@ public class TransactCommand implements Command {
      * @param digits The string to validate.
      */
     private void checkIfDigit(String digits) {
+        assert digits != null : "Digits string should not be null";
         for (char digit : digits.toCharArray()) {
             if (!Character.isDigit(digit)) {
                 throw new IllegalArgumentException("Invalid transact, Index or Quantity Must be a digit");
@@ -80,6 +84,7 @@ public class TransactCommand implements Command {
      * @param digits The signed numeric string to validate.
      */
     private void checkIfSignedDigit(String digits) {
+        assert digits != null : "Digits string should not be null";
         if (digits.isEmpty()) {
             throw new IllegalArgumentException("Invalid transact. Quantity cannot be empty.");
         }
