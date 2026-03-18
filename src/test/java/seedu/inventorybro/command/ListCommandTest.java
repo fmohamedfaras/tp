@@ -13,21 +13,35 @@ import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
 import seedu.inventorybro.Ui;
 
+/**
+ * Tests for {@link ListCommand}.
+ */
 class ListCommandTest {
     private final Ui ui = new Ui();
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream standardOut = System.out;
 
+    /**
+     * Redirects standard output stream to a new PrintStream with ByteArrayOutputStream
+     * to inspect printed output.
+     */
     @BeforeEach
     void setUp() {
         System.setOut(new PrintStream(outContent));
     }
 
+    /**
+     * Restores standard output stream to original state after each tests to avoid affecting
+     * other tests.
+     */
     @AfterEach
     void tearDown() {
         System.setOut(standardOut);
     }
 
+    /**
+     * Verifies that a non-empty list is printed with expected values.
+     */
     @Test
     void execute_validUserInputListNotEmpty_success() {
         ItemList items = new ItemList();
@@ -45,6 +59,10 @@ class ListCommandTest {
         assertEquals(expectedOutput, outContent.toString());
     }
 
+    /**
+     * Verifies that a message to the user that the inventory is empty is printed when the
+     * list is empty.
+     */
     @Test
     void execute_validUserInputListEmpty_success() {
         ItemList items = new ItemList();
@@ -56,6 +74,9 @@ class ListCommandTest {
         assertEquals(expectedOutput, outContent.toString());
     }
 
+    /**
+     * Verifies that an invalid command entered by the user is rejected.
+     */
     @Test
     void execute_invalidUserInput_throwException() {
         ItemList items = new ItemList();
