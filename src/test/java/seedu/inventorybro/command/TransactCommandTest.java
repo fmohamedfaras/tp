@@ -9,11 +9,13 @@ import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
 import seedu.inventorybro.Ui;
 
+//@@author elliotjohnwu
 /**
  * Tests for {@link TransactCommand}.
  */
 class TransactCommandTest {
     private final Ui ui = new Ui();
+
     /**
      * Verifies that a valid negative quantity transaction decreases stock.
      */

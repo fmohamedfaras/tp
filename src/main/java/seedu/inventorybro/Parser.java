@@ -8,6 +8,7 @@ import seedu.inventorybro.command.ExitCommand;
 import seedu.inventorybro.command.ListCommand;
 import seedu.inventorybro.command.TransactCommand;
 
+
 public class Parser {
     public static void parse(String line, ItemList items, Ui ui) {
         assert line != null : "Input line should not be null";
@@ -22,7 +23,6 @@ public class Parser {
 
         command.execute(items, ui);
     }
-
 
     private static Command parseCommand(String line) {
         String trimmedLine = line.trim();

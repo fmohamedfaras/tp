@@ -4,6 +4,7 @@ import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
 import seedu.inventorybro.Ui;
 
+//@@author elliotjohnwu
 /**
  * Adjusts an item's quantity by a signed transaction amount.
  */
