@@ -43,8 +43,16 @@ public class EditCommand implements Command {
 
             String[] descParts = parts[1].split("q/", 2);
             String newName = descParts[0].trim();
-            int newQuantity = Integer.parseInt(descParts[1].trim());
+            if (newName.isEmpty()) {
+                throw new IllegalArgumentException("Item name cannot be empty.");
+            }
 
+            int newQuantity = Integer.parseInt(descParts[1].trim());
+            if (newQuantity < 0) {
+                throw new IllegalArgumentException("Quantity cannot be negative.");
+            }
+
+            
             Item item = items.getItem(index);
             item.setDescription(newName);
             item.setQuantity(newQuantity);
