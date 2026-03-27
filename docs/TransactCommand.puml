@@ -1,0 +1,14 @@
+@startuml
+class seedu.inventorybro.command.TransactCommand {
+- String input
++ <<Create>> TransactCommand(String)
++ void execute(ItemList,Ui)
+- void checkIfDigit(String)
+- void checkIfSignedDigit(String)
+}
+
+
+
+
+seedu.inventorybro.command.Command <|.. seedu.inventorybro.command.TransactCommand
+@enduml
