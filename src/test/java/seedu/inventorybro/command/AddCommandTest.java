@@ -57,4 +57,19 @@ class AddCommandTest {
                 () -> new AddCommand("addItem Apple 10").execute(items, ui)
         );
     }
+
+    /**
+     * Verifies that a name with extra internal whitespace before q/ is trimmed,
+     * so "Apple " and "Apple" are treated as the same item.
+     */
+    @Test
+    void execute_duplicateNameWithTrailingSpace_throwsException() {
+        ItemList items = new ItemList();
+        new AddCommand("addItem d/Apple q/10").execute(items, ui);
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new AddCommand("addItem d/Apple  q/5").execute(items, ui)
+        );
+    }
 }
