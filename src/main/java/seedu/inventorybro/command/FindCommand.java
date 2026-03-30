@@ -11,7 +11,7 @@ import seedu.inventorybro.Ui;
  * Finds and lists all items in the inventory whose description contains the keyword.
  */
 public class FindCommand implements Command {
-    private static final Pattern FIND_COMMAND_PATTERN = Pattern.compile("^find\\s+(.+)$");
+    private static final Pattern FIND_COMMAND_PATTERN = Pattern.compile("^findItem\\s+(.+)$");
 
     private final String input;
 
@@ -37,7 +37,7 @@ public class FindCommand implements Command {
 
         if (!matcher.matches() || matcher.group(1).trim().isEmpty()) {
             throw new IllegalArgumentException(
-                    "Invalid find format! Use: find KEYWORD"
+                    "Invalid find format! Use: findItem KEYWORD"
             );
         }
 
