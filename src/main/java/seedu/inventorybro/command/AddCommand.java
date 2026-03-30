@@ -35,7 +35,7 @@ public class AddCommand implements Command {
         new AddCommandValidator(input).validate(items);
 
         Matcher matcher = ADD_COMMAND_PATTERN.matcher(input);
-        assert matcher.matches();
+        matcher.matches();
         String name = matcher.group(1);
         int quantity = Integer.parseInt(matcher.group(2));
         Item newItem = new Item(name, quantity);
