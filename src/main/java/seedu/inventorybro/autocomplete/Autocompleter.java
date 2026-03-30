@@ -2,10 +2,9 @@ package seedu.inventorybro.autocomplete;
 
 import java.util.List;
 
+import seedu.inventorybro.CommandWord;
+
 public class Autocompleter {
-    private static final List<String> KEYWORDS = List.of(
-            "addItem", "deleteItem", "editItem", "transact", "listItems", "help", "exit"
-    );
     private final Trie trie;
 
     public Autocompleter() {
@@ -18,8 +17,8 @@ public class Autocompleter {
 
     private static Trie buildTrie() {
         Trie t = new Trie();
-        for (String keyword : KEYWORDS) {
-            t.insert(keyword);
+        for (CommandWord cmd : CommandWord.values()) {
+            t.insert(cmd.getWord());
         }
         return t;
     }
