@@ -8,6 +8,7 @@ import seedu.inventorybro.ItemList;
 import seedu.inventorybro.Ui;
 import seedu.inventorybro.validator.AddCommandValidator;
 
+//@@author kenpegrasio
 /**
  * Adds a new item to the inventory.
  */
@@ -22,6 +23,7 @@ public class AddCommand implements Command {
      * @param input The full add command string.
      */
     public AddCommand(String input) {
+        assert input != null : "Input should not be null";
         this.input = input;
     }
 
@@ -32,14 +34,19 @@ public class AddCommand implements Command {
      */
     @Override
     public void execute(ItemList items, Ui ui) {
+        assert items != null : "ItemList should not be null";
+        assert ui != null : "Ui should not be null";
+
         new AddCommandValidator(input).validate(items);
 
         Matcher matcher = ADD_COMMAND_PATTERN.matcher(input);
         matcher.matches();
         String name = matcher.group(1);
         int quantity = Integer.parseInt(matcher.group(2));
+        assert quantity >= 0 : "Parsed quantity should be non-negative";
         Item newItem = new Item(name, quantity);
         items.addItem(newItem);
+        assert items.size() > 0 : "Item list should not be empty after adding";
 
         ui.showMessage("Added: " + newItem);
     }
