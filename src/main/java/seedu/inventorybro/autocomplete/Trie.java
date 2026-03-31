@@ -3,6 +3,7 @@ package seedu.inventorybro.autocomplete;
 import java.util.ArrayList;
 import java.util.List;
 
+//@@author kenpegrasio
 class Trie {
     private final TrieNode root;
 

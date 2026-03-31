@@ -1,7 +1,6 @@
 package seedu.inventorybro.command;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -15,7 +14,7 @@ import seedu.inventorybro.Ui;
 
 //@@author adbsw
 /**
- * Tests for {@link ListCommand}.
+ * Execution tests for {@link ListCommand}.
  */
 class ListCommandTest {
     private final Ui ui = new Ui();
@@ -73,37 +72,5 @@ class ListCommandTest {
         String expectedOutput = "Your inventory is empty." + System.lineSeparator();
 
         assertEquals(expectedOutput, outContent.toString());
-    }
-
-    /**
-     * Verifies that an invalid command entered by the user is rejected.
-     */
-    @Test
-    void execute_invalidUserInput_throwException() {
-        ItemList items = new ItemList();
-        items.addItem(new Item("Apple", 50));
-        items.addItem(new Item("Banana", 40));
-        items.addItem(new Item("Orange", 30));
-
-        try {
-            new ListCommand("list").execute(items, ui);
-            fail();
-        } catch (IllegalArgumentException e) {
-            assertEquals("Did you mean 'listItems'?", e.getMessage());
-        }
-
-        try {
-            new ListCommand("LiSt all").execute(items, ui);
-            fail();
-        } catch (IllegalArgumentException e) {
-            assertEquals("Did you mean 'listItems'?", e.getMessage());
-        }
-
-        try {
-            new ListCommand("LiStItEms").execute(items, ui);
-            fail();
-        } catch (IllegalArgumentException e) {
-            assertEquals("Did you mean 'listItems'?", e.getMessage());
-        }
     }
 }

@@ -3,6 +3,7 @@ package seedu.inventorybro.command;
 import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
 import seedu.inventorybro.Ui;
+import seedu.inventorybro.validator.DeleteCommandValidator;
 
 /**
  * Removes an item from the inventory using a one-based index.
@@ -24,28 +25,16 @@ public class DeleteCommand implements Command {
      *
      * @param items The inventory item list to update.
      */
+    //@@author fmohamedfaras
     @Override
     public void execute(ItemList items, Ui ui) {
+        new DeleteCommandValidator(input).validate(items);
+
         String[] words = input.split(" ");
+        int index = Integer.parseInt(words[1]) - 1;
+        Item removedItem = items.deleteItem(index);
 
-        if (words.length != 2 || !words[0].equalsIgnoreCase("deleteItem")) {
-            throw new IllegalArgumentException("Invalid delete format! Use: deleteItem INDEX");
-        }
-
-        try {
-            int index = Integer.parseInt(words[1]) - 1;
-
-            if (index < 0 || index >= items.size()) {
-                throw new IllegalArgumentException("Invalid index! Please provide a valid item number.");
-            }
-
-            Item removedItem = items.deleteItem(index);
-
-            ui.showMessage("Noted, BRO. I've removed this item:\n  " + removedItem +
-                    "\nNow you have " + items.size() + " items in the list.");
-
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("The index must be a number! Use: deleteItem INDEX");
-        }
+        ui.showMessage("Noted, BRO. I've removed this item:\n  " + removedItem +
+                "\nNow you have " + items.size() + " items in the list.");
     }
 }

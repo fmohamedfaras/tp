@@ -1,7 +1,6 @@
 package seedu.inventorybro.command;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -9,12 +8,14 @@ import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
 import seedu.inventorybro.Ui;
 
+//@@author kenpegrasio
 /**
- * Tests for {@link AddCommand}.
+ * Execution tests for {@link AddCommand}.
  */
 class AddCommandTest {
 
     private final Ui ui = new Ui();
+
     /**
      * Verifies that a valid add command creates a new item with the expected values.
      */
@@ -43,18 +44,5 @@ class AddCommandTest {
 
         assertEquals("Green Apple", item.getDescription());
         assertEquals(25, item.getQuantity());
-    }
-
-    /**
-     * Verifies that malformed add input is rejected.
-     */
-    @Test
-    void execute_invalidFormat_throwsException() {
-        ItemList items = new ItemList();
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> new AddCommand("addItem Apple 10").execute(items, ui)
-        );
     }
 }

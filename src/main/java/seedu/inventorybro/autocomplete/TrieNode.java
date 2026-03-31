@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+//@@author kenpegrasio
 class TrieNode {
     private final Map<Character, TrieNode> children;
     private String keyword;

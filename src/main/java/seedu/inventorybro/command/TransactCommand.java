@@ -3,6 +3,7 @@ package seedu.inventorybro.command;
 import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
 import seedu.inventorybro.Ui;
+import seedu.inventorybro.validator.TransactCommandValidator;
 
 //@@author elliotjohnwu
 /**
@@ -31,76 +32,18 @@ public class TransactCommand implements Command {
         assert items != null : "ItemList should not be null";
         assert ui != null : "Ui should not be null";
 
-        try {
-            String[] words = input.split(" ", 2);
-            if (words.length < 2 || words[1].isEmpty() || !words[0].equalsIgnoreCase("transact")) {
-                throw new IllegalArgumentException("Invalid transact format. "
-                        + "Use: transact INDEX q/CHANGE_IN_QUANTITY");
-            }
+        new TransactCommandValidator(input).validate(items);
 
-            String[] digits = words[1].split("q/", 2);
-            if (digits.length < 2) {
-                throw new IllegalArgumentException("Invalid transact format. "
-                        + "Use: transact INDEX q/CHANGE_IN_QUANTITY");
-            }
+        String[] words = input.split(" ", 2);
+        String[] digits = words[1].split("q/", 2);
+        int index = Integer.parseInt(digits[0].trim()) - 1;
+        int change = Integer.parseInt(digits[1].trim());
+        Item item = items.getItem(index);
+        int newQuantity = item.getQuantity() + change;
 
-            checkIfDigit(digits[0].trim());
-            int index = Integer.parseInt(digits[0].trim()) - 1;
-            if (index < 0 || index >= items.size()) {
-                throw new IllegalArgumentException("Invalid index for transact.");
-            }
+        item.setQuantity(newQuantity);
+        assert item.getQuantity() >= 0 : "Quantity became negative after transaction";
 
-            checkIfSignedDigit(digits[1].trim());
-            int change = Integer.parseInt(digits[1].trim());
-            Item item = items.getItem(index);
-            int newQuantity = item.getQuantity() + change;
-            if (newQuantity < 0) {
-                throw new IllegalArgumentException("Transaction failed. Quantity cannot go below 0.");
-            }
-
-            item.setQuantity(newQuantity);
-            assert item.getQuantity() >= 0 : "Quantity became negative after transaction";
-
-            ui.showMessage("Transaction recorded.\n" + item.getDescription() + " new quantity: " + newQuantity);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        }
-    }
-
-    /**
-     * Ensures that the provided string contains only digit characters.
-     *
-     * @param digits The string to validate.
-     */
-    private void checkIfDigit(String digits) {
-        assert digits != null : "Digits string should not be null";
-        for (char digit : digits.toCharArray()) {
-            if (!Character.isDigit(digit)) {
-                throw new IllegalArgumentException("Invalid transact, Index or Quantity Must be a digit");
-            }
-        }
-    }
-
-    /**
-     * Ensures that the provided string is either a positive integer or a negative integer.
-     *
-     * @param digits The signed numeric string to validate.
-     */
-    private void checkIfSignedDigit(String digits) {
-        assert digits != null : "Digits string should not be null";
-        if (digits.isEmpty()) {
-            throw new IllegalArgumentException("Invalid transact. Quantity cannot be empty.");
-        }
-
-        int start = 0;
-        if (digits.charAt(0) == '-') {
-            start = 1;
-        }
-
-        if (start == 1 && digits.length() == 1) {
-            throw new IllegalArgumentException("Invalid transact. Quantity cannot be just a minus sign.");
-        }
-
-        checkIfDigit(digits.substring(start));
+        ui.showMessage("Transaction recorded.\n" + item.getDescription() + " new quantity: " + newQuantity);
     }
 }

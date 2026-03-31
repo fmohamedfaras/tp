@@ -2,6 +2,7 @@ package seedu.inventorybro.command;
 
 import seedu.inventorybro.ItemList;
 import seedu.inventorybro.Ui;
+import seedu.inventorybro.validator.ListCommandValidator;
 
 //@@author adbsw
 /**
@@ -28,11 +29,7 @@ public class ListCommand implements Command {
      */
     @Override
     public void execute(ItemList items, Ui ui) {
-        String[] words = input.split(" ");
-
-        if (!words[0].equals("listItems") || words.length > 1) {
-            throw new IllegalArgumentException("Did you mean 'listItems'?");
-        }
+        new ListCommandValidator(input).validate(items);
 
         if (items.isEmpty()) {
             ui.showMessage("Your inventory is empty.");

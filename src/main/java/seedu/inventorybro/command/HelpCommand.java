@@ -6,6 +6,7 @@ import java.util.Map;
 
 import seedu.inventorybro.ItemList;
 import seedu.inventorybro.Ui;
+import seedu.inventorybro.validator.HelpCommandValidator;
 
 //@@author adbsw
 
@@ -21,19 +22,23 @@ public class HelpCommand implements Command {
             editItem:   Edits the name and/or quantity of an existing item in the inventory
                         based on item index. At least name or quantity must be provided,
                         existing values are updated to the input values.
+            findItem:   Finds an item in the current inventory list based on the keyword typed \
+
+                        or displays message to the user that the inventory does not have item
+                        that matches keyword.
             transact:   Updates stock quantities after a sale or restock.
             listItems:  Displays all items currently in the inventory, or displays message
                         to the user that the inventory is empty if there are no items.
             help:       Displays summaries of each command to the user, or displays a detailed
                         instruction of a specified command.
             exit:       Closes the application.
-            
+
             For further details on a particular command, specify it using 'help [COMMAND_NAME]'.
             """;
     private static final String helpAddItemMessage = """
             addItem:
             Adds a new item of a given name and quantity to the current inventory list.
-            
+
             Example usage: addItem d/Apples q/10
             This adds an item named 'Apples' of quantity '10' to the inventory list.
             """;
@@ -41,7 +46,7 @@ public class HelpCommand implements Command {
             deleteItem:
             Deletes an item from the current inventory list based on the provided list index.
             Enter 'listItems' to view the list index of the item you wish to delete.
-            
+
             Example usage: deleteItem 1
             This removes the item indexed at 1 in the inventory list.
             """;
@@ -50,16 +55,16 @@ public class HelpCommand implements Command {
             Edits the name and/or quantity of an existing item in the current inventory list
             based on the provided list index. At least a name or quantity should be provided.
             Enter 'listItems' to view the list index of the item you wish to edit.
-            
+
             Example usages:-
             (Both name and quantity fields provided): editItem 1 d/Oranges q/20
             This updates the name and quantity of the item indexed at 1 in the inventory list
             to 'Oranges' and '20' respectively.
-            
+
             (Just name field provided): editItem 1 d/Oranges
             This updates only the name of the item indexed at 1 in the inventory list to
             'Oranges'.
-            
+
             (Just quantity field provided): editItem 1 q/20
             This updates only the quantity of the item indexed at 1 in the inventory list to
             '20'.
@@ -68,21 +73,21 @@ public class HelpCommand implements Command {
             transact:
             Increases (restocking) or decreases (selling) quantity of the item based on the
             provided list index.
-            
+
             To increase the quantity, simply key in the change in quantity.
             To decrease the quantity, precede the change in quantity with '-'.
-            
+
             The existing quantity value will be updated by adding or subtracting the provided
             change in quantity. The quantity cannot be decreased below 0 or it will result in
             an error.
-            
+
             Enter 'listItems' to view the list index of the item you wish to transact.
-            
+
             Example usages:-
             (Restocking): transact 1 q/10
             This adds '10' to the existing quantity assigned to the item indexed at 1
             in the inventory list.
-            
+
             (Selling): transact 1 q/-10
             This subtract off '10' from the existing quantity assigned to the item indexed at 1
             in the inventory list, provided that it does not result in a quantity lower than 0.
@@ -93,7 +98,7 @@ public class HelpCommand implements Command {
             Displays the list of items and their quantities in the current inventory, or displays
             a message to the user that inventory is empty if there are no items in the current
             inventory.
-            
+
             Example usage: listItems
             """;
     private static final String helpHelpMessage = """
@@ -102,24 +107,34 @@ public class HelpCommand implements Command {
             be specified to display a more detailed instruction of it. You can use 'help' to view
             the valid name of the command, and specify that command to view further details of
             it.
-            
+
             Example usages:-
             (Without specifying a command): help
             This displays each command name and their summaries.
-            
+
             (Specifying a command): help addItem
             This displays a more detailed instruction of how to use the command 'addItem'.
             """;
     private static final String helpExitMessage = """
             exit:
             Closes the application.
-            
+
             Example usage: exit
             """;
+    private static final String helpFindItemMessage = """
+            findItem:
+            Finds and lists all items in the inventory whose description contains the keyword.
+            The search is case-insensitive and matches partial words.
+
+            Example usage: findItem app
+            This displays all items containing 'app' in their name, such as 'Apples' or 'Pineapple'.
+            """;
+
     private static final Map<String, String> commandMessages = Map.ofEntries(
             entry("addItem", helpAddItemMessage),
             entry("deleteItem", helpDeleteItemMessage),
             entry("editItem", helpEditItemMessage),
+            entry("findItem", helpFindItemMessage),
             entry("transact", helpTransactMessage),
             entry("listItems", helpListItemsMessage),
             entry("help", helpHelpMessage),
@@ -146,41 +161,16 @@ public class HelpCommand implements Command {
      */
     @Override
     public void execute(ItemList items, Ui ui) {
+        new HelpCommandValidator(input).validate(items);
+
         String[] words = input.split(" ");
-
-        if (!words[0].equals("help")) {
-            throw new IllegalArgumentException("Did you mean 'help'?");
-        }
-
-        String info = "";
+        String info;
         if (words.length == 1) {
             info = helpSummaryMessage;
-        } else if (isValidCommandSpecified(words)) {
+        } else {
             info = commandMessages.get(words[1]);
         }
 
         ui.showMessage(info);
-    }
-
-    /**
-     * Checks if a valid command name is specified in the input and returns true, else returns false.
-     *
-     * @param words The String array of user input.
-     * @return true if a valid command name is specified, else returns false.
-     */
-    private static boolean isValidCommandSpecified(String[] words) {
-        boolean isNotCommand = !words[1].equals("addItem") && !words[1].equals("deleteItem")
-                && !words[1].equals("editItem") && !words[1].equals("transact")
-                && !words[1].equals("listItems") && !words[1].equals("help")
-                && !words[1].equals("exit");
-
-        if (isNotCommand || !(words.length == 2)) {
-            throw new IllegalArgumentException("Invalid help format. "
-                    + "Use: help [VALID_COMMAND_NAME]"
-                    + System.lineSeparator()
-                    + "or enter 'help' to display each command name and their summaries.");
-        }
-
-        return true;
     }
 }

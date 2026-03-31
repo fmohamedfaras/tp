@@ -10,7 +10,7 @@ import seedu.inventorybro.command.ExitCommand;
 import seedu.inventorybro.command.HelpCommand;
 import seedu.inventorybro.command.ListCommand;
 import seedu.inventorybro.command.TransactCommand;
-
+import seedu.inventorybro.command.FindCommand;
 
 public class Parser {
     private static final TypoDetector TYPO_DETECTOR = new TypoDetector();
@@ -44,6 +44,8 @@ public class Parser {
             return new TransactCommand(trimmedLine);
         case "listitems":
             return new ListCommand(trimmedLine);
+        case "finditem":
+            return new FindCommand(trimmedLine);
         case "help":
             return new HelpCommand(trimmedLine);
         case "exit":
@@ -67,4 +69,3 @@ public class Parser {
         return line.trim().split("\\s+")[0];
     }
 }
-

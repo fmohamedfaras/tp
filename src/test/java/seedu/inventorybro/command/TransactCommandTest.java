@@ -1,7 +1,6 @@
 package seedu.inventorybro.command;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +10,7 @@ import seedu.inventorybro.Ui;
 
 //@@author elliotjohnwu
 /**
- * Tests for {@link TransactCommand}.
+ * Execution tests for {@link TransactCommand}.
  */
 class TransactCommandTest {
     private final Ui ui = new Ui();
@@ -64,102 +63,6 @@ class TransactCommandTest {
         items.addItem(new Item("Coke Can", 50));
 
         new TransactCommand("transact 1 q/0").execute(items, ui);
-
-        assertEquals(50, items.getItem(0).getQuantity());
-    }
-
-    /**
-     * Verifies that transactions which would make the quantity negative are rejected.
-     */
-    @Test
-    void execute_quantityBelowZero_throwsException() {
-        ItemList items = new ItemList();
-        items.addItem(new Item("Coke Can", 50));
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> new TransactCommand("transact 1 q/-999").execute(items, ui)
-        );
-
-        assertEquals(50, items.getItem(0).getQuantity());
-    }
-
-    /**
-     * Verifies that an out-of-bounds index is rejected.
-     */
-    @Test
-    void execute_invalidIndex_throwsException() {
-        ItemList items = new ItemList();
-        items.addItem(new Item("Coke Can", 50));
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> new TransactCommand("transact 99 q/10").execute(items, ui)
-        );
-
-        assertEquals(50, items.getItem(0).getQuantity());
-    }
-
-    /**
-     * Verifies that a missing q/ separator is rejected.
-     */
-    @Test
-    void execute_missingQuantityPrefix_throwsException() {
-        ItemList items = new ItemList();
-        items.addItem(new Item("Coke Can", 50));
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> new TransactCommand("transact 1 10").execute(items, ui)
-        );
-
-        assertEquals(50, items.getItem(0).getQuantity());
-    }
-
-    /**
-     * Verifies that a non-digit index is rejected.
-     */
-    @Test
-    void execute_nonDigitIndex_throwsException() {
-        ItemList items = new ItemList();
-        items.addItem(new Item("Coke Can", 50));
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> new TransactCommand("transact abc q/10").execute(items, ui)
-        );
-
-        assertEquals(50, items.getItem(0).getQuantity());
-    }
-
-    /**
-     * Verifies that a lone minus sign as quantity is rejected.
-     */
-    @Test
-    void execute_justMinusSign_throwsException() {
-        ItemList items = new ItemList();
-        items.addItem(new Item("Coke Can", 50));
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> new TransactCommand("transact 1 q/-").execute(items, ui)
-        );
-
-        assertEquals(50, items.getItem(0).getQuantity());
-    }
-
-    /**
-     * Verifies that a non-digit quantity is rejected.
-     */
-    @Test
-    void execute_nonDigitQuantity_throwsException() {
-        ItemList items = new ItemList();
-        items.addItem(new Item("Coke Can", 50));
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> new TransactCommand("transact 1 q/abc").execute(items, ui)
-        );
 
         assertEquals(50, items.getItem(0).getQuantity());
     }
