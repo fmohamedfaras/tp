@@ -18,10 +18,10 @@ deleteItem 0
 deleteItem 23
 deleteItem s
 deleteItem 3
-edit
-edit 90 d/newName q/newQ p/9.99
-edit 2 d/newName q/newQ p/9.99
-edit 2 d/newName q/39 p/9.99
+editItem
+editItem 90 d/newName q/newQ
+editItem 2 d/newName q/newQ
+editItem 2 d/newName q/39
 transact
 transact t q/80
 transact 1 q/50

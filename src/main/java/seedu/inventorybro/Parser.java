@@ -1,5 +1,7 @@
 package seedu.inventorybro;
 
+import java.util.Optional;
+
 import seedu.inventorybro.command.AddCommand;
 import seedu.inventorybro.command.Command;
 import seedu.inventorybro.command.DeleteCommand;
@@ -12,6 +14,8 @@ import seedu.inventorybro.command.TransactCommand;
 import seedu.inventorybro.command.FindCommand;
 
 public class Parser {
+    private static final TypoDetector TYPO_DETECTOR = new TypoDetector();
+
     public static void parse(String line, ItemList items, Ui ui) {
         assert line != null : "Input line should not be null";
         assert items != null : "ItemList should not be null";
@@ -19,7 +23,7 @@ public class Parser {
 
         Command command = parseCommand(line);
         if (command == null) {
-            ui.showError("Invalid command, please try addItem, deleteItem, editItem, transact, listItems, filterItem, help, exit");
+            handleUnknownCommand(line, ui);
             return;
         }
 
@@ -28,44 +32,43 @@ public class Parser {
 
     private static Command parseCommand(String line) {
         String trimmedLine = line.trim();
-        String lowerCaseLine = trimmedLine.toLowerCase();
+        String firstWord = extractFirstWord(trimmedLine).toLowerCase();
 
-        if (lowerCaseLine.startsWith("add")) {
+        switch (firstWord) {
+        case "additem":
             return new AddCommand(trimmedLine);
-        }
-
-        if (lowerCaseLine.startsWith("delete")) {
+        case "deleteitem":
             return new DeleteCommand(trimmedLine);
-        }
-
-        if (lowerCaseLine.startsWith("edit")) {
+        case "edititem":
             return new EditCommand(trimmedLine);
-        }
-
-        if (lowerCaseLine.startsWith("transact")) {
+        case "transact":
             return new TransactCommand(trimmedLine);
-        }
-
-        if (lowerCaseLine.startsWith("filter")) {
+        case "filteritem":
             return new FilterCommand(trimmedLine);
-        }
-
-        if (lowerCaseLine.startsWith("list")) {
+        case "listitems":
             return new ListCommand(trimmedLine);
-        }
-
-        if (lowerCaseLine.startsWith("find")) {
+        case "finditem":
             return new FindCommand(trimmedLine);
-        }
-
-        if (lowerCaseLine.startsWith("help")) {
+        case "help":
             return new HelpCommand(trimmedLine);
-        }
-
-        if (lowerCaseLine.startsWith("exit")) {
+        case "exit":
             return new ExitCommand();
+        default:
+            return null;
         }
+    }
 
-        return null;
+    private static void handleUnknownCommand(String line, Ui ui) {
+        String firstWord = extractFirstWord(line);
+        Optional<String> suggestion = TYPO_DETECTOR.findClosestMatch(firstWord);
+        if (suggestion.isPresent()) {
+            ui.showMessage("Do you mean " + suggestion.get() + "?");
+        } else {
+            ui.showError("Invalid command, please try addItem, deleteItem, editItem, transact, listItems, help, exit");
+        }
+    }
+
+    private static String extractFirstWord(String line) {
+        return line.trim().split("\\s+")[0];
     }
 }
