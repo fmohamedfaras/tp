@@ -9,7 +9,6 @@ import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
 import seedu.inventorybro.Ui;
 
-
 /**
  * Tests for {@link DeleteCommand}.
  */
@@ -19,6 +18,7 @@ class DeleteCommandTest {
     /**
      * Verifies that deleting a valid index removes the correct item.
      */
+    //@@author fmohamedfaras
     @Test
     void execute_validIndex_itemRemoved() {
         ItemList items = new ItemList();
@@ -34,6 +34,7 @@ class DeleteCommandTest {
     /**
      * Verifies that out-of-range indices are rejected without mutating the list.
      */
+    //@@author fmohamedfaras
     @Test
     void execute_invalidIndex_throwsException() {
         ItemList items = new ItemList();
@@ -56,6 +57,7 @@ class DeleteCommandTest {
     /**
      * Verifies that malformed delete input is rejected.
      */
+    //@@author fmohamedfaras
     @Test
     void execute_invalidInputFormats_throwsException() {
         ItemList items = new ItemList();

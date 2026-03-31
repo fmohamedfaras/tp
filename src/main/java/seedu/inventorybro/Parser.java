@@ -5,8 +5,10 @@ import seedu.inventorybro.command.Command;
 import seedu.inventorybro.command.DeleteCommand;
 import seedu.inventorybro.command.EditCommand;
 import seedu.inventorybro.command.ExitCommand;
+import seedu.inventorybro.command.HelpCommand;
 import seedu.inventorybro.command.ListCommand;
 import seedu.inventorybro.command.TransactCommand;
+import seedu.inventorybro.command.FindCommand;
 
 public class Parser {
     public static void parse(String line, ItemList items, Ui ui) {
@@ -16,7 +18,7 @@ public class Parser {
 
         Command command = parseCommand(line);
         if (command == null) {
-            ui.showError("Invalid command, please try addItem, deleteItem, edit, transact, list, exit");
+            ui.showError("Invalid command, please try addItem, deleteItem, editItem, transact, listItems, help, exit");
             return;
         }
 
@@ -45,6 +47,14 @@ public class Parser {
 
         if (lowerCaseLine.startsWith("list")) {
             return new ListCommand(trimmedLine);
+        }
+
+        if (lowerCaseLine.startsWith("find")) {
+            return new FindCommand(trimmedLine);
+        }
+
+        if (lowerCaseLine.startsWith("help")) {
+            return new HelpCommand(trimmedLine);
         }
 
         if (lowerCaseLine.startsWith("exit")) {

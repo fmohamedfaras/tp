@@ -8,6 +8,11 @@ list
 lIsT all
 ListItem
 listItems
+findItem
+findItem
+findItem app
+findItem an
+findItem ghost
 delete
 deleteItem 0
 deleteItem 23
@@ -23,4 +28,16 @@ transact 1 q/50
 transact 2 q/-40
 transact 2 q/-39
 invalidCommand
+helpinvalid
+help
+help invalidCommandName
+help addItem extraWord
+help addItem
+help deleteItem
+help editItem
+help transact
+help listItems
+help findItem
+help help
+help exit
 exit
