@@ -37,6 +37,25 @@ Here are your current inventory items:
 4. bananas (Quantity: 65)
 --------------------------------------------------
 > --------------------------------------------------
+ERROR: Invalid find format! Use: findItem KEYWORD
+--------------------------------------------------
+> --------------------------------------------------
+ERROR: Invalid find format! Use: findItem KEYWORD
+--------------------------------------------------
+> --------------------------------------------------
+Here are the matching items in your inventory:
+1. apples (Quantity: 233)
+--------------------------------------------------
+> --------------------------------------------------
+Here are the matching items in your inventory:
+2. oranges (Quantity: 42)
+3. mangoes (Quantity: 53)
+4. bananas (Quantity: 65)
+--------------------------------------------------
+> --------------------------------------------------
+No matching items found for: ghost
+--------------------------------------------------
+> --------------------------------------------------
 ERROR: Invalid delete format! Use: deleteItem INDEX
 --------------------------------------------------
 > --------------------------------------------------
@@ -95,6 +114,9 @@ deleteItem: Deletes an item from the current inventory list.
 editItem:   Edits the name and/or quantity of an existing item in the inventory
             based on item index. At least name or quantity must be provided,
             existing values are updated to the input values.
+findItem:   Finds an item in the current inventory list based on the keyword typed
+            or displays message to the user that the inventory does not have item
+            that matches keyword.
 transact:   Updates stock quantities after a sale or restock.
 listItems:  Displays all items currently in the inventory, or displays message
             to the user that the inventory is empty if there are no items.
@@ -182,6 +204,15 @@ a message to the user that inventory is empty if there are no items in the curre
 inventory.
 
 Example usage: listItems
+
+--------------------------------------------------
+> --------------------------------------------------
+findItem:
+Finds and lists all items in the inventory whose description contains the keyword.
+The search is case-insensitive and matches partial words.
+
+Example usage: findItem app
+This displays all items containing 'app' in their name, such as 'Apples' or 'Pineapple'.
 
 --------------------------------------------------
 > --------------------------------------------------

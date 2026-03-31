@@ -24,6 +24,7 @@ public class DeleteCommand implements Command {
      *
      * @param items The inventory item list to update.
      */
+    //@@author fmohamedfaras
     @Override
     public void execute(ItemList items, Ui ui) {
         String[] words = input.split(" ");

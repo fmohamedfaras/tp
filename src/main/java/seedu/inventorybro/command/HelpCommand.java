@@ -21,6 +21,9 @@ public class HelpCommand implements Command {
             editItem:   Edits the name and/or quantity of an existing item in the inventory
                         based on item index. At least name or quantity must be provided,
                         existing values are updated to the input values.
+            findItem:   Finds an item in the current inventory list based on the keyword typed 
+                        or displays message to the user that the inventory does not have item
+                        that matches keyword.
             transact:   Updates stock quantities after a sale or restock.
             listItems:  Displays all items currently in the inventory, or displays message
                         to the user that the inventory is empty if there are no items.
@@ -116,10 +119,20 @@ public class HelpCommand implements Command {
             
             Example usage: exit
             """;
+    private static final String helpFindItemMessage = """
+            findItem:
+            Finds and lists all items in the inventory whose description contains the keyword.
+            The search is case-insensitive and matches partial words.
+            
+            Example usage: findItem app
+            This displays all items containing 'app' in their name, such as 'Apples' or 'Pineapple'.
+            """;
+
     private static final Map<String, String> commandMessages = Map.ofEntries(
             entry("addItem", helpAddItemMessage),
             entry("deleteItem", helpDeleteItemMessage),
             entry("editItem", helpEditItemMessage),
+            entry("findItem", helpFindItemMessage),
             entry("transact", helpTransactMessage),
             entry("listItems", helpListItemsMessage),
             entry("help", helpHelpMessage),
@@ -172,7 +185,7 @@ public class HelpCommand implements Command {
         boolean isNotCommand = !words[1].equals("addItem") && !words[1].equals("deleteItem")
                 && !words[1].equals("editItem") && !words[1].equals("transact")
                 && !words[1].equals("listItems") && !words[1].equals("help")
-                && !words[1].equals("exit");
+                && !words[1].equals("findItem") && !words[1].equals("exit");
 
         if (isNotCommand || !(words.length == 2)) {
             throw new IllegalArgumentException("Invalid help format. "
