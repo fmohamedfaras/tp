@@ -3,6 +3,7 @@ package seedu.inventorybro.command;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import seedu.inventorybro.DuplicateItemValidator;
 import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
 import seedu.inventorybro.Ui;
@@ -38,8 +39,9 @@ public class AddCommand implements Command {
             );
         }
 
-        String name = matcher.group(1);
+        String name = matcher.group(1).trim();
         int quantity = Integer.parseInt(matcher.group(2));
+        new DuplicateItemValidator().validate(name, items);
         Item newItem = new Item(name, quantity);
         items.addItem(newItem);
 
