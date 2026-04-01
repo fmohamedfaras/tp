@@ -6,6 +6,7 @@ import seedu.inventorybro.Ui;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+//@@author elliotjohnwu
 public class ShowTransactionHistoryCommandTest {
 
     @Test

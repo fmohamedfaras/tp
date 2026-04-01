@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 
+//@@author elliotjohnwu
 /**
  * Handles saving and loading transaction history as plain strings.
  * No Transaction class is required — formatting is handled internally.

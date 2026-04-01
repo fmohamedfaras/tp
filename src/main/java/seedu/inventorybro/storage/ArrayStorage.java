@@ -6,6 +6,7 @@ import seedu.inventorybro.ItemList;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
+//@@author elliotjohnwu
 /**
  * Handles saving and loading the ItemList.
  * Extends Storage with Item-specific encode and decode logic.
