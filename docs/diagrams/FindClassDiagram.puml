@@ -1,0 +1,46 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+hide circle
+
+
+
+    interface Command <<interface>> {
+        + execute(items: ItemList, ui: Ui): void
+    }
+    class FindCommand {
+        - {static} FIND_COMMAND_PATTERN: Pattern
+        - input: String
+        + FindCommand(input: String)
+        + execute(items: ItemList, ui: Ui): void
+    }
+
+
+    class ItemList {
+        + size(): int
+        + getItem(index: int): Item
+    }
+
+    class Item {
+        + getDescription(): String
+    }
+
+    class Ui {
+        + showMessage(message: String): void
+    }
+
+' Relationships
+Command <|.. FindCommand
+
+FindCommand ..> ItemList : reads >
+FindCommand ..> Item : reads >
+FindCommand ..> Ui : uses >
+
+note right of FindCommand
+  execute() iterates through the
+  ItemList and uses contains()
+  on each Item's description to
+  find partial matches.
+end note
+
+@enduml

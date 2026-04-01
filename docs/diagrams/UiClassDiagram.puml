@@ -1,0 +1,52 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+hide circle
+
+
+    class Ui {
+        - {static} PROMPT: String
+        - isInteractive: boolean
+        - lineReader: LineReader
+        - fallbackReader: BufferedReader
+        - autocompleter: Autocompleter
+
+        + Ui()
+        + showWelcome(): void
+        + showLine(): voidx
+        + readCommand(): String
+        + showMessage(message: String): void
+        + showError(message: String): void
+        - buildLineReader(): LineReader
+        - complete(reader: LineReader, line: ParsedLine, candidates: List<Candidate>): void
+    }
+
+
+        class Autocompleter {
+            + getMatches(partial: String): List<String>
+        }
+
+
+
+
+    interface LineReader <<interface>>
+
+
+
+    class BufferedReader
+
+' Relationships
+Ui *--> "1" Autocompleter : creates/owns >
+Ui o--> "0..1" LineReader : uses (if interactive) >
+Ui o--> "0..1" BufferedReader : uses (if fallback) >
+
+note right of Ui
+  The constructor checks System.console()
+  to set **isInteractive**.
+
+  If true, it initializes **LineReader** for
+  autocompletion. Otherwise, it initializes
+  **BufferedReader** for test scripts.
+end note
+
+@enduml
