@@ -47,7 +47,7 @@ class AutocompleterTest {
     @Test
     void getMatches_emptyString_returnsAllKeywords() {
         List<String> matches = autocompleter.getMatches("");
-        assertEquals(8, matches.size());
+        assertEquals(9, matches.size());
     }
 
     @Test
