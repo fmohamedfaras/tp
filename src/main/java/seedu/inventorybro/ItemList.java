@@ -79,30 +79,30 @@ public class ItemList {
     public ArrayList<Item> getSortedItems(String field, String order) {
         ArrayList<Item> sortedItems = null;
         switch (field) {
-            case "quantity":
-                if (order.equals("high")) {
-                    sortedItems = items.stream()
-                            .sorted(Comparator.comparing(Item::getQuantity).reversed())
-                            .collect(Collectors.toCollection(ArrayList::new));
-                } else if (order.equals("low")) {
-                    sortedItems = items.stream()
-                            .sorted(Comparator.comparing(Item::getQuantity))
-                            .collect(Collectors.toCollection(ArrayList::new));
-                }
-                break;
-            case "price":
-                if (order.equals("high")) {
-                    sortedItems = items.stream()
-                            .sorted(Comparator.comparing(Item::getPrice).reversed())
-                            .collect(Collectors.toCollection(ArrayList::new));
-                } else if (order.equals("low")) {
-                    sortedItems = items.stream()
-                            .sorted(Comparator.comparing(Item::getPrice))
-                            .collect(Collectors.toCollection(ArrayList::new));
-                }
-                break;
-            default:
-                break;
+        case "quantity":
+            if (order.equals("high")) {
+                sortedItems = items.stream()
+                        .sorted(Comparator.comparing(Item::getQuantity).reversed())
+                        .collect(Collectors.toCollection(ArrayList::new));
+            } else if (order.equals("low")) {
+                sortedItems = items.stream()
+                        .sorted(Comparator.comparing(Item::getQuantity))
+                        .collect(Collectors.toCollection(ArrayList::new));
+            }
+            break;
+        case "price":
+            if (order.equals("high")) {
+                sortedItems = items.stream()
+                        .sorted(Comparator.comparing(Item::getPrice).reversed())
+                        .collect(Collectors.toCollection(ArrayList::new));
+            } else if (order.equals("low")) {
+                sortedItems = items.stream()
+                        .sorted(Comparator.comparing(Item::getPrice))
+                        .collect(Collectors.toCollection(ArrayList::new));
+            }
+            break;
+        default:
+            break;
         }
         return sortedItems;
     }
