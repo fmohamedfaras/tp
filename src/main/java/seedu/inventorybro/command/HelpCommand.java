@@ -22,11 +22,15 @@ public class HelpCommand implements Command {
             editItem:   Edits the name and/or quantity of an existing item in the inventory
                         based on item index. At least name or quantity must be provided,
                         existing values are updated to the input values.
-            findItem:   Finds an item in the current inventory list based on the keyword typed \
+            findItem:   Finds an item in the current inventory list based on the keyword typed
 
                         or displays message to the user that the inventory does not have item
                         that matches keyword.
+            filerItem:  Displays only the items that match one or more field-based predicates.
+                        Predicates can be combined using AND (both must match) and OR (either
+                        must match). AND binds tighter than OR.
             transact:   Updates stock quantities after a sale or restock.
+            showTransactHistory: Shows a list of history of transactions.
             listItems:  Displays all items currently in the inventory, or displays message
                         to the user that the inventory is empty if there are no items.
             help:       Displays summaries of each command to the user, or displays a detailed
@@ -77,6 +81,30 @@ public class HelpCommand implements Command {
             Example usage: findItem app
             This displays all items containing 'app' in their name, such as 'Apples' or 'Pineapple'.
             """;
+    private static final String HELPFILTERITEMMESSAGE = """
+            filterItem:
+            Displays only the items that match one or more field-based predicates. Predicates can be
+            combined using AND (both must match) and OR (either must match). AND binds tighter than OR.
+            
+            Supported fields and value types:
+            Field	     Operators	      Value format
+            description	   = < >	   Text enclosed in single quotes (e.g. 'Coke')
+            quantity	   = < >	   Non-negative integer (e.g. 10)
+            price	       = < >	   Non-negative integer (e.g. 5)
+            
+            Note: Description values must always be wrapped in single quotes. Quantity and price values
+            must be whole numbers — decimals are not accepted.
+            
+            Example usage:
+            (Single predicate): filterItem quantity > 10
+            
+            (AND — both conditions must hold): filterItem quantity > 10 AND quantity < 40
+            
+            (OR — either condition matches): filterItem description = 'Coke Can' OR description = 'Sprite Bottle'
+            
+            (price filter): filterItem price < 5
+            
+            """
     private static final String HELPTRANSACTMESSAGE = """
             transact:
             Increases (restocking) or decreases (selling) quantity of the item based on the
@@ -134,6 +162,7 @@ public class HelpCommand implements Command {
             entry("deleteItem", HELPDELETEITEMMESSAGE),
             entry("editItem", HELPEDITITEMMESSAGE),
             entry("findItem", HELPFINDITEMMESSAGE),
+            entry("filterItem", HELPFILTERITEMMESSAGE),
             entry("transact", HELPTRANSACTMESSAGE),
             entry("listItems", HELPLISTITEMSMESSAGE),
             entry("help", HELPHELPMESSAGE),
