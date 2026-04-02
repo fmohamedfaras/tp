@@ -145,6 +145,8 @@ The `ShowTransactionHistoryCommand` retrieves and displays all past transactions
 ![Show History Sequence Diagram](diagrams/ShowTransactionHistoryCommandSequenceDiagram.png)
 
 ### Viewing list of items in the inventory
+**Figure 12: List Command Class Diagram**
+![Show List Command Class Diagram](diagrams/ListCommandClassDiagram.png)
 
 **Step-by-step Execution:**
 1. When the user inputs `listItems`, the parser instantiates a new `ListCommand` with the raw input string.
@@ -154,7 +156,12 @@ The `ShowTransactionHistoryCommand` retrieves and displays all past transactions
 5. Control is returned to the `execute` method which checks if the inventory list is empty and passes a message that the inventory is empty to the `ui` to display to the user.
 6. Otherwise, it passes the list of items in the inventory to the `ui` to display to the user.
 
+**Figure 13: List Command Sequence Diagram**
+![List Command Sequence Diagram](diagrams/ListCommandSequenceDiagram.png)
+
 ### Viewing help instructions of how to use commands
+**Figure 14: Help Command Sequence Diagram**
+![Show Help Command Class Diagram](diagrams/HelpCommandClassDiagram.png)
 
 **Step-by-step Execution:**
 1. The user inputs `help` or specifies a particular command and inputs `help [command_name]`.
@@ -164,6 +171,9 @@ The `ShowTransactionHistoryCommand` retrieves and displays all past transactions
 5. The `execute` method then checks the raw input string if a particular command name is specified:
     * If yes, then the detailed instruction of that particular command is passed to the `ui` to be displayed to the user.
     * If no, which means the user input is only `help`, then the command names and their summaries are passed to the `ui` to display to the user.
+
+**Figure 15: Help Command Sequence Diagram**
+![Help Command Sequence Diagram](diagrams/HelpCommandSequenceDiagram.png)
 
 ---
 ### Storage System
