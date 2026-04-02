@@ -82,15 +82,28 @@ Edits the name and/or quantity of an item based on its index. At least one of th
   1. Coke Can (Quantity: 50)
   ```
   ### 4. Viewing All Items: `listItems`
-Displays a numbered list of all items currently in your inventory.
+Displays a numbered list of all items currently in your inventory. Indicate a field and order to view the list of items sorted based on them. The options for `[FIELD]` are `quantity` and `price`. The options for `[ORDER]` are `high` for descending order and `low` for ascending order.
 
-* **Format:** `listItems`
-* **Example Output:**
+* **Format:** `listItems` or `listItems [FIELD] [ORDER]`
+* **Examples and output:**
   ```text
+  > listItems
   Here are your current inventory items:
-  1. Coke Can (Quantity: 50)
-  2. Sprite Bottle (Quantity: 30)
-  3. Potato Chips (Quantity: 20)
+  1. Coke Can (Quantity: 50, Price: $2.00)
+  2. Sprite Bottle (Quantity: 30, Price: $1.00)
+  3. Potato Chips (Quantity: 20, Price: $3.00)
+  
+  > listItems quantity high
+  Here are your current inventory items based on quantity in descending order:
+  1. Coke Can (Quantity: 50, Price: $2.00)
+  2. Potato Chips (Quantity: 20, Price: $3.00)
+  3. Sprite Bottle (Quantity: 30, Price: $1.00)
+  
+  > listItems price low
+  Here are your current inventory items based on price in ascending order:
+  1. Sprite Bottle (Quantity: 30, Price: $1.00)
+  2. Coke Can (Quantity: 50, Price: $2.00)
+  3. Potato Chips (Quantity: 20, Price: $3.00)
   ```
 
 ### 5. Finding an Item: `findItem`

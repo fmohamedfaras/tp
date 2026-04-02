@@ -13,6 +13,8 @@
     * [Filtering Items](#filtering-items)
     * [Transacting an Item](#transacting-an-item)
     * [Viewing Transaction History](#viewing-transaction-history)
+    * [Viewing list of items in the inventory](#viewing-list-of-items-in-the-inventory)
+    * [Viewing help instructions of how to use commands](#Viewing-help-instructions-of-how-to-use-commands)
     * [Storage System](#storage-system)
     * [Command Autocompletion (Trie & JLine)](#command-autocompletion)
     * [Typo Detection](#typo-detection)
@@ -215,7 +217,7 @@ The `ShowTransactionHistoryCommand` retrieves and displays all past transactions
 ![Show History Sequence Diagram](diagrams/ShowTransactionHistoryCommandSequenceDiagram.png)
 
 ### Viewing list of items in the inventory
-**Figure 12: List Command Class Diagram**
+**Figure 25: List Command Class Diagram**
 ![Show List Command Class Diagram](diagrams/ListCommandClassDiagram.png)
 
 **Step-by-step Execution:**
@@ -226,11 +228,11 @@ The `ShowTransactionHistoryCommand` retrieves and displays all past transactions
 5. Control is returned to the `execute` method which checks if the inventory list is empty and passes a message that the inventory is empty to the `ui` to display to the user.
 6. Otherwise, it passes the list of items in the inventory to the `ui` to display to the user.
 
-**Figure 13: List Command Sequence Diagram**
+**Figure 26: List Command Sequence Diagram**
 ![List Command Sequence Diagram](diagrams/ListCommandSequenceDiagram.png)
 
 ### Viewing help instructions of how to use commands
-**Figure 14: Help Command Sequence Diagram**
+**Figure 27: Help Command Sequence Diagram**
 ![Show Help Command Class Diagram](diagrams/HelpCommandClassDiagram.png)
 
 **Step-by-step Execution:**
@@ -242,7 +244,7 @@ The `ShowTransactionHistoryCommand` retrieves and displays all past transactions
     * If yes, then the detailed instruction of that particular command is passed to the `ui` to be displayed to the user.
     * If no, which means the user input is only `help`, then the command names and their summaries are passed to the `ui` to display to the user.
 
-**Figure 15: Help Command Sequence Diagram**
+**Figure 28: Help Command Sequence Diagram**
 ![Help Command Sequence Diagram](diagrams/HelpCommandSequenceDiagram.png)
 
 ---

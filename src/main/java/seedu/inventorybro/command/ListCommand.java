@@ -61,7 +61,7 @@ public class ListCommand implements Command {
                 + ":");
         for (int i = 0; i < items.size(); i++) {
             listIndex = i + 1;
-            System.out.println(listIndex + ". " + (field.isEmpty() ? items.getItem(i) : sortedItems.get(i)));
+            ui.showMessage(listIndex + ". " + (field.isEmpty() ? items.getItem(i) : sortedItems.get(i)));
         }
 
         assert listIndex == items.size() : "List index should be equal to total number " +
