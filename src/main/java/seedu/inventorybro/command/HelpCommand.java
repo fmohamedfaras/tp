@@ -30,7 +30,8 @@ public class HelpCommand implements Command {
                         Predicates can be combined using AND (both must match) and OR (either
                         must match). AND binds tighter than OR.
             transact:   Updates stock quantities after a sale or restock.
-            showTransactHistory: Shows a list of history of transactions.
+            showTransactHistory: Displays a complete, numbered list of all past transactions
+                                 (sales and restocks) recorded by the application.
             listItems:  Displays all items currently in the inventory, or displays message
                         to the user that the inventory is empty if there are no items.
             help:       Displays summaries of each command to the user, or displays a detailed
@@ -104,7 +105,7 @@ public class HelpCommand implements Command {
             
             (price filter): filterItem price < 5
             
-            """
+            """;
     private static final String HELPTRANSACTMESSAGE = """
             transact:
             Increases (restocking) or decreases (selling) quantity of the item based on the
@@ -128,6 +129,13 @@ public class HelpCommand implements Command {
             This subtract off '10' from the existing quantity assigned to the item indexed at 1
             in the inventory list, provided that it does not result in a quantity lower than 0.
             Otherwise, an error will be shown.
+            """;
+    private static final String HELPSHOWHISTORYMESSAGE = """
+            showHistory:
+            Displays a complete, numbered list of all past transactions (sales and restocks)
+            recorded by the application.
+            
+            Example usage: showHistory
             """;
     private static final String HELPLISTITEMSMESSAGE = """
             listItems:
@@ -164,6 +172,7 @@ public class HelpCommand implements Command {
             entry("findItem", HELPFINDITEMMESSAGE),
             entry("filterItem", HELPFILTERITEMMESSAGE),
             entry("transact", HELPTRANSACTMESSAGE),
+            entry("showHistory", HELPSHOWHISTORYMESSAGE),
             entry("listItems", HELPLISTITEMSMESSAGE),
             entry("help", HELPHELPMESSAGE),
             entry("exit", HELPEXITMESSAGE)
