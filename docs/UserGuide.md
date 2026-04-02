@@ -175,7 +175,23 @@ Updates the stock quantity after a sale or restock.
   Sprite Bottle new quantity: 40
   ```
 
-### 8. Getting Help: `help`
+### 8. Viewing Transaction History: `showHistory`
+Displays a complete, numbered list of all past transactions (sales and restocks) recorded by the application.
+
+* **Format:** `showHistory`
+* **Example Output (With History):**
+  ```text
+  Transaction History:
+  1. Coke Can: -5
+  2. Sprite Bottle: +10
+  3. Potato Chips: -2
+  ```
+* **Example Output (Empty History):**
+  ```text
+  No transaction history found.
+  ```
+
+### 9. Getting Help: `help`
 Displays a quick-reference list of all available commands, or provides detailed instructions and examples for a specific command.
 
 * **Format 1 (General Summary):** `help`
@@ -195,7 +211,7 @@ Displays a quick-reference list of all available commands, or provides detailed 
 
 * **Format:** `help`
 
-### 9. Exiting the Program: `exit`
+### 10. Exiting the Program: `exit`
 Safely closes the application.
 
 * **Format:** `exit`
