@@ -7,12 +7,15 @@
     * [UI Component](#ui-component)
     * [Parser Component](#parser-component)
 3. [Implementation](#implementation)
+    * [Adding an Item](#adding-an-item)
     * [Deleting an Item](#deleting-an-item)
     * [Finding an Item](#finding-an-item)
+    * [Filtering Items](#filtering-items)
     * [Transacting an Item](#transacting-an-item)
     * [Viewing Transaction History](#viewing-transaction-history)
     * [Storage System](#storage-system)
     * [Command Autocompletion (Trie & JLine)](#command-autocompletion)
+    * [Typo Detection](#typo-detection)
 4. [Proposed/Planned Features](#proposedplanned-features)
     * [Storage & Data Persistence](#storage--data-persistence)
 
@@ -68,9 +71,31 @@ The `Parser` is responsible for routing user input to the correct command.
 
 ## Implementation
 
+### Adding an Item
+
+The add mechanism is handled by the `AddCommand` class. It validates the input, creates a new `Item`, and appends it to the inventory.
+
+**Figure 13: Add Command Class Diagram**
+![Add Command Class Diagram](diagrams/AddCommandClassDiagram.png)
+
+**Step-by-step Execution:**
+1. The user inputs `addItem d/Apple q/50`.
+2. `Parser` matches the `addItem` prefix and instantiates a new `AddCommand` with the raw input string.
+3. `Parser` calls `execute(items, ui)` on the `AddCommand`.
+4. `AddCommand.execute()` immediately creates a new `AddCommandValidator` and calls `validate(items)`.
+5. `AddCommandValidator` applies the regex `^addItem d/(.*?) q/(\d+)$` to the input. If it does not match, it throws `IllegalArgumentException` with `"Invalid addItem format! Use: addItem d/NAME q/INITIAL_QUANTITY"`. If the format is valid, it trims the captured name and delegates to `DuplicateItemValidator`, which iterates the `ItemList` performing a case-insensitive name comparison; a match throws `IllegalArgumentException` with `"An item named '<NAME>' already exists in the inventory."`.
+6. If validation passes, `AddCommand` re-applies the same regex to extract the trimmed name and parses the quantity as an integer.
+7. A new `Item` is constructed and appended to the `ItemList` via `items.addItem(newItem)`.
+8. `ui.showMessage("Added: " + newItem)` confirms the addition to the user.
+
+**Figure 14: Add Command Sequence Diagram**
+![Add Command Sequence Diagram](diagrams/AddCommandSequenceDiagram.png)
+
+---
+
 ### Deleting an Item
 
-**Figure 4: Delete Command Class Diagram**  
+**Figure 15: Delete Command Class Diagram**
 ![Delete Class Diagram](diagrams/DeleteClassDiagram.png)
 
 **Step-by-step Execution:**
@@ -82,13 +107,13 @@ The `Parser` is responsible for routing user input to the correct command.
 6. Finally, a success message containing the removed item's details is passed to the `Ui` to be displayed to the user.
 
 
-**Figure 5: Delete Command Sequence Diagram**  
+**Figure 16: Delete Command Sequence Diagram**
 ![Delete Sequence Diagram](diagrams/DeleteSequenceDiagram.png)
 
 
 ### Finding an Item
 
-**Figure 6: Find Command Class Diagram**  
+**Figure 17: Find Command Class Diagram**
 ![Find Class Diagram](diagrams/FindClassDiagram.png)
 
 **Step-by-step Execution:**
@@ -99,15 +124,38 @@ The `Parser` is responsible for routing user input to the correct command.
 5. Matching items are immediately passed to the `Ui` to be displayed. If no items match by the end of the loop, a "not found" message is displayed instead.
 
 
-**Figure 7: Find Command Sequence Diagram**  
+**Figure 18: Find Command Sequence Diagram**
 ![Find Sequence Diagram](diagrams/FindSequenceDiagram.png)
 
+
+### Filtering Items
+
+The filter mechanism is handled by the `FilterCommand` class. It evaluates one or more field-operator-value predicates — joined by `AND` / `OR` — against every item in the inventory and displays all matching results.
+
+**Figure 19: Filter Command Class Diagram**
+![Filter Command Class Diagram](diagrams/FilterCommandClassDiagram.png)
+
+**Step-by-step Execution:**
+1. The user inputs a command such as `filterItem quantity > 10` or `filterItem description = 'Apple' OR quantity < 5`. The `Parser` instantiates a new `FilterCommand` with the raw input string.
+2. The `Parser` calls `execute(items, ui)` on the `FilterCommand`.
+3. Inside `execute()`, `FilterCommand` immediately creates a `FilterCommandValidator` and calls `validate(items)`.
+4. `FilterCommandValidator` first checks that the input starts with `"filterItem "`. It then applies the predicate regex `(description|quantity|price) (=|<|>) ('.*?'|[^\s']+)` to extract all predicate matches and their positions.
+5. The validator checks every gap between consecutive matches: the first gap must be empty, each subsequent gap must be exactly `AND` or `OR`, and no trailing text may follow the last predicate. A bad gap throws `IllegalArgumentException` (e.g. `"Expected AND or OR between predicates, found: '...'"` ). It then validates each predicate's value type: `description` values must be single-quoted; `quantity` and `price` values must match `^\d+$`. A type mismatch throws `IllegalArgumentException`.
+6. Back in `execute()`, the same regex builds a flat list of `[field, operator, value]` arrays and a corresponding list of joining operators.
+7. `buildAndGroups()` splits the flat list into AND-groups: consecutive predicates joined by `AND` stay in the same group; an `OR` starts a new group. This implements AND-before-OR precedence without explicit precedence parsing.
+8. `collectMatchingItems()` iterates every `Item` in the `ItemList`. For each item, `passesFilter()` checks whether it satisfies every predicate in at least one AND-group. Within a group, `evaluatePredicate()` resolves each field: `description` uses `String.compareTo`; `quantity` and `price` use `Integer.compare`. The comparator result is tested against `=`, `<`, or `>` by `satisfiesOperator()`.
+9. If no items match, `Ui` displays `"No items match the given filter."`. Otherwise it displays `"Here are the filtered items:"` followed by a numbered list of matching items in their original inventory order.
+
+**Figure 20: Filter Command Sequence Diagram**
+![Filter Command Sequence Diagram](diagrams/FilterCommandSequenceDiagram.png)
+
+---
 
 ### Transacting an Item
 
 The transact mechanism is handled by the `TransactCommand` class. It updates an item's quantity and records the transaction.
 
-**Figure 8: Transact Command Class Diagram**  
+**Figure 21: Transact Command Class Diagram**
 ![Transact Class Diagram](diagrams/TransactCommandClassDiagram.png)
 
 **Step-by-step Execution:**
@@ -123,7 +171,7 @@ The transact mechanism is handled by the `TransactCommand` class. It updates an 
 8. `TransactionStorage.saveHistory()` records the transaction
 9. UI displays updated quantity
 
-**Figure 9: Transact Command Sequence Diagram**  
+**Figure 22: Transact Command Sequence Diagram**
 ![Transact Sequence Diagram](diagrams/TransactCommandSequenceDiagram.png)
 
 
@@ -131,7 +179,7 @@ The transact mechanism is handled by the `TransactCommand` class. It updates an 
 
 The `ShowTransactionHistoryCommand` retrieves and displays all past transactions.
 
-**Figure 10: Show History Class Diagram**  
+**Figure 23: Show History Class Diagram**
 ![Show History Class Diagram](diagrams/ShowTransactionHistoryCommandClassDiagram.png)
 
 **Step-by-step Execution:**
@@ -142,7 +190,7 @@ The `ShowTransactionHistoryCommand` retrieves and displays all past transactions
 5. If empty → show message
 6. Otherwise → iterate and print all entries
 
-**Figure 11: Show History Sequence Diagram**  
+**Figure 24: Show History Sequence Diagram**
 ![Show History Sequence Diagram](diagrams/ShowTransactionHistoryCommandSequenceDiagram.png)
 
 ---
@@ -151,7 +199,7 @@ The `ShowTransactionHistoryCommand` retrieves and displays all past transactions
 
 The storage system is responsible for persisting both inventory data and transaction history.
 
-**Figure 12: Storage Class Diagram**  
+**Figure 25: Storage Class Diagram**
 ![Storage Class Diagram](diagrams/StorageClassDiagram.png)
 
 **Design breakdown:**
@@ -177,12 +225,54 @@ The storage system is responsible for persisting both inventory data and transac
 
 ### Command Autocompletion
 
-To enhance user experience, InventoryBRO features a robust autocompletion engine.
+The autocompletion mechanism is handled by the `Autocompleter` class, which wraps a `Trie` data structure and integrates with JLine's completer API to provide real-time tab-completion of command keywords in interactive terminal sessions.
 
-**Implementation Details:**
-* Uses Trie for efficient prefix search
-* Case-insensitive matching
-* Integrated with JLine
+**Figure 26: Autocompleter Class Diagram**
+
+![Autocompleter Class Diagram](diagrams/AutocompleterClassDiagram.png)
+
+**Step-by-step Execution:**
+
+**Initialisation:**
+1. `Ui` is constructed and immediately instantiates a new `Autocompleter`.
+2. `Autocompleter`'s constructor calls `buildTrie()`, which creates a new `Trie` (and its root `TrieNode`).
+3. `buildTrie()` iterates over every value in `CommandWord.values()` and calls `trie.insert(cmd.getWord())` for each keyword.
+4. `Trie.insert()` traverses the trie character by character (lowercased), calling `getOrCreateChild(ch)` on each `TrieNode`. At the terminal node it calls `setKeyword(word)` to store the original-cased keyword, marking that node as an end-of-word.
+5. After construction, `Autocompleter` holds a fully populated `Trie` that can answer prefix-match queries for all known command words.
+
+**Tab-completion (user presses Tab):**
+1. JLine detects the Tab keystroke and invokes `Ui.complete(reader, line, candidates)`.
+2. `Ui.complete()` checks `line.wordIndex() == 0`; if the cursor is not on the first word, it returns immediately (no completion for arguments).
+3. `Ui.complete()` calls `autocompleter.getMatches(line.word())`, passing the current partial word as the prefix.
+4. `Autocompleter.getMatches()` delegates to `trie.findWithPrefix(prefix)`.
+5. `Trie.findWithPrefix()` calls `navigateTo(prefix.toLowerCase())` to walk down the trie to the node corresponding to the prefix. If no such node exists, an empty list is returned.
+6. Starting from the prefix node, `collectWords()` recursively visits every descendant node. Any node where `isEndOfWord()` is true contributes its stored keyword to the result list.
+7. The list of matching keywords is returned to `Ui.complete()`, which wraps each keyword in a `Candidate` object and adds it to JLine's `candidates` list.
+8. JLine displays the candidates to the user in the terminal (inline if only one match, or as a menu if multiple).
+
+**Figure 27: Autocompleter Sequence Diagram**
+![Autocompleter Sequence Diagram](diagrams/AutocompleterSequenceDiagram.png)
+
+---
+
+### Typo Detection
+
+When a user enters an unknown command, InventoryBRO attempts to detect whether it is a near-miss typo and suggests the closest known command.
+
+**Figure 28: Typo Detector Class Diagram**
+![Typo Detector Class Diagram](diagrams/TypoDetectorClassDiagram.png)
+
+**Step-by-step Execution:**
+1. The user inputs an unrecognised command (e.g. `adItem d/Apple q/5`).
+2. `Parser.parseCommand()` evaluates the first word against all known command keywords in the switch statement and returns `null` because no branch matches.
+3. `Parser.parse()` detects the `null` result and calls `handleUnknownCommand(line, ui)`.
+4. `handleUnknownCommand()` extracts the first word from the raw input and calls `TYPO_DETECTOR.findClosestMatch(firstWord)`.
+5. `TypoDetector.findClosestMatch()` converts the input to lowercase and iterates over `KNOWN_COMMANDS` (`addItem`, `deleteItem`, `editItem`, `transact`, `listItems`, `help`, `exit`). For each known command it calls `calculateWeightedEditDistance()`, which uses dynamic programming with QWERTY keyboard Manhattan distance as the substitution cost: adjacent keys on the same row cost less than keys far apart, encouraging the algorithm to prefer swaps of physically close keys over arbitrary substitutions.
+6. After scoring all commands, `findClosestMatch()` calls `isBelowTypoThreshold()` on the best candidate. The threshold is `TYPO_THRESHOLD_FACTOR (0.2) * max(inputLength, commandLength)`. If the best distance is below this threshold the command name is returned as a non-empty `Optional`; otherwise an empty `Optional` is returned.
+7. Back in `handleUnknownCommand()`, if the `Optional` is present, `ui.showMessage("Do you mean " + suggestion + "?")` prompts the user with the suggested correction. If no command qualifies, `ui.showError(...)` displays the full list of valid commands.
+
+**Figure 29: Typo Detector Sequence Diagram**
+![Typo Detector Sequence Diagram](diagrams/TypoDetectorSequenceDiagram.png)
 
 ---
 

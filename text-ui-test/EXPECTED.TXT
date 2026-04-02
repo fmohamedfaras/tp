@@ -102,6 +102,36 @@ oranges new quantity: 2
 ERROR: Transaction failed. Quantity cannot go below 0.
 --------------------------------------------------
 --------------------------------------------------
+ERROR: Invalid filterItem format! Use: filterItem description =/</> 'VALUE' or filterItem quantity =/</> VALUE or filterItem price =/</> VALUE
+--------------------------------------------------
+--------------------------------------------------
+ERROR: Invalid filterItem format! Use: filterItem description =/</> 'VALUE' or filterItem quantity =/</> VALUE or filterItem price =/</> VALUE
+--------------------------------------------------
+--------------------------------------------------
+Here are the filtered items:
+1. apples (Quantity: 283, Price: $0.00)
+--------------------------------------------------
+--------------------------------------------------
+Here are the filtered items:
+1. oranges (Quantity: 2, Price: $0.00)
+--------------------------------------------------
+--------------------------------------------------
+Here are the filtered items:
+1. bananas (Quantity: 65, Price: $0.00)
+--------------------------------------------------
+--------------------------------------------------
+Here are the filtered items:
+1. apples (Quantity: 283, Price: $0.00)
+2. oranges (Quantity: 2, Price: $0.00)
+3. bananas (Quantity: 65, Price: $0.00)
+--------------------------------------------------
+--------------------------------------------------
+No items match the given filter.
+--------------------------------------------------
+--------------------------------------------------
+No items match the given filter.
+--------------------------------------------------
+--------------------------------------------------
 ERROR: Invalid command, please try addItem, deleteItem, editItem, transact, showHistory, listItems, help, exit
 --------------------------------------------------
 --------------------------------------------------

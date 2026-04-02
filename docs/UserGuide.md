@@ -104,7 +104,48 @@ Searches for items whose descriptions contain your specified keyword. This is ca
   1. Coke Can (Quantity: 50)
   ```
 
-### 6. Recording a Transaction: `transact`
+### 6. Filtering Items: `filterItem`
+Displays only the items that match one or more field-based predicates. Predicates can be combined using `AND` (both must match) and `OR` (either must match). `AND` binds tighter than `OR`.
+
+Supported fields and value types:
+
+| Field | Operators | Value format |
+| :--- | :--- | :--- |
+| `description` | `=` `<` `>` | Text enclosed in **single quotes** (e.g. `'Coke'`) |
+| `quantity` | `=` `<` `>` | Non-negative integer (e.g. `10`) |
+| `price` | `=` `<` `>` | Non-negative integer (e.g. `5`) |
+
+* **Format:** `filterItem FIELD OPERATOR VALUE [AND|OR FIELD OPERATOR VALUE ...]`
+* **Example 1 (single predicate):** `filterItem quantity > 10`
+  ```text
+  Here are the filtered items:
+  1. Coke Can (Quantity: 50, Price: $0.00)
+  2. Potato Chips (Quantity: 20, Price: $0.00)
+  ```
+* **Example 2 (AND — both conditions must hold):** `filterItem quantity > 10 AND quantity < 40`
+  ```text
+  Here are the filtered items:
+  1. Potato Chips (Quantity: 20, Price: $0.00)
+  ```
+* **Example 3 (OR — either condition matches):** `filterItem description = 'Coke Can' OR description = 'Sprite Bottle'`
+  ```text
+  Here are the filtered items:
+  1. Coke Can (Quantity: 50, Price: $0.00)
+  2. Sprite Bottle (Quantity: 30, Price: $0.00)
+  ```
+* **Example 4 (price filter):** `filterItem price < 5`
+  ```text
+  Here are the filtered items:
+  1. Potato Chips (Quantity: 20, Price: $2.00)
+  ```
+* **No match output:**
+  ```text
+  No items match the given filter.
+  ```
+
+> **Note:** Description values must always be wrapped in single quotes. Quantity and price values must be whole numbers — decimals are not accepted.
+
+### 7. Recording a Transaction: `transact`
 Updates the stock quantity after a sale or restock.
 * Use a **negative number** for a sale.
 * Use a **positive number** for a restock.
@@ -121,7 +162,7 @@ Updates the stock quantity after a sale or restock.
   Sprite Bottle new quantity: 40
   ```
 
-### 7. Getting Help: `help`
+### 8. Getting Help: `help`
 Displays a quick-reference list of all available commands, or provides detailed instructions and examples for a specific command.
 
 * **Format 1 (General Summary):** `help`
@@ -141,7 +182,7 @@ Displays a quick-reference list of all available commands, or provides detailed 
 
 * **Format:** `help`
 
-### 8. Exiting the Program: `exit`
+### 9. Exiting the Program: `exit`
 Safely closes the application.
 
 * **Format:** `exit`
@@ -161,7 +202,56 @@ InventoryBRO automatically saves your data to the hard disk whenever:
 
 There is **no need to manually save**. Data is stored seamlessly in `./data/inventorybro.txt`. If the folder or file does not exist, InventoryBRO will automatically create it for you upon startup.
 
+---
 
+## Command Autocompletion
+
+InventoryBRO includes a built-in tab-completion engine so you never have to remember or fully type a command keyword.
+
+**How it works:**
+* Type the first few letters of any command and press the `Tab` key.
+* If only one command matches your prefix, it is completed immediately.
+* If multiple commands match, a list of candidates is shown for you to choose from.
+
+**Examples:**
+
+| You type | You press | Result |
+| :--- | :--- | :--- |
+| `add` | `Tab` | Completes to `addItem` |
+| `del` | `Tab` | Completes to `deleteItem` |
+| `li` | `Tab` | Completes to `listItems` |
+| `f` | `Tab` | Shows `filterItem`, `findItem` |
+
+**Things to know:**
+* Autocompletion only works on the **command keyword** (the first word). It does not attempt to complete arguments like item names or indices.
+* Autocompletion is only available when running the application directly from the JAR file (`java -jar inventorybro.jar`). It is **not** available when running via `./gradlew run` because Gradle pipes stdin, which disables raw terminal mode.
+* Matching is **case-insensitive** — typing `ADD` and pressing `Tab` will still complete to `addItem`.
+
+---
+
+## Typo Detection
+
+If you accidentally misspell a command, InventoryBRO will attempt to detect the mistake and suggest the closest valid command rather than silently failing.
+
+**How it works:**
+* When you enter an unrecognised command, InventoryBRO compares it to all known commands using a keyboard-aware edit-distance algorithm. Keys that are physically adjacent on a QWERTY keyboard are treated as more similar than keys that are far apart, so common slip-of-the-finger mistakes are caught more reliably.
+* If a close enough match is found, you are prompted with a suggestion. Otherwise, the full list of valid commands is shown.
+
+**Examples:**
+
+| You type | InventoryBRO responds |
+| :--- | :--- |
+| `adItem d/Coke q/5` | `Do you mean addItem?` |
+| `deletItem 2` | `Do you mean deleteItem?` |
+| `lsitItems` | `Do you mean listItems?` |
+| `eixt` | `Do you mean exit?` |
+
+**Things to know:**
+* The suggestion is a hint only — you still need to re-enter the corrected command yourself.
+* Very short or highly scrambled inputs may not produce a suggestion if no known command is close enough.
+* Typo detection runs automatically on every unrecognised input. There is nothing to configure.
+
+---
 
 ## Command Summary
 
@@ -172,6 +262,7 @@ There is **no need to manually save**. Data is stored seamlessly in `./data/inve
 | **Edit item** | `editItem INDEX (n/NAME) (q/QUANTITY)` | `editItem 2 n/New Coke Name` |
 | **List items** | `listItems` | `listItems` |
 | **Find item** | `findItem KEYWORD` | `findItem apple` |
+| **Filter items** | `filterItem FIELD OP VALUE [AND\|OR ...]` | `filterItem quantity > 10` |
 | **Record transaction** | `transact INDEX q/CHANGE` | `transact 1 q/-3` |
 | **Get Help** | `help` | `help` |
 | **Exit** | `exit` | `exit` |

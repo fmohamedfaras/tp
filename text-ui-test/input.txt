@@ -27,6 +27,14 @@ transact t q/80
 transact 1 q/50
 transact 2 q/-40
 transact 2 q/-39
+filterItem
+filterItem name = 'apples'
+filterItem description = 'apples'
+filterItem quantity < 10
+filterItem quantity > 10 AND quantity < 100
+filterItem price = 0
+filterItem price > 0
+filterItem description = 'ghost'
 invalidCommand
 helpinvalid
 help
