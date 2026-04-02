@@ -24,6 +24,7 @@ Example: `addItem d/Apple q/10`
 
 ### List all items: `listItems`
 Shows all items currently in the inventory.
+Items with a quantity of 5 or below will be flagged with `[LOW STOCK]`.
 
 Format: `listItems`
 

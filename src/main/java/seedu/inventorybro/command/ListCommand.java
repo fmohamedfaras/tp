@@ -44,7 +44,9 @@ public class ListCommand implements Command {
         ui.showMessage("Here are your current inventory items:");
         for (int i = 0; i < items.size(); i++) {
             listIndex = i + 1;
-            System.out.println(listIndex + ". " + items.getItem(i));
+            Item item = items.getItem(i);
+            String lowStock = item.getQuantity() <= 5 ? " [LOW STOCK]" : "";
+            System.out.println(listIndex + ". " + item + lowStock);
         }
         assert listIndex == items.size() : "List index should be equal to total number " +
                 "of items in list after iterating through and printing all items";
