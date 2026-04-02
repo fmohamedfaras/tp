@@ -175,7 +175,23 @@ Updates the stock quantity after a sale or restock.
   Sprite Bottle new quantity: 40
   ```
 
-### 8. Getting Help: `help`
+### 8. Viewing Transaction History: `showHistory`
+Displays a complete, numbered list of all past transactions (sales and restocks) recorded by the application.
+
+* **Format:** `showHistory`
+* **Example Output (With History):**
+  ```text
+  Transaction History:
+  1. Coke Can: -5
+  2. Sprite Bottle: +10
+  3. Potato Chips: -2
+  ```
+* **Example Output (Empty History):**
+  ```text
+  No transaction history found.
+  ```
+
+### 9. Getting Help: `help`
 Displays a quick-reference list of all available commands, or provides detailed instructions and examples for a specific command.
 
 * **Format 1 (General Summary):** `help`
@@ -195,7 +211,7 @@ Displays a quick-reference list of all available commands, or provides detailed 
 
 * **Format:** `help`
 
-### 9. Exiting the Program: `exit`
+### 10. Exiting the Program: `exit`
 Safely closes the application.
 
 * **Format:** `exit`
@@ -277,18 +293,18 @@ If you accidentally misspell a command, InventoryBRO will attempt to detect the 
 | **Find item** | `findItem KEYWORD` | `findItem apple` |
 | **Filter items** | `filterItem FIELD OP VALUE [AND\|OR ...]` | `filterItem quantity > 10` |
 | **Record transaction** | `transact INDEX q/CHANGE` | `transact 1 q/-3` |
+| **View History** | `showHistory` | `showHistory` |
 | **Get Help** | `help` | `help` |
 | **Exit** | `exit` | `exit` |
 
 ---
 
-## 🔮 Scope of v1.0
-InventoryBRO v1.0 officially supports:
+## Scope of v2.0
+InventoryBRO v2.0 officially supports:
 * Basic inventory tracking and quantity updates
 * Viewing current stock & finding specific items
 * Typo suggestions & Command Tab-autocompletion
 * Automatic background saving
 
 **Planned for Future Versions:**
-* Add price tracking to items
 * Low-stock automated alerts
