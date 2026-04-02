@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import seedu.inventorybro.ItemList;
@@ -14,26 +13,16 @@ import seedu.inventorybro.storage.TransactionStorageStub;
 
 //@@author elliotjohnwu
 /**
- * Tests for {@link ShowTransactionHistoryCommand} using a stubbed storage.
+ * Tests for {@link ShowTransactionHistoryCommand}
  */
 class ShowTransactionHistoryCommandTest {
 
-    private ItemList items;
-    private Ui ui;
+    private final ItemList items = new ItemList();
+    private final Ui ui = new Ui();
 
-    @BeforeEach
-    void setUp() {
-        items = new ItemList();
-        ui = new Ui();
-    }
-
-
-
-    /**
-     * Verifies empty history case.
-     */
     @Test
     void execute_validCommand_emptyHistoryShowsEmptyMessage() {
+
         TransactionStorageStub stub =
                 new TransactionStorageStub(new ArrayList<>());
 
@@ -43,15 +32,14 @@ class ShowTransactionHistoryCommandTest {
         assertDoesNotThrow(() -> command.execute(items, ui));
     }
 
-    /**
-     * Verifies single entry case.
-     */
     @Test
     void execute_validCommand_oneEntryDisplaysEntry() {
+
         ArrayList<String> entries = new ArrayList<>();
         entries.add("Coke Can | -5 | 2026-03-26 14:30");
 
-        TransactionStorageStub stub = new TransactionStorageStub(entries);
+        TransactionStorageStub stub =
+                new TransactionStorageStub(entries);
 
         ShowTransactionHistoryCommand command =
                 new ShowTransactionHistoryCommand("showHistory", stub);
@@ -59,17 +47,16 @@ class ShowTransactionHistoryCommandTest {
         assertDoesNotThrow(() -> command.execute(items, ui));
     }
 
-    /**
-     * Verifies multiple entries case.
-     */
     @Test
     void execute_validCommand_multipleEntriesDisplaysAll() {
+
         ArrayList<String> entries = new ArrayList<>();
         entries.add("Coke Can | -5 | 2026-03-26 14:30");
         entries.add("Sprite Bottle | 10 | 2026-03-26 14:31");
         entries.add("Fanta | -3 | 2026-03-26 14:32");
 
-        TransactionStorageStub stub = new TransactionStorageStub(entries);
+        TransactionStorageStub stub =
+                new TransactionStorageStub(entries);
 
         ShowTransactionHistoryCommand command =
                 new ShowTransactionHistoryCommand("showHistory", stub);
@@ -77,9 +64,9 @@ class ShowTransactionHistoryCommandTest {
         assertDoesNotThrow(() -> command.execute(items, ui));
     }
 
-
     @Test
     void execute_extraArguments_throwsException() {
+
         ShowTransactionHistoryCommand command =
                 new ShowTransactionHistoryCommand(
                         "showHistory extra",
@@ -92,6 +79,7 @@ class ShowTransactionHistoryCommandTest {
 
     @Test
     void execute_wrongCommandWord_throwsException() {
+
         ShowTransactionHistoryCommand command =
                 new ShowTransactionHistoryCommand(
                         "history",
@@ -104,6 +92,7 @@ class ShowTransactionHistoryCommandTest {
 
     @Test
     void execute_wrongCase_throwsException() {
+
         ShowTransactionHistoryCommand command =
                 new ShowTransactionHistoryCommand(
                         "ShowHistory",
