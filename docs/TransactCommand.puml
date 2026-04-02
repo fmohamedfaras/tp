@@ -1,10 +1,9 @@
 @startuml
 class seedu.inventorybro.command.TransactCommand {
+- {static} Logger logger
 - String input
-+ <<Create>> TransactCommand(String)
+- TransactionStorage transactionStorage
 + void execute(ItemList,Ui)
-- void checkIfDigit(String)
-- void checkIfSignedDigit(String)
 }
 
 

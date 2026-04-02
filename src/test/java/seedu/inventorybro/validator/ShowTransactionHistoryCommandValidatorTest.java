@@ -10,9 +10,9 @@ import seedu.inventorybro.ItemList;
 
 //@@author elliotjohnwu
 /**
- * Validation tests for {@link ShowTransactionHistoryValidator}.
+ * Validation tests for {@link ShowTransactionHistoryCommandValidator}.
  */
-class ShowTransactionHistoryValidatorTest {
+class ShowTransactionHistoryCommandValidatorTest {
 
     /**
      * Verifies that the exact "showHistory" input passes validation.
@@ -22,7 +22,7 @@ class ShowTransactionHistoryValidatorTest {
         ItemList items = new ItemList();
 
         assertDoesNotThrow(() ->
-                new ShowTransactionHistoryValidator("showHistory").validate(items)
+                new ShowTransactionHistoryCommandValidator("showHistory").validate(items)
         );
     }
 
@@ -35,7 +35,7 @@ class ShowTransactionHistoryValidatorTest {
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new ShowTransactionHistoryValidator("history").validate(items)
+                () -> new ShowTransactionHistoryCommandValidator("history").validate(items)
         );
     }
 
@@ -48,7 +48,7 @@ class ShowTransactionHistoryValidatorTest {
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new ShowTransactionHistoryValidator("showHistory all").validate(items)
+                () -> new ShowTransactionHistoryCommandValidator("showHistory all").validate(items)
         );
     }
 
@@ -61,7 +61,7 @@ class ShowTransactionHistoryValidatorTest {
 
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
-                () -> new ShowTransactionHistoryValidator("ShowHistory").validate(items)
+                () -> new ShowTransactionHistoryCommandValidator("ShowHistory").validate(items)
         );
 
         assertEquals("Did you mean 'showHistory'?", ex.getMessage());

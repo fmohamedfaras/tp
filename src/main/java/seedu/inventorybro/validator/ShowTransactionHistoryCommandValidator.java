@@ -6,10 +6,10 @@ import seedu.inventorybro.ItemList;
 /**
  * Validates the raw input string for the showTransactionHistory command.
  */
-public class ShowTransactionHistoryValidator implements Validator {
+public class ShowTransactionHistoryCommandValidator implements Validator {
     private final String input;
 
-    public ShowTransactionHistoryValidator(String input) {
+    public ShowTransactionHistoryCommandValidator(String input) {
         assert input != null : "Input line should not be null";
         this.input = input;
     }
