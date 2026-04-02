@@ -1,0 +1,38 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+skinparam monochrome true
+skinparam shadowing false
+hide circle
+
+interface Command <<interface>> {
+    + execute(items: ItemList, ui: Ui): void
+}
+
+class ShowTransactionHistoryCommand {
+    - input: String
+    - transactionStorage: TransactionStorage
+    + ShowTransactionHistoryCommand(input: String)
+    + execute(items: ItemList, ui: Ui): void
+}
+
+class ShowTransactionHistoryCommandValidator {
+    - input: String
+    + validate(items: ItemList): void
+}
+
+class TransactionStorage {
+    + load(): ArrayList<String>
+}
+
+class Ui {
+    + showMessage(message: String): void
+}
+
+Command <|.. ShowTransactionHistoryCommand
+
+ShowTransactionHistoryCommand ..> ShowTransactionHistoryCommandValidator : creates
+ShowTransactionHistoryCommand ..> TransactionStorage : uses
+ShowTransactionHistoryCommand ..> Ui : uses
+
+@enduml

@@ -1,0 +1,100 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+skinparam monochrome true
+skinparam shadowing false
+hide circle
+
+package "seedu.inventorybro" {
+    class InventoryBro {
+        - ui: Ui
+        - items: ItemList
+        - arrayStorage: ArrayStorage
+    }
+    class Ui
+
+
+package "command" {
+    interface Command <<interface>>
+
+    class AddCommand
+    class DeleteCommand
+    class EditCommand
+    class TransactCommand
+    class ShowTransactionHistoryCommand
+    class ListCommand
+    class FindCommand
+    class HelpCommand
+    class ExitCommand
+}
+
+
+
+package "storage" {
+    abstract class Storage
+    class ArrayStorage
+    class TransactionStorage
+}
+
+package "validator" {
+    interface Validator <<interface>>
+
+    class AddCommandValidator
+    class DeleteCommandValidator
+    class EditCommandValidator
+    class TransactCommandValidator
+    class ShowTransactionHistoryCommandValidator
+    class ListCommandValidator
+    class HelpCommandValidator
+}
+
+
+InventoryBro --> Parser
+InventoryBro --> Ui
+InventoryBro --> ArrayStorage
+
+Ui --> Parser
+Parser --> Command
+
+Command <|.. TransactCommand
+Command <|.. ShowTransactionHistoryCommand
+
+Command <|.. AddCommand
+Command <|.. DeleteCommand
+Command <|.. EditCommand
+Command <|.. ListCommand
+Command <|.. FindCommand
+Command <|.. HelpCommand
+Command <|.. ExitCommand
+
+TransactCommand --> ItemList
+TransactCommand --> TransactionStorage
+
+ShowTransactionHistoryCommand --> TransactionStorage
+
+AddCommand --> AddCommandValidator
+DeleteCommand --> DeleteCommandValidator
+EditCommand --> EditCommandValidator
+TransactCommand --> TransactCommandValidator
+ShowTransactionHistoryCommand --> ShowTransactionHistoryCommandValidator
+ListCommand --> ListCommandValidator
+HelpCommand --> HelpCommandValidator
+
+Validator <|.. AddCommandValidator
+Validator <|.. DeleteCommandValidator
+Validator <|.. EditCommandValidator
+Validator <|.. TransactCommandValidator
+Validator <|.. ShowTransactionHistoryCommandValidator
+Validator <|.. ListCommandValidator
+Validator <|.. HelpCommandValidator
+
+Storage <|-- ArrayStorage
+Storage <|-- TransactionStorage
+
+ArrayStorage --> ItemList
+
+ItemList --> Item
+
+}
+
+@enduml

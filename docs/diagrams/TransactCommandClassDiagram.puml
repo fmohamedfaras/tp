@@ -1,0 +1,49 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+hide circle
+
+interface Command <<interface>> {
+    + execute(items: ItemList, ui: Ui): void
+}
+
+class TransactCommand {
+    - input: String
+    - transactionStorage: TransactionStorage
+    + TransactCommand(input: String)
+    + execute(items: ItemList, ui: Ui): void
+}
+
+class TransactCommandValidator {
+    - input: String
+    + validate(items: ItemList): void
+}
+
+class ItemList {
+    + getItem(index: int): Item
+}
+
+class Item {
+    + getQuantity(): int
+    + setQuantity(quantity: int): void
+    + getDescription(): String
+}
+
+class TransactionStorage {
+    + saveHistory(itemName: String, change: int): void
+}
+
+class Ui {
+    + showMessage(message: String): void
+}
+
+Command <|.. TransactCommand
+
+TransactCommand ..> TransactCommandValidator : creates
+TransactCommand ..> ItemList : uses
+TransactCommand ..> Item : modifies
+TransactCommand ..> TransactionStorage : uses
+TransactCommand ..> Ui : uses
+
+@enduml

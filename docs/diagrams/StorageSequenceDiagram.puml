@@ -1,0 +1,29 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+skinparam monochrome true
+skinparam shadowing false
+hide circle
+
+participant InventoryBro
+participant ArrayStorage
+participant Storage
+participant File
+
+== Save Inventory ==
+
+InventoryBro -> ArrayStorage: saveArray(items)
+ArrayStorage -> Storage: saveArray(ArrayList<Item>)
+Storage -> File: write lines
+
+== Load Inventory ==
+
+InventoryBro -> ArrayStorage: loadItemList()
+ArrayStorage -> Storage: load()
+Storage -> File: read lines
+Storage --> ArrayStorage: ArrayList<Item>
+ArrayStorage --> InventoryBro: ItemList
+
+@enduml

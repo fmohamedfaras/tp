@@ -1,0 +1,37 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+hide circle
+
+actor User
+participant Parser
+participant TransactCommand
+participant TransactCommandValidator
+participant ItemList
+participant Item
+participant TransactionStorage
+participant Ui
+
+User -> Parser: "transact 1 q/-5"
+Parser -> TransactCommand: create(input)
+
+TransactCommand -> TransactCommandValidator: validate(items)
+TransactCommandValidator --> TransactCommand
+
+TransactCommand -> TransactCommand: parse input\n(index, change)
+
+TransactCommand -> ItemList: getItem(index)
+ItemList --> TransactCommand: Item
+
+TransactCommand -> Item: getQuantity()
+TransactCommand -> Item: setQuantity(newQuantity)
+
+TransactCommand -> TransactionStorage: saveHistory(description, change)
+
+TransactCommand -> Ui: showMessage(result)
+
+@enduml

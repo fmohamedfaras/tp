@@ -1,0 +1,35 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+hide circle
+
+actor User
+participant Parser
+participant ShowTransactionHistoryCommand
+participant ShowTransactionHistoryCommandValidator
+participant TransactionStorage
+participant Ui
+
+User -> Parser: "showHistory"
+Parser -> ShowTransactionHistoryCommand: create(input)
+
+ShowTransactionHistoryCommand -> ShowTransactionHistoryCommandValidator: validate(items)
+
+ShowTransactionHistoryCommand -> TransactionStorage: load()
+TransactionStorage --> ShowTransactionHistoryCommand: history list
+
+alt history is empty
+    ShowTransactionHistoryCommand -> Ui: "No transaction history found."
+else
+    ShowTransactionHistoryCommand -> Ui: "Transaction History:"
+    loop for each entry
+        ShowTransactionHistoryCommand -> Ui: showMessage(index + entry)
+    end
+end
+
+@enduml

@@ -1,0 +1,63 @@
+@startuml
+!pragma teoz true
+skinparam monochrome true
+skinparam shadowing false
+hide circle
+
+box "Logic" #LightBlue
+participant "<<class>>\nParser" as Parser
+participant "f:FindCommand" as FindCommand
+end box
+
+box "Data" #LightYellow
+participant "items:ItemList" as ItemList
+participant "item:Item" as Item
+end box
+
+box "UI" #LightGreen
+participant "ui:Ui" as Ui
+end box
+
+-> Parser : parse("findItem apple", items, ui)
+activate Parser
+
+create FindCommand
+Parser -> FindCommand : new FindCommand("findItem apple")
+activate FindCommand
+FindCommand --> Parser : f
+deactivate FindCommand
+
+Parser -> FindCommand : execute(items, ui)
+activate FindCommand
+
+opt Loop through all items
+    FindCommand -> ItemList : size()
+    activate ItemList
+    ItemList --> FindCommand : size
+    deactivate ItemList
+
+    FindCommand -> ItemList : getItem(i)
+    activate ItemList
+    ItemList --> FindCommand : item
+    deactivate ItemList
+
+    FindCommand -> Item : getDescription()
+    activate Item
+    Item --> FindCommand : description
+    deactivate Item
+
+    opt description contains keyword
+        FindCommand -> Ui : showMessage(matchingItemDetails)
+        activate Ui
+        Ui --> FindCommand
+        deactivate Ui
+    end
+end
+
+FindCommand --> Parser
+deactivate FindCommand
+
+<-- Parser
+deactivate Parser
+
+@enduml

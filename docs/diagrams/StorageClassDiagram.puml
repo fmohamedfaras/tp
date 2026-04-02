@@ -1,0 +1,35 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+skinparam monochrome true
+
+abstract class Storage<T> {
+    - filePath: String
+    + saveArray(items: ArrayList<T>): void
+    + saveHistory(item: T): void
+    + load(): ArrayList<T>
+    # encode(item: T): String
+    # decode(line: String, lineNumber: int): T
+}
+
+class ArrayStorage {
+    + saveArray(items: ItemList): void
+    + loadItemList(): ItemList
+}
+
+class TransactionStorage {
+    + saveHistory(itemName: String, change: int): void
+}
+
+class Item
+class ItemList
+
+Storage <|-- ArrayStorage
+Storage <|-- TransactionStorage
+
+ArrayStorage ..> Item : encodes/decodes
+ArrayStorage ..> ItemList : converts
+
+TransactionStorage ..> String : stores history
+
+@enduml

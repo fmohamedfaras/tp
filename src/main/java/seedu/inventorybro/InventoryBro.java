@@ -1,12 +1,19 @@
 package seedu.inventorybro;
 
+import seedu.inventorybro.storage.ArrayStorage;
+//import seedu.inventorybro.storage.TransactionStorage;
+
 public class InventoryBro {
     private Ui ui;
     private ItemList items;
+    private final ArrayStorage arrayStorage;
+    //private final TransactionStorage transactionStorage;
 
     public InventoryBro() {
         ui = new Ui();
-        items = new ItemList();
+        arrayStorage = new ArrayStorage();
+        //transactionStorage = new TransactionStorage();
+        items = arrayStorage.loadItemList();
     }
 
     public void run() {
@@ -28,6 +35,7 @@ public class InventoryBro {
                 // Catches all the exceptions thrown by your various Commands!
                 ui.showError(e.getMessage());
             }
+            arrayStorage.saveArray(items);
             ui.showLine();
         }
     }

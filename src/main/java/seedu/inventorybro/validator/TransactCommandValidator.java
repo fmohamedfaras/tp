@@ -20,17 +20,7 @@ public class TransactCommandValidator implements Validator {
         assert items != null : "ItemList should not be null";
 
         try {
-            String[] words = input.split(" ", 2);
-            if (words.length < 2 || words[1].isEmpty() || !words[0].equalsIgnoreCase("transact")) {
-                throw new IllegalArgumentException("Invalid transact format. "
-                        + "Use: transact INDEX q/CHANGE_IN_QUANTITY");
-            }
-
-            String[] digits = words[1].split("q/", 2);
-            if (digits.length < 2) {
-                throw new IllegalArgumentException("Invalid transact format. "
-                        + "Use: transact INDEX q/CHANGE_IN_QUANTITY");
-            }
+            String[] digits = getDigits();
 
             checkIfDigit(digits[0].trim());
             int index = Integer.parseInt(digits[0].trim()) - 1;
@@ -47,6 +37,21 @@ public class TransactCommandValidator implements Validator {
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
+    }
+
+    private String[] getDigits() {
+        String[] words = input.split(" ", 2);
+        if (words.length < 2 || words[1].isEmpty() || !words[0].equalsIgnoreCase("transact")) {
+            throw new IllegalArgumentException("Invalid transact format. "
+                    + "Use: transact INDEX q/CHANGE_IN_QUANTITY");
+        }
+
+        String[] digits = words[1].split("q/", 2);
+        if (digits.length < 2) {
+            throw new IllegalArgumentException("Invalid transact format. "
+                    + "Use: transact INDEX q/CHANGE_IN_QUANTITY");
+        }
+        return digits;
     }
 
     private void checkIfDigit(String digits) {

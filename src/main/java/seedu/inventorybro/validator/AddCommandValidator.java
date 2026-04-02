@@ -3,7 +3,6 @@ package seedu.inventorybro.validator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import seedu.inventorybro.DuplicateItemValidator;
 import seedu.inventorybro.ItemList;
 
 //@@author kenpegrasio
@@ -42,6 +41,6 @@ public class AddCommandValidator implements Validator {
             );
         }
         String name = matcher.group(1).trim();
-        new DuplicateItemValidator().validate(name, items);
+        new DuplicateItemValidator(name).validate(items);
     }
 }
