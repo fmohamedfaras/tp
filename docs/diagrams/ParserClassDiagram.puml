@@ -1,0 +1,61 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+skinparam monochrome true
+skinparam shadowing false
+hide circle
+
+
+
+    class Parser {
+        + parse(line: String, items: ItemList, ui: Ui): void
+        - parseCommand(line: String): Command
+        - handleUnknownCommand(line: String, ui: Ui): void
+        - extractFirstWord(line: String): String
+    }
+
+    interface Command <<interface>> {
+        + execute(items: ItemList, ui: Ui): void
+    }
+
+    class AddCommand
+    class DeleteCommand
+    class EditCommand
+    class TransactCommand
+    class ShowTransactionHistoryCommand
+    class ListCommand
+    class FindCommand
+    class HelpCommand
+    class ExitCommand
+
+    class TypoDetector
+
+
+
+    class ItemList
+
+
+
+    class Ui
+
+
+' Relationships
+Parser --> Command : creates >
+Parser --> TypoDetector : uses >
+Parser --> Ui : uses >
+Parser --> ItemList : passes >
+
+Command --> Ui : uses >
+Command --> ItemList : passes >
+
+Command <|.. AddCommand
+Command <|.. DeleteCommand
+Command <|.. EditCommand
+Command <|.. TransactCommand
+Command <|.. ShowTransactionHistoryCommand
+Command <|.. ListCommand
+Command <|.. FindCommand
+Command <|.. HelpCommand
+Command <|.. ExitCommand
+
+@enduml
