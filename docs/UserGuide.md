@@ -58,30 +58,21 @@ Deletes an item permanently from the inventory.
 * **Example:** `deleteItem 2`
 * **Expected Output:**
   ```text
-  Item deleted:
-  2. Sprite Bottle (Quantity: 30)
-  Total items in inventory: 3
+  Noted, BRO. I've removed this item:
+  Grape (Quantity: 200, Price: $0.00)
+  Now you have 3 items in the list.
   ```
 
 ### 3. Editing an Item: `editItem`
 Edits the name and/or quantity of an item based on its index. At least one of the optional fields must be provided. Existing values will be overwritten.
 
-* **Format:** `editItem INDEX (n/NAME) (q/QUANTITY)`
+* **Format:** `editItem INDEX (n/NAME) (q/QUANTITY) (p/PRICE)`
 * **Examples & Output:**
   ```text
-  > editItem 1 n/new Coke Can
-  Item edited:
-  1. new Coke Can (Quantity: 50)
-
-  > editItem 1 q/200
-  Item edited:
-  1. new Coke Can (Quantity: 200)
-
-  > editItem 1 n/Coke Can q/50 
-  Item edited:
-  1. Coke Can (Quantity: 50)
+  > editItem 1 n/Coke Can q/50 p/3
+  Item updated: apple (Quantity: 200, Price: $3.00)
   ```
-  ### 4. Viewing All Items: `listItems`
+### 4. Viewing All Items: `listItems`
 Displays a numbered list of all items currently in your inventory. Indicate a field and order to view the list of items sorted based on them. The options for `[FIELD]` are `quantity` and `price`. The options for `[ORDER]` are `high` for descending order and `low` for ascending order.
 
 * **Format:** `listItems` or `listItems [FIELD] [ORDER]`
@@ -114,7 +105,7 @@ Searches for items whose descriptions contain your specified keyword. This is ca
 * **Expected Output:**
   ```text
   Here are the matching items in your inventory:
-  1. Coke Can (Quantity: 50)
+  1. Coke Can (Quantity: 50, Price: $1.50)
   ```
 
 ### 6. Filtering Items: `filterItem`
@@ -182,9 +173,9 @@ Displays a complete, numbered list of all past transactions (sales and restocks)
 * **Example Output (With History):**
   ```text
   Transaction History:
-  1. Coke Can: -5
-  2. Sprite Bottle: +10
-  3. Potato Chips: -2
+  1. Sprite Bottle | 10 | 2026-04-01 11:22
+  2. Coke Can | -5 | 2026-04-01 11:22
+  3. Coke Can | -50 | 2026-04-01 11:22
   ```
 * **Example Output (Empty History):**
   ```text
@@ -284,18 +275,18 @@ If you accidentally misspell a command, InventoryBRO will attempt to detect the 
 
 ## Command Summary
 
-| Action | Format | Example |
-| :--- | :--- | :--- |
-| **Add item** | `addItem d/NAME q/QUANTITY` | `addItem d/Coke q/50` |
-| **Delete item** | `deleteItem INDEX` | `deleteItem 2` |
-| **Edit item** | `editItem INDEX (n/NAME) (q/QUANTITY)` | `editItem 2 n/New Coke Name` |
-| **List items** | `listItems` | `listItems` |
-| **Find item** | `findItem KEYWORD` | `findItem apple` |
-| **Filter items** | `filterItem FIELD OP VALUE [AND\|OR ...]` | `filterItem quantity > 10` |
-| **Record transaction** | `transact INDEX q/CHANGE` | `transact 1 q/-3` |
-| **View History** | `showHistory` | `showHistory` |
-| **Get Help** | `help` | `help` |
-| **Exit** | `exit` | `exit` |
+| Action | Format                                           | Example |
+| :--- |:-------------------------------------------------| :--- |
+| **Add item** | `addItem d/NAME q/QUANTITY`                      | `addItem d/Coke q/50` |
+| **Delete item** | `deleteItem INDEX`                               | `deleteItem 2` |
+| **Edit item** | `editItem INDEX (n/NAME) (q/QUANTITY) (p/PRICE)` | `editItem 2 n/New Coke Name` |
+| **List items** | `listItems`                                      | `listItems` |
+| **Find item** | `findItem KEYWORD`                               | `findItem apple` |
+| **Filter items** | `filterItem FIELD OP VALUE [AND\|OR ...]`        | `filterItem quantity > 10` |
+| **Record transaction** | `transact INDEX q/CHANGE`                        | `transact 1 q/-3` |
+| **View History** | `showHistory`                                    | `showHistory` |
+| **Get Help** | `help`                                           | `help` |
+| **Exit** | `exit`                                           | `exit` |
 
 ---
 
@@ -308,3 +299,4 @@ InventoryBRO v2.0 officially supports:
 
 **Planned for Future Versions:**
 * Low-stock automated alerts
+* Edit individual fields for each item instead of requiring all fields
