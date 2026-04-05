@@ -33,7 +33,6 @@ public class AddCommandValidator implements Validator {
      */
     @Override
     public void validate(ItemList items) {
-        assert input != null : "Input should not be null";
         Matcher matcher = ADD_COMMAND_PATTERN.matcher(input);
         if (!matcher.matches()) {
             throw new IllegalArgumentException(
