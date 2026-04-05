@@ -20,8 +20,8 @@ deleteItem s
 deleteItem 3
 editName
 editName 90 d/newName
-editName 2 d/newName
-editQuantity 2 q/39
+editName 99 d/newName
+editQuantity 99 q/39
 transact
 transact t q/80
 transact 1 q/50
