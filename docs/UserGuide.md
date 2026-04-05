@@ -86,6 +86,11 @@ Edits the name, quantity, and/or price of an existing item based on its index. A
 
 > **Note:** All three fields (`d/`, `q/`, `p/`) must be provided together. If you only want to update the price, you still need to re-enter the current name and quantity.
 
+> **Tip:** To update only the price of an item, re-enter the current name and quantity with the new price.
+> For example: `editItem 1 d/Coke Can q/50 p/2.50` updates only the price while keeping the name and quantity the same.
+
+> **Price Display:** Prices are shown in `$X.XX` format. All items start with a default price of `$0.00` until updated via `editItem`.
+
 ### 4. Viewing All Items: `listItems`
 Displays a numbered list of all items currently in your inventory.
 
