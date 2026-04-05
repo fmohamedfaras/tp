@@ -11,38 +11,47 @@ import seedu.inventorybro.Ui;
 /**
  * Execution tests for {@link EditCommand}.
  */
+//@@author vionyp
 class EditCommandTest {
     private final Ui ui = new Ui();
 
     /**
-     * Verifies that a valid edit command updates the targeted item.
+     * Verifies that editName updates the item name correctly.
      */
     @Test
-    void execute_validInput_updatesItemCorrectly() {
+    void execute_editName_updatesNameCorrectly() {
         ItemList items = new ItemList();
         items.addItem(new Item("Apple", 10));
 
-        new EditCommand("edit 1 d/Orange q/20 p/1.50").execute(items, ui);
+        new EditCommand("editName 1 d/Orange").execute(items, ui);
 
         assertEquals("Orange", items.getItem(0).getDescription());
-        assertEquals(20, items.getItem(0).getQuantity());
-        assertEquals(1.50, items.getItem(0).getPrice());
     }
 
     /**
-     * Verifies that editing works correctly for a later item in the list.
+     * Verifies that editQuantity updates the item quantity correctly.
      */
     @Test
-    void execute_secondItem_updatesCorrectly() {
+    void execute_editQuantity_updatesQuantityCorrectly() {
         ItemList items = new ItemList();
         items.addItem(new Item("Apple", 10));
-        items.addItem(new Item("Banana", 5));
 
-        new EditCommand("edit 2 d/Mango q/7 p/2.00").execute(items, ui);
+        new EditCommand("editQuantity 1 q/20").execute(items, ui);
 
-        assertEquals("Mango", items.getItem(1).getDescription());
-        assertEquals(7, items.getItem(1).getQuantity());
-        assertEquals(2.00, items.getItem(1).getPrice());
+        assertEquals(20, items.getItem(0).getQuantity());
+    }
+
+    /**
+     * Verifies that editPrice updates the item price correctly.
+     */
+    @Test
+    void execute_editPrice_updatesPriceCorrectly() {
+        ItemList items = new ItemList();
+        items.addItem(new Item("Apple", 10));
+
+        new EditCommand("editPrice 1 p/1.50").execute(items, ui);
+
+        assertEquals(1.50, items.getItem(0).getPrice());
     }
 
     /**
@@ -54,9 +63,24 @@ class EditCommandTest {
         items.addItem(new Item("Apple", 10));
         items.addItem(new Item("Banana", 5));
 
-        new EditCommand("edit 1 d/Orange q/99 p/0.00").execute(items, ui);
+        new EditCommand("editName 1 d/Orange").execute(items, ui);
 
         assertEquals("Banana", items.getItem(1).getDescription());
         assertEquals(5, items.getItem(1).getQuantity());
     }
+
+    /**
+     * Verifies that editName works correctly for a later item in the list.
+     */
+    @Test
+    void execute_secondItem_updatesCorrectly() {
+        ItemList items = new ItemList();
+        items.addItem(new Item("Apple", 10));
+        items.addItem(new Item("Banana", 5));
+
+        new EditCommand("editName 2 d/Mango").execute(items, ui);
+
+        assertEquals("Mango", items.getItem(1).getDescription());
+    }
 }
+//@@author
