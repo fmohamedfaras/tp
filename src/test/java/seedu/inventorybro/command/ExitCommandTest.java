@@ -12,7 +12,7 @@ class ExitCommandTest {
 
     @AfterEach
     void tearDown() {
-        ExitCommand.resetExiter(); // cleanup after each test
+        ExitCommand.resetExiter();
     }
 
     @Test
