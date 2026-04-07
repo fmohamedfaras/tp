@@ -9,7 +9,9 @@
 3. [Implementation](#implementation)
     * [Adding an Item](#adding-an-item)
     * [Deleting an Item](#deleting-an-item)
-    * [Editing an Item](#editing-an-item)
+    * [Editing an Item's Description](#editing-an-items-description)
+    * [Editing an Item's Price](#editing-an-items-price)
+    * [Editing an Item's Quantity](#editing-an-items-quantity)
     * [Finding an Item](#finding-an-item)
     * [Filtering Items](#filtering-items)
     * [Transacting an Item](#transacting-an-item)
@@ -135,53 +137,77 @@ The add mechanism is handled by the `AddCommand` class. It validates the input, 
 
 ---
 
-### Editing an Item
+### Editing an Item's Description
 
-The edit mechanism is handled by the `EditCommand` class working together with `EditCommandValidator`.
-It updates all three fields — name, quantity, and price — of an existing item in a single command.
+The edit-description mechanism is handled by the `EditDescriptionCommand` class. It updates the description field of an existing item in the inventory.
 
-**Figure 16b: Edit Command Class Diagram**
-![Edit Command Class Diagram](diagrams/EditCommandClassDiagram.png)
+**Figure 30: Edit Description Command Class Diagram**
+![Edit Description Command Class Diagram](diagrams/EditDescriptionCommandClassDiagram.png)
 
 **Step-by-step Execution:**
-1. The user inputs `editItem 1 d/Coke Can q/100 p/2.50`.
-2. `Parser` matches the `edit` prefix and instantiates a new `EditCommand` with the raw input string.
-3. `Parser` calls `execute(items, ui)` on the `EditCommand`.
-4. `EditCommand.execute()` immediately creates a new `EditCommandValidator` and calls `validate(items)`.
-5. `EditCommandValidator.validate()` checks: format is correct, index is within bounds, name is not empty,
-   quantity is a non-negative integer, and price is a non-negative decimal.
-   If any check fails, an `IllegalArgumentException` is thrown with a descriptive message.
-6. If validation passes, `EditCommand` parses the index, name, quantity, and price from the input.
-7. The target `Item` is retrieved via `items.getItem(index)` and updated in-place via
-   `setDescription()`, `setQuantity()`, and `setPrice()`.
-8. `ui.showMessage("Item updated: " + item)` confirms the update to the user.
+1. The user inputs `editDescription 1 d/New Name`.
+2. `Parser` matches the `editDescription` prefix and instantiates a new `EditDescriptionCommand` with the raw input string.
+3. `Parser` calls `execute(items, ui)` on the `EditDescriptionCommand`.
+4. `EditDescriptionCommand.execute()` immediately creates a new `EditDescriptionCommandValidator` and calls `validate(items)`.
+5. `EditDescriptionCommandValidator.validate()` performs these checks in order:
+   - Splits the input on the first space; if only one token is present (no arguments after the command word), it throws `IllegalArgumentException` with `"Invalid editDescription format. Use: editDescription INDEX d/NEW_DESCRIPTION"`.
+   - Splits the argument portion on `d/`; if the `d/` delimiter is absent, it throws `IllegalArgumentException` with the same format error message.
+   - Parses the text before `d/` as an integer index (1-based); if it is not a number, it throws `IllegalArgumentException` with `"Index must be a number."`. If the resulting zero-based index is out of bounds (`< 0` or `>= items.size()`), it throws `IllegalArgumentException` with `"Invalid index."`.
+   - Trims the text after `d/`; if it is empty, it throws `IllegalArgumentException` with `"Item description cannot be empty."`.
+6. If validation passes, `EditDescriptionCommand` performs the same parse: splits on the first space, then on `d/`, converts the index to zero-based, and trims the new description string. It calls `items.getItem(index)` to retrieve the target `Item`, then calls `item.setDescription(newDescription)` to update it in-place. Finally, it calls `ui.showMessage("Item description updated: " + item)` to confirm the change to the user.
 
-**Figure 16c: Edit Command Sequence Diagram**
-```puml
-@startuml
-actor User
-participant "Parser" as P
-participant "EditCommand" as EC
-participant "EditCommandValidator" as ECV
-participant "ItemList" as IL
-participant "Item" as I
-participant "Ui" as UI
+**Figure 31: Edit Description Command Sequence Diagram**
+![Edit Description Command Sequence Diagram](diagrams/EditDescriptionCommandSequenceDiagram.png)
 
-User -> P : parse("editItem 1 d/Coke Can q/100 p/2.50")
-P -> EC : new EditCommand(input)
-P -> EC : execute(items, ui)
-EC -> ECV : new EditCommandValidator(input)
-EC -> ECV : validate(items)
-ECV --> EC : (passes)
-EC -> IL : getItem(index)
-IL --> EC : item
-EC -> I : setDescription(newName)
-EC -> I : setQuantity(newQuantity)
-EC -> I : setPrice(newPrice)
-EC -> UI : showMessage("Item updated: ...")
-@enduml
-` `` 
-```
+---
+
+### Editing an Item's Price
+
+The edit-price mechanism is handled by the `EditPriceCommand` class. It updates the price field of an existing item in the inventory.
+
+**Figure 32: Edit Price Command Class Diagram**
+![Edit Price Command Class Diagram](diagrams/EditPriceCommandClassDiagram.png)
+
+**Step-by-step Execution:**
+1. The user inputs `editPrice INDEX p/NEW_PRICE`.
+2. `Parser` matches the `editPrice` prefix (via the `"editprice"` case in its switch statement) and instantiates a new `EditPriceCommand` with the raw input string.
+3. `Parser` calls `execute(items, ui)` on the `EditPriceCommand`.
+4. `EditPriceCommand.execute()` immediately creates a new `EditPriceCommandValidator` and calls `validate(items)`.
+5. `EditPriceCommandValidator.validate()` performs these checks in order:
+   - Splits the input on the first space; if only one token is present (no arguments after the command word), it throws `IllegalArgumentException` with `"Invalid editPrice format. Use: editPrice INDEX p/NEW_PRICE"`.
+   - Splits the argument portion on `p/`; if the `p/` delimiter is absent, it throws `IllegalArgumentException` with the same format error message.
+   - Parses the text before `p/` as an integer index (1-based); if it is not a number, or if the price text is not a valid decimal, it throws `IllegalArgumentException` with `"Index must be a number and price must be a valid decimal."`. If the resulting zero-based index is out of bounds (`< 0` or `>= items.size()`), it throws `IllegalArgumentException` with `"Invalid index."`.
+   - Parses the text after `p/` as a `double`; if the value is negative, it throws `IllegalArgumentException` with `"Price cannot be negative."`.
+6. If validation passes, `EditPriceCommand` performs the same parse: splits on the first space, then on `p/`, converts the index to zero-based, and parses the new price as a `double`. It calls `items.getItem(index)` to retrieve the target `Item`, then calls `item.setPrice(newPrice)` to update it in-place. Finally, it calls `ui.showMessage("Item price updated: " + item)` to confirm the change to the user.
+
+**Figure 33: Edit Price Command Sequence Diagram**
+![Edit Price Command Sequence Diagram](diagrams/EditPriceCommandSequenceDiagram.png)
+
+---
+
+### Editing an Item's Quantity
+
+The edit-quantity mechanism is handled by the `EditQuantityCommand` class. It updates the quantity field of an existing item in the inventory.
+
+**Figure 34: Edit Quantity Command Class Diagram**
+![Edit Quantity Command Class Diagram](diagrams/EditQuantityCommandClassDiagram.png)
+
+**Step-by-step Execution:**
+1. The user inputs `editQuantity INDEX q/NEW_QUANTITY`.
+2. `Parser` matches the `editQuantity` prefix (via the `"editquantity"` case in its switch statement) and instantiates a new `EditQuantityCommand` with the raw input string.
+3. `Parser` calls `execute(items, ui)` on the `EditQuantityCommand`.
+4. `EditQuantityCommand.execute()` immediately creates a new `EditQuantityCommandValidator` and calls `validate(items)`.
+5. `EditQuantityCommandValidator.validate()` performs these checks in order:
+   - Splits the input on the first space; if only one token is present (no arguments after the command word), it throws `IllegalArgumentException` with `"Invalid editQuantity format. Use: editQuantity INDEX q/NEW_QUANTITY"`.
+   - Splits the argument portion on `q/`; if the `q/` delimiter is absent, it throws `IllegalArgumentException` with the same format error message.
+   - Parses the text before `q/` as an integer index (1-based); if it is not a number, or if the quantity text is not a valid integer, it throws `IllegalArgumentException` with `"Index and quantity must be numbers."`. If the resulting zero-based index is out of bounds (`< 0` or `>= items.size()`), it throws `IllegalArgumentException` with `"Invalid index."`.
+   - Parses the text after `q/` as an integer; if the value is negative, it throws `IllegalArgumentException` with `"Quantity cannot be negative."`.
+6. If validation passes, `EditQuantityCommand` performs the same parse: splits on the first space, then on `q/`, converts the index to zero-based, and parses the new quantity as an integer. It calls `items.getItem(index)` to retrieve the target `Item`, then calls `item.setQuantity(newQuantity)` to update it in-place. Finally, it calls `ui.showMessage("Item quantity updated: " + item)` to confirm the change to the user.
+
+**Figure 35: Edit Quantity Command Sequence Diagram**
+![Edit Quantity Command Sequence Diagram](diagrams/EditQuantityCommandSequenceDiagram.png)
+
+---
 
 ### Finding an Item
 

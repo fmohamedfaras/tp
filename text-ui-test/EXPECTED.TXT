@@ -73,7 +73,7 @@ Noted, BRO. I've removed this item:
 Now you have 3 items in the list.
 --------------------------------------------------
 --------------------------------------------------
-ERROR: Invalid editName format. Use: editName INDEX d/NEW_NAME
+ERROR: Invalid editDescription format. Use: editDescription INDEX d/NEW_DESCRIPTION
 --------------------------------------------------
 --------------------------------------------------
 ERROR: Invalid index.
