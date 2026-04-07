@@ -2,9 +2,19 @@ package seedu.inventorybro;
 
 import java.util.Optional;
 
+import seedu.inventorybro.command.AddCommand;
+import seedu.inventorybro.command.Command;
+import seedu.inventorybro.command.DeleteCommand;
+import seedu.inventorybro.command.EditDescriptionCommand;
 import seedu.inventorybro.command.EditPriceCommand;
 import seedu.inventorybro.command.EditQuantityCommand;
-import seedu.inventorybro.command.EditDescriptionCommand;
+import seedu.inventorybro.command.ExitCommand;
+import seedu.inventorybro.command.FilterCommand;
+import seedu.inventorybro.command.FindCommand;
+import seedu.inventorybro.command.HelpCommand;
+import seedu.inventorybro.command.ListCommand;
+import seedu.inventorybro.command.ShowTransactionHistoryCommand;
+import seedu.inventorybro.command.TransactCommand;
 
 public class Parser {
     private static final TypoDetector TYPO_DETECTOR = new TypoDetector();
