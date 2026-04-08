@@ -3,6 +3,7 @@ package seedu.inventorybro.storage;
 import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
@@ -27,7 +28,7 @@ public class ArrayStorage extends Storage<Item> {
      *
      * @param items The ItemList to save.
      */
-    public void saveArray(ItemList items) {
+    public void saveArray(ItemList items) throws IOException {
         assert items != null : "ItemList should not be null";
         saveArray(items.getItems());
     }
@@ -65,15 +66,16 @@ public class ArrayStorage extends Storage<Item> {
     protected Item decode(String line, int lineNumber) {
         try {
             String[] parts = line.split(" \\| ");
-            if (parts.length < 2) {
-                throw new IllegalArgumentException("Expected at least 2 parts");
+            if (parts.length < 3) {
+                throw new IllegalArgumentException("Expected at least 3 parts");
             }
             int quantity = Integer.parseInt(parts[0].trim());
             String description = parts[1].trim();
+            double price = Double.parseDouble(parts[2].trim());
             if (description.isEmpty()) {
                 throw new IllegalArgumentException("Description is empty");
             }
-            return new Item(description, quantity);
+            return new Item(description, quantity, price);
         } catch (Exception e) {
             logger.log(Level.WARNING, "Skipping corrupted item line {0}: {1} — Reason: {2}",
                     new Object[]{lineNumber, line, e.getMessage()});
