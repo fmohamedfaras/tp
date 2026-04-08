@@ -1,6 +1,8 @@
 package seedu.inventorybro;
 
 import seedu.inventorybro.storage.ArrayStorage;
+
+import java.io.IOException;
 //import seedu.inventorybro.storage.TransactionStorage;
 
 public class InventoryBro {
@@ -38,7 +40,12 @@ public class InventoryBro {
                 // Catches all the exceptions thrown by your various Commands!
                 ui.showError(e.getMessage());
             }
-            arrayStorage.saveArray(items);
+
+            try {
+                arrayStorage.saveArray(items);
+            } catch (IOException e) {
+                ui.showError(e.getMessage());
+            }
             ui.showLine();
         }
     }

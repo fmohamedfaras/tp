@@ -36,15 +36,10 @@ public abstract class Storage<T> {
      *
      * @param items The list to save.
      */
-    public void saveArray(ArrayList<T> items) {
+    public void saveArray(ArrayList<T> items) throws IOException {
         assert items != null : "Items list should not be null";
         try {
-            File file = new File(filePath);
-            File parentDir = file.getParentFile();
-            if (!parentDir.exists() && !parentDir.mkdirs()) {
-                logger.log(Level.WARNING, "Could not create directory: {0}", parentDir.getPath());
-                return;
-            }
+            File file = getFile();
             FileWriter fw = new FileWriter(file);
             for (T item : items) {
                 fw.write(encode(item) + System.lineSeparator());
@@ -55,6 +50,7 @@ public abstract class Storage<T> {
         } catch (IOException e) {
             logger.log(Level.WARNING, "Could not save to {0}: {1}",
                     new Object[]{filePath, e.getMessage()});
+            throw new IOException(e.getMessage());
         }
     }
 
@@ -64,15 +60,10 @@ public abstract class Storage<T> {
      *
      * @param item The item to add to history.
      */
-    public void saveHistory(T item) {
+    public void saveHistory(T item) throws IOException  {
         assert item != null : "Item should not be null";
         try {
-            File file = new File(filePath);
-            File parentDir = file.getParentFile();
-            if (!parentDir.exists() && !parentDir.mkdirs()) {
-                logger.log(Level.WARNING, "Could not create directory: {0}", parentDir.getPath());
-                return;
-            }
+            File file = getFile();
             FileWriter fw = new FileWriter(file, true);
             fw.write(encode(item) + System.lineSeparator());
             fw.close();
@@ -80,7 +71,18 @@ public abstract class Storage<T> {
         } catch (IOException e) {
             logger.log(Level.WARNING, "Could not add to history at {0}: {1}",
                     new Object[]{filePath, e.getMessage()});
+            throw new IOException(e.getMessage());
         }
+    }
+
+    private File getFile() throws IOException {
+        File file = new File(filePath);
+        File parentDir = file.getParentFile();
+        if (!parentDir.exists() && !parentDir.mkdirs()) {
+            logger.log(Level.WARNING, "Could not create directory: {0}", parentDir.getPath());
+            throw new IOException("Could not create directory: " + parentDir.getPath());
+        }
+        return file;
     }
 
     /**

@@ -22,6 +22,24 @@ public class Item {
         this.price = 0.0;
     }
 
+    //@@author elliotjohnwu
+    /**
+     * Creates an item with the given description, quantity, and price.
+     *
+     * @param description The item description.
+     * @param quantity    The quantity of item.
+     * @param price       The price of item.
+     */
+    public Item(String description, int quantity, double price) {
+        assert description != null && !description.isEmpty() : "Description should not be null or empty";
+        assert quantity >= 0 : "Quantity should not be negative: " + quantity;
+        assert price >= 0 : "Price should not be negative: " + price;
+        this.description = description;
+        this.quantity = quantity;
+        this.price = price;
+    }
+    //@@author
+
     /**
      * Set this item quantity.
      *
@@ -78,7 +96,7 @@ public class Item {
      * @return A string formatted for writing to the save file.
      */
     public String toSaveFormat() {
-        return (quantity) + " | " + description;
+        return (quantity) + " | " + description + " | " + String.format("%.2f", price);
     }
 
     /**

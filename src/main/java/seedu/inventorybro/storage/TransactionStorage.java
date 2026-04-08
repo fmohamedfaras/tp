@@ -1,5 +1,6 @@
 package seedu.inventorybro.storage;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
@@ -30,11 +31,15 @@ public class TransactionStorage extends Storage<String> {
      * @param itemName The name of the item transacted.
      * @param change   The quantity change, positive for restock negative for sale.
      */
-    public void saveHistory(String itemName, int change) {
+    public void saveHistory(String itemName, int change) throws IllegalArgumentException {
         assert itemName != null && !itemName.isEmpty() : "Item name should not be null or empty";
         String timestamp = LocalDateTime.now().format(FORMATTER);
         String entry = itemName + " | " + change + " | " + timestamp;
-        saveHistory(entry);
+        try {
+            saveHistory(entry);
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
         logger.log(Level.INFO, "Saved transaction history entry: {0}", entry);
     }
 

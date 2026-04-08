@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.inventorybro.ItemList;
 import seedu.inventorybro.Ui;
-import seedu.inventorybro.storage.TransactionStorageStub;
+import seedu.inventorybro.storage.TransactionStorageHistoryStub;
 
 //@@author elliotjohnwu
 /**
@@ -23,8 +23,8 @@ class ShowTransactionHistoryCommandTest {
     @Test
     void execute_validCommand_emptyHistoryShowsEmptyMessage() {
 
-        TransactionStorageStub stub =
-                new TransactionStorageStub(new ArrayList<>());
+        TransactionStorageHistoryStub stub =
+                new TransactionStorageHistoryStub(new ArrayList<>());
 
         ShowTransactionHistoryCommand command =
                 new ShowTransactionHistoryCommand("showHistory", stub);
@@ -38,8 +38,8 @@ class ShowTransactionHistoryCommandTest {
         ArrayList<String> entries = new ArrayList<>();
         entries.add("Coke Can | -5 | 2026-03-26 14:30");
 
-        TransactionStorageStub stub =
-                new TransactionStorageStub(entries);
+        TransactionStorageHistoryStub stub =
+                new TransactionStorageHistoryStub(entries);
 
         ShowTransactionHistoryCommand command =
                 new ShowTransactionHistoryCommand("showHistory", stub);
@@ -55,8 +55,8 @@ class ShowTransactionHistoryCommandTest {
         entries.add("Sprite Bottle | 10 | 2026-03-26 14:31");
         entries.add("Fanta | -3 | 2026-03-26 14:32");
 
-        TransactionStorageStub stub =
-                new TransactionStorageStub(entries);
+        TransactionStorageHistoryStub stub =
+                new TransactionStorageHistoryStub(entries);
 
         ShowTransactionHistoryCommand command =
                 new ShowTransactionHistoryCommand("showHistory", stub);
@@ -70,7 +70,7 @@ class ShowTransactionHistoryCommandTest {
         ShowTransactionHistoryCommand command =
                 new ShowTransactionHistoryCommand(
                         "showHistory extra",
-                        new TransactionStorageStub(new ArrayList<>())
+                        new TransactionStorageHistoryStub(new ArrayList<>())
                 );
 
         assertThrows(IllegalArgumentException.class,
@@ -83,7 +83,7 @@ class ShowTransactionHistoryCommandTest {
         ShowTransactionHistoryCommand command =
                 new ShowTransactionHistoryCommand(
                         "history",
-                        new TransactionStorageStub(new ArrayList<>())
+                        new TransactionStorageHistoryStub(new ArrayList<>())
                 );
 
         assertThrows(IllegalArgumentException.class,
@@ -96,7 +96,7 @@ class ShowTransactionHistoryCommandTest {
         ShowTransactionHistoryCommand command =
                 new ShowTransactionHistoryCommand(
                         "ShowHistory",
-                        new TransactionStorageStub(new ArrayList<>())
+                        new TransactionStorageHistoryStub(new ArrayList<>())
                 );
 
         assertThrows(IllegalArgumentException.class,

@@ -1,32 +1,65 @@
 package seedu.inventorybro.storage;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 //@@author elliotjohnwu
 /**
- * A stub for TransactionStorage used in unit testing.
- * Returns predefined transaction history instead of reading from file.
+ * Stub implementation of TransactionStorage for testing.
+ * Uses a custom file path to avoid interfering with real data.
  */
 public class TransactionStorageStub extends TransactionStorage {
 
-    private final ArrayList<String> entries;
+    private final String testFilePath;
 
-    /**
-     * Creates a stub with predefined transaction entries.
-     *
-     * @param entries The entries that load() should return.
-     */
-    public TransactionStorageStub(ArrayList<String> entries) {
-        this.entries = entries;
+    public TransactionStorageStub(String testFilePath) {
+        super(); // call parent constructor if needed
+        this.testFilePath = testFilePath;
     }
 
-    /**
-     * Returns the predefined entries instead of reading from file.
-     *
-     * @return List of transaction history entries.
-     */
+    @Override
+    public void saveHistory(String itemName, int change) {
+        String entry = itemName + " | " + change + " | TEST_TIMESTAMP";
+        try {
+            File file = new File(testFilePath);
+            file.getParentFile().mkdirs();
+            FileWriter fw = new FileWriter(file, true);
+            fw.write(entry + System.lineSeparator());
+            fw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public ArrayList<String> load() {
+        ArrayList<String> entries = new ArrayList<>();
+        File file = new File(testFilePath);
+
+        if (!file.exists()) {
+            return entries;
+        }
+
+        try (Scanner s = new Scanner(file)) {
+            int lineNumber = 0;
+            while (s.hasNextLine()) {
+                lineNumber++;
+                String line = s.nextLine().trim();
+
+                if (!line.isEmpty()) {
+                    String decoded = decode(line, lineNumber);
+                    if (decoded != null) {
+                        entries.add(decoded);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         return entries;
     }
 }
