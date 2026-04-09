@@ -39,17 +39,18 @@ Before diving into the standard commands, here are a few built-in features to ma
 ## Feature List (v2.0)
 
 ### 1. Adding an Item: `addItem`
-Adds a new product into the inventory.
+Adds a new product with a name, quantity, and price into the inventory.
 
-* **Format:** `addItem d/NAME q/INITIAL_QUANTITY`
-* **Example:** `addItem d/Coke Can q/50`
+* **Format:** `addItem d/NAME q/INITIAL_QUANTITY p/PRICE`
+* **Example:** `addItem d/Coke Can q/50 p/1.50`
 * **Expected Output:**
   ```text
-  Item added:
-  Name: Coke Can
-  Quantity: 50
-  Total items in inventory: 1
+  Added: Coke Can (Quantity: 50, Price: $1.50)
   ```
+* Quantity must be `0` or greater — negative values are rejected.
+* Price must be at least `0.01` when rounded to 2 decimal places (e.g. `p/0.001` is rejected).
+* Name cannot be empty or whitespace only.
+* An item with the same name (case-insensitive) cannot be added twice.
 
 ### 2. Deleting an Item: `deleteItem`
 Deletes an item permanently from the inventory.
@@ -215,10 +216,15 @@ Displays a quick-reference list of all available commands, or provides detailed 
     * **Expected Output:**
       ```text
       addItem:
-      Adds a new item of a given name and quantity to the current inventory list.
+      Adds a new item with a given name, quantity, and price to the current inventory list.
+      - Name (d/): cannot be empty.
+      - Quantity (q/): must be 0 or greater (negative values are not allowed).
+      - Price (p/): must be at least 0.01 when rounded to 2 decimal places (e.g. 0.001 is rejected).
 
-      Example usage: addItem d/Apples q/10
-      This adds an item named 'Apples' of quantity '10' to the inventory list.
+      Format: addItem d/NAME q/INITIAL_QUANTITY p/PRICE
+
+      Example usage: addItem d/Apples q/10 p/1.50
+      This adds an item named 'Apples' with quantity '10' and price '$1.50' to the inventory list.
       ```
 
 ### 12. Exiting the Program: `exit`
@@ -296,7 +302,7 @@ If you accidentally misspell a command, InventoryBRO will attempt to detect the 
 
 | Action | Format | Example |
 | :--- | :--- | :--- |
-| **Add item** | `addItem d/NAME q/QUANTITY` | `addItem d/Coke q/50` |
+| **Add item** | `addItem d/NAME q/QUANTITY p/PRICE` | `addItem d/Coke q/50 p/1.50` |
 | **Delete item** | `deleteItem INDEX` | `deleteItem 2` |
 | **Edit description** | `editDescription INDEX d/NEW_DESCRIPTION` | `editDescription 1 d/Coke Can` |
 | **Edit price** | `editPrice INDEX p/NEW_PRICE` | `editPrice 1 p/2.50` |

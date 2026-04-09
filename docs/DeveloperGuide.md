@@ -77,41 +77,23 @@ The `Parser` is responsible for routing user input to the correct command.
 ## Implementation
 ### Adding an Item
 
-The add mechanism is handled by the `AddCommand` class. It validates the input, creates a new `Item`, and appends it to the inventory.
+The add mechanism is handled by the `AddCommand` class. It validates the input, creates a new `Item` with a name, quantity, and price, and appends it to the inventory.
 
 **Figure 13: Add Command Class Diagram**
 ![Add Command Class Diagram](diagrams/AddCommandClassDiagram.png)
 
 **Step-by-step Execution:**
-1. The user inputs `addItem d/Apple q/50`.
-2. `Parser` matches the `addItem` prefix and instantiates a new `AddCommand` with the raw input string.
+1. The user inputs `addItem d/Apple q/10 p/1.50`.
+2. `Parser` matches the `additem` prefix (case-insensitive switch) and instantiates a new `AddCommand` with the raw input string.
 3. `Parser` calls `execute(items, ui)` on the `AddCommand`.
 4. `AddCommand.execute()` immediately creates a new `AddCommandValidator` and calls `validate(items)`.
-5. `AddCommandValidator` applies the regex `^addItem d/(.*?) q/(\d+)$` to the input. If it does not match, it throws `IllegalArgumentException` with `"Invalid addItem format! Use: addItem d/NAME q/INITIAL_QUANTITY"`. If the format is valid, it trims the captured name and delegates to `DuplicateItemValidator`, which iterates the `ItemList` performing a case-insensitive name comparison; a match throws `IllegalArgumentException` with `"An item named '<NAME>' already exists in the inventory."`.
-6. If validation passes, `AddCommand` re-applies the same regex to extract the trimmed name and parses the quantity as an integer.
-7. A new `Item` is constructed and appended to the `ItemList` via `items.addItem(newItem)`.
-8. `ui.showMessage("Added: " + newItem)` confirms the addition to the user.
-
-**Figure 14: Add Command Sequence Diagram**
-![Add Command Sequence Diagram](diagrams/AddCommandSequenceDiagram.png)
-
----
-
-### Adding an Item
-
-The add mechanism is handled by the `AddCommand` class. It validates the input, creates a new `Item`, and appends it to the inventory.
-
-**Figure 13: Add Command Class Diagram**
-![Add Command Class Diagram](diagrams/AddCommandClassDiagram.png)
-
-**Step-by-step Execution:**
-1. The user inputs `addItem d/Apple q/50`.
-2. `Parser` matches the `addItem` prefix and instantiates a new `AddCommand` with the raw input string.
-3. `Parser` calls `execute(items, ui)` on the `AddCommand`.
-4. `AddCommand.execute()` immediately creates a new `AddCommandValidator` and calls `validate(items)`.
-5. `AddCommandValidator` applies the regex `^addItem d/(.*?) q/(\d+)$` to the input. If it does not match, it throws `IllegalArgumentException` with `"Invalid addItem format! Use: addItem d/NAME q/INITIAL_QUANTITY"`. If the format is valid, it trims the captured name and delegates to `DuplicateItemValidator`, which iterates the `ItemList` performing a case-insensitive name comparison; a match throws `IllegalArgumentException` with `"An item named '<NAME>' already exists in the inventory."`.
-6. If validation passes, `AddCommand` re-applies the same regex to extract the trimmed name and parses the quantity as an integer.
-7. A new `Item` is constructed and appended to the `ItemList` via `items.addItem(newItem)`.
+5. `AddCommandValidator` applies the regex `^addItem d/(.*?) q/(-?\d+) p/(-?\d+(\.\d+)?)$` to the input. If it does not match, it throws `IllegalArgumentException` with `"Invalid addItem format! Use: addItem d/NAME q/INITIAL_QUANTITY p/PRICE"`. If the pattern matches, the following checks are applied in order:
+   - If the parsed quantity is negative, throws `IllegalArgumentException` with `"Quantity cannot be negative."`.
+   - If `Math.round(price * 100) <= 0` (i.e. the price rounds to `$0.00`), throws `IllegalArgumentException` with `"Price must be at least 0.01 when rounded"`.
+   - If the trimmed name is empty, throws `IllegalArgumentException` with `"Item name cannot be empty."`.
+   - Delegates to `DuplicateItemValidator`, which iterates the `ItemList` performing a case-insensitive name comparison; a match throws `IllegalArgumentException` with `"An item named '<NAME>' already exists in the inventory."`.
+6. If validation passes, `AddCommand` re-applies the same regex to extract the trimmed name, quantity (parsed as `int`), and price (parsed as `double`).
+7. A new `Item` is constructed via `new Item(name, quantity, price)` and appended to the `ItemList` via `items.addItem(newItem)`.
 8. `ui.showMessage("Added: " + newItem)` confirms the addition to the user.
 
 **Figure 14: Add Command Sequence Diagram**

@@ -18,11 +18,11 @@ box "UI" #LightGreen
 participant "ui:Ui" as Ui
 end box
 
--> Parser : parse("addItem d/Apple q/50", items, ui)
+-> Parser : parse("addItem d/Apple q/10 p/1.50", items, ui)
 activate Parser
 
 create AddCommand
-Parser -> AddCommand : new AddCommand("addItem d/Apple q/50")
+Parser -> AddCommand : new AddCommand("addItem d/Apple q/10 p/1.50")
 activate AddCommand
 AddCommand --> Parser : d
 deactivate AddCommand
@@ -31,7 +31,7 @@ Parser -> AddCommand : execute(items, ui)
 activate AddCommand
 
 create AddCommandValidator
-AddCommand -> AddCommandValidator : new AddCommandValidator("addItem d/Apple q/50")
+AddCommand -> AddCommandValidator : new AddCommandValidator("addItem d/Apple q/10 p/1.50")
 activate AddCommandValidator
 AddCommandValidator --> AddCommand : v
 deactivate AddCommandValidator
@@ -39,26 +39,48 @@ deactivate AddCommandValidator
 AddCommand -> AddCommandValidator : validate(items)
 activate AddCommandValidator
 
+note right of AddCommandValidator
+  1. Applies regex:
+     ^addItem d/(.*?) q/(-?\d+) p/(-?\d+(\.\d+)?)$
+  2. quantity < 0 → "Quantity cannot be negative."
+  3. Math.round(price * 100) <= 0 → "Price must be at least 0.01 when rounded"
+  4. name.isEmpty() → "Item name cannot be empty."
+end note
+
 create DuplicateItemValidator
 AddCommandValidator -> DuplicateItemValidator : new DuplicateItemValidator("Apple")
 activate DuplicateItemValidator
-DuplicateItemValidator --> AddCommandValidator : dup
+DuplicateItemValidator --> AddCommandValidator : dv
 deactivate DuplicateItemValidator
 
 AddCommandValidator -> DuplicateItemValidator : validate(items)
 activate DuplicateItemValidator
-DuplicateItemValidator -> ItemList : getItem(i) [for each item]
-activate ItemList
-ItemList --> DuplicateItemValidator : item
-deactivate ItemList
+
+loop for each item in ItemList
+    DuplicateItemValidator -> ItemList : getItem(i)
+    activate ItemList
+    ItemList --> DuplicateItemValidator : item
+    deactivate ItemList
+    note right of DuplicateItemValidator
+        item.getDescription().equalsIgnoreCase("Apple")
+    end note
+end
+
 DuplicateItemValidator --> AddCommandValidator
 deactivate DuplicateItemValidator
 
 AddCommandValidator --> AddCommand
 deactivate AddCommandValidator
 
+note right of AddCommand
+  Re-applies regex to extract:
+  name     = group(1).trim()
+  quantity = Integer.parseInt(group(2))
+  price    = Double.parseDouble(group(3))
+end note
+
 create Item
-AddCommand -> Item : new Item("Apple", 50)
+AddCommand -> Item : new Item("Apple", 10, 1.50)
 activate Item
 Item --> AddCommand : newItem
 deactivate Item
@@ -68,7 +90,7 @@ activate ItemList
 ItemList --> AddCommand
 deactivate ItemList
 
-AddCommand -> Ui : showMessage("Added: Apple (Quantity: 50, Price: $0.00)")
+AddCommand -> Ui : showMessage("Added: Apple (Quantity: 10, Price: $1.50)")
 activate Ui
 Ui --> AddCommand
 deactivate Ui

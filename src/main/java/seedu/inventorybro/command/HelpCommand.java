@@ -17,7 +17,7 @@ import seedu.inventorybro.validator.HelpCommandValidator;
 public class HelpCommand implements Command {
     private static final String HELPSUMMARYMESSAGE = """
             Command names and their summaries:
-            addItem:    Adds a new item of a given quantity to the current inventory list.
+            addItem:    Adds a new item of a given name, quantity, and price to the inventory list.
             deleteItem: Deletes an item from the current inventory list.
             editItem:   Edits the name and/or quantity of an existing item in the inventory
                         based on item index. At least name or quantity must be provided,
@@ -37,10 +37,15 @@ public class HelpCommand implements Command {
             """;
     private static final String HELPADDITEMMESSAGE = """
             addItem:
-            Adds a new item of a given name and quantity to the current inventory list.
+            Adds a new item with a given name, quantity, and price to the current inventory list.
+            - Name (d/): cannot be empty.
+            - Quantity (q/): must be 0 or greater (negative values are not allowed).
+            - Price (p/): must be at least 0.01 when rounded to 2 decimal places (e.g. 0.001 is rejected).
 
-            Example usage: addItem d/Apples q/10
-            This adds an item named 'Apples' of quantity '10' to the inventory list.
+            Format: addItem d/NAME q/INITIAL_QUANTITY p/PRICE
+
+            Example usage: addItem d/Apples q/10 p/1.50
+            This adds an item named 'Apples' with quantity '10' and price '$1.50' to the inventory list.
             """;
     private static final String HELPDELETEITEMMESSAGE = """
             deleteItem:

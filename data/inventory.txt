@@ -1,2 +1,2 @@
-100 | Sprite Bottle
-50 | Coke Can
+10 | Apple | 0.01
+10 | FreshTestItem | 1.50

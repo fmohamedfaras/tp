@@ -13,7 +13,8 @@ import seedu.inventorybro.validator.AddCommandValidator;
  * Adds a new item to the inventory.
  */
 public class AddCommand implements Command {
-    private static final Pattern ADD_COMMAND_PATTERN = Pattern.compile("^addItem d/(.*?) q/(\\d+)$");
+    private static final Pattern ADD_COMMAND_PATTERN =
+            Pattern.compile("^addItem d/(.*?) q/(-?\\d+) p/(-?\\d+(\\.\\d+)?)$");
 
     private final String input;
 
@@ -21,7 +22,7 @@ public class AddCommand implements Command {
      * Creates an add command bound to the given raw user input.
      *
      * @param input The full command string, expected to match
-     *              {@code addItem d/NAME q/INITIAL_QUANTITY}.
+     *              {@code addItem d/NAME q/INITIAL_QUANTITY p/PRICE}.
      */
     public AddCommand(String input) {
         assert input != null : "Input should not be null";
@@ -46,7 +47,8 @@ public class AddCommand implements Command {
         matcher.matches();
         String name = matcher.group(1).trim();
         int quantity = Integer.parseInt(matcher.group(2));
-        Item newItem = new Item(name, quantity);
+        double price = Double.parseDouble(matcher.group(3));
+        Item newItem = new Item(name, quantity, price);
         items.addItem(newItem);
 
         ui.showMessage("Added: " + newItem);

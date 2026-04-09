@@ -8,6 +8,7 @@ interface Command <<interface>> {
 }
 
 class AddCommand {
+    - ADD_COMMAND_PATTERN: Pattern
     - input: String
     + AddCommand(input: String)
     + execute(items: ItemList, ui: Ui): void
@@ -18,6 +19,7 @@ interface Validator <<interface>> {
 }
 
 class AddCommandValidator {
+    - ADD_COMMAND_PATTERN: Pattern
     - input: String
     + AddCommandValidator(input: String)
     + validate(items: ItemList): void
@@ -30,12 +32,13 @@ class DuplicateItemValidator {
 }
 
 class Item {
-    - description: String
-    - quantity: int
-    - price: double
-    + Item(description: String, quantity: int)
+    # description: String
+    # quantity: int
+    # price: double
+    + Item(description: String, quantity: int, price: double)
     + getDescription(): String
     + getQuantity(): int
+    + getPrice(): double
 }
 
 class ItemList {
@@ -57,7 +60,6 @@ AddCommand ..> Item : creates
 AddCommand ..> ItemList : modifies
 AddCommand ..> Ui : uses
 AddCommandValidator ..> DuplicateItemValidator : creates
-AddCommandValidator ..> ItemList : reads
 DuplicateItemValidator ..> ItemList : reads
 
 @enduml
