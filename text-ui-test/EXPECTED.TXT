@@ -6,19 +6,19 @@
 ERROR: Invalid command, please try addItem, deleteItem, editItem, transact, showHistory, listItems, help, exit
 --------------------------------------------------
 --------------------------------------------------
-ERROR: Invalid addItem format! Use: addItem d/NAME q/INITIAL_QUANTITY
+ERROR: Invalid addItem format! Use: addItem d/NAME q/INITIAL_QUANTITY p/PRICE
 --------------------------------------------------
 --------------------------------------------------
-Added: apples (Quantity: 233, Price: $0.00)
+Added: apples (Quantity: 233, Price: $1.00)
 --------------------------------------------------
 --------------------------------------------------
-Added: oranges (Quantity: 42, Price: $0.00)
+Added: oranges (Quantity: 42, Price: $2.00)
 --------------------------------------------------
 --------------------------------------------------
-Added: mangoes (Quantity: 53, Price: $0.00)
+Added: mangoes (Quantity: 53, Price: $3.00)
 --------------------------------------------------
 --------------------------------------------------
-Added: bananas (Quantity: 65, Price: $0.00)
+Added: bananas (Quantity: 65, Price: $4.00)
 --------------------------------------------------
 --------------------------------------------------
 ERROR: Invalid command, please try addItem, deleteItem, editItem, transact, showHistory, listItems, help, exit
@@ -31,10 +31,10 @@ Do you mean listItems?
 --------------------------------------------------
 --------------------------------------------------
 Here are your current inventory items:
-1. apples (Quantity: 233, Price: $0.00)
-2. oranges (Quantity: 42, Price: $0.00)
-3. mangoes (Quantity: 53, Price: $0.00)
-4. bananas (Quantity: 65, Price: $0.00)
+1. apples (Quantity: 233, Price: $1.00)
+2. oranges (Quantity: 42, Price: $2.00)
+3. mangoes (Quantity: 53, Price: $3.00)
+4. bananas (Quantity: 65, Price: $4.00)
 --------------------------------------------------
 --------------------------------------------------
 ERROR: Invalid find format! Use: findItem KEYWORD
@@ -44,13 +44,13 @@ ERROR: Invalid find format! Use: findItem KEYWORD
 --------------------------------------------------
 --------------------------------------------------
 Here are the matching items in your inventory:
-1. apples (Quantity: 233, Price: $0.00)
+1. apples (Quantity: 233, Price: $1.00)
 --------------------------------------------------
 --------------------------------------------------
 Here are the matching items in your inventory:
-2. oranges (Quantity: 42, Price: $0.00)
-3. mangoes (Quantity: 53, Price: $0.00)
-4. bananas (Quantity: 65, Price: $0.00)
+2. oranges (Quantity: 42, Price: $2.00)
+3. mangoes (Quantity: 53, Price: $3.00)
+4. bananas (Quantity: 65, Price: $4.00)
 --------------------------------------------------
 --------------------------------------------------
 No matching items found for: ghost
@@ -69,7 +69,7 @@ ERROR: The index must be a number! Use: deleteItem INDEX
 --------------------------------------------------
 --------------------------------------------------
 Noted, BRO. I've removed this item:
-  mangoes (Quantity: 53, Price: $0.00)
+  mangoes (Quantity: 53, Price: $3.00)
 Now you have 3 items in the list.
 --------------------------------------------------
 --------------------------------------------------
@@ -109,24 +109,24 @@ ERROR: Invalid filterItem format! Use: filterItem description =/</> 'VALUE' or f
 --------------------------------------------------
 --------------------------------------------------
 Here are the filtered items:
-1. apples (Quantity: 283, Price: $0.00)
+1. apples (Quantity: 283, Price: $1.00)
 --------------------------------------------------
 --------------------------------------------------
 Here are the filtered items:
-1. oranges (Quantity: 2, Price: $0.00)
+1. oranges (Quantity: 2, Price: $2.00)
 --------------------------------------------------
 --------------------------------------------------
 Here are the filtered items:
-1. bananas (Quantity: 65, Price: $0.00)
---------------------------------------------------
---------------------------------------------------
-Here are the filtered items:
-1. apples (Quantity: 283, Price: $0.00)
-2. oranges (Quantity: 2, Price: $0.00)
-3. bananas (Quantity: 65, Price: $0.00)
+1. bananas (Quantity: 65, Price: $4.00)
 --------------------------------------------------
 --------------------------------------------------
 No items match the given filter.
+--------------------------------------------------
+--------------------------------------------------
+Here are the filtered items:
+1. apples (Quantity: 283, Price: $1.00)
+2. oranges (Quantity: 2, Price: $2.00)
+3. bananas (Quantity: 65, Price: $4.00)
 --------------------------------------------------
 --------------------------------------------------
 No items match the given filter.
@@ -139,7 +139,7 @@ ERROR: Invalid command, please try addItem, deleteItem, editItem, transact, show
 --------------------------------------------------
 --------------------------------------------------
 Command names and their summaries:
-addItem:    Adds a new item of a given quantity to the current inventory list.
+addItem:    Adds a new item of a given name, quantity, and price to the inventory list.
 deleteItem: Deletes an item from the current inventory list.
 editItem:   Edits the name and/or quantity of an existing item in the inventory
             based on item index. At least name or quantity must be provided,
@@ -147,6 +147,8 @@ editItem:   Edits the name and/or quantity of an existing item in the inventory
 findItem:   Finds an item in the current inventory list based on the keyword typed 
             or displays message to the user that the inventory does not have item
             that matches keyword.
+filterItem: Displays only the items that match one or more field-based conditions.
+            Conditions can be combined using AND or OR operators.
 transact:   Updates stock quantities after a sale or restock.
 listItems:  Displays all items currently in the inventory, or displays message
             to the user that the inventory is empty if there are no items.
@@ -167,10 +169,15 @@ or enter 'help' to display each command name and their summaries.
 --------------------------------------------------
 --------------------------------------------------
 addItem:
-Adds a new item of a given name and quantity to the current inventory list.
+Adds a new item with a given name, quantity, and price to the current inventory list.
+- Name (d/): cannot be empty.
+- Quantity (q/): must be 0 or greater (negative values are not allowed).
+- Price (p/): must be at least 0.01 when rounded to 2 decimal places (e.g. 0.001 is rejected).
 
-Example usage: addItem d/Apples q/10
-This adds an item named 'Apples' of quantity '10' to the inventory list.
+Format: addItem d/NAME q/INITIAL_QUANTITY p/PRICE
+
+Example usage: addItem d/Apples q/10 p/1.50
+This adds an item named 'Apples' with quantity '10' and price '$1.50' to the inventory list.
 
 --------------------------------------------------
 --------------------------------------------------
@@ -237,8 +244,13 @@ Example usage: listItems
 
 --------------------------------------------------
 --------------------------------------------------
-ERROR: Invalid help format. Use: help [VALID_COMMAND_NAME]
-or enter 'help' to display each command name and their summaries.
+findItem:
+Finds and lists all items in the inventory whose description contains the keyword.
+The search is case-insensitive and matches partial words.
+
+Example usage: findItem app
+This displays all items containing 'app' in their name, such as 'Apples' or 'Pineapple'.
+
 --------------------------------------------------
 --------------------------------------------------
 help:
