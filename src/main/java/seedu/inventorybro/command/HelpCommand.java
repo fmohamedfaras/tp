@@ -74,7 +74,7 @@ public class HelpCommand implements Command {
             Edits the price of an existing item in the current inventory list based on the
             provided list index.
             
-            Example usage: editPrice 1 q/2
+            Example usage: editPrice 1 p/2
             This updates the price of the item indexed at 1 in the inventory list to '$2'.
             """;
     private static final String HELPEDITQUANTITYMESSAGE = """
