@@ -42,7 +42,9 @@ help invalidCommandName
 help addItem extraWord
 help addItem
 help deleteItem
-help editItem
+help editDescription
+help editPrice
+help editQuantity
 help transact
 help listItems
 help findItem

@@ -17,25 +17,28 @@ import seedu.inventorybro.validator.HelpCommandValidator;
 public class HelpCommand implements Command {
     private static final String HELPSUMMARYMESSAGE = """
             Command names and their summaries:
-            addItem:     Adds a new item of a given name, quantity, and price to the inventory list.
-            deleteItem:  Deletes an item from the current inventory list.
-            editItem:    Edits the name and/or quantity of an existing item in the inventory
-                         based on item index. At least name or quantity must be provided,
-                         existing values are updated to the input values.
-            findItem:    Finds an item in the current inventory list based on the keyword typed
-                         or displays message to the user that the inventory does not have item
-                         that matches keyword.
-            filterItem:  Displays only the items that match one or more field-based conditions.
-                         Conditions can be combined using AND or OR operators.
-            transact:    Updates stock quantities after a sale or restock.
-            showHistory: Displays a complete, numbered list of all past transactions
-                         (sales and restocks) recorded by the application.
-            listItems:   Displays all items currently in the inventory, or displays message
-                         to the user that the inventory is empty if there are no items.
-            help:        Displays summaries of each command to the user, or displays a detailed
-                         instruction of a specified command.
-            exit:        Closes the application. All saved data can be found in '/data/inventory.txt`
-                         and '/data/transaction.txt'.
+            addItem:          Adds a new item of a given name, quantity, and price to the inventory list.
+            deleteItem:       Deletes an item from the current inventory list.
+            editDescription:  Edits the description of an existing item in the inventory based on the
+                              item index. Existing description is updated to the provided input.
+            editPrice:        Edits the price of an existing item in the inventory based on the item
+                              index. Existing price is updated to the provided input.
+            editQuantity:     Edits the quantity of an existing item in the inventory based on the item
+                              index. Existing quantity is updated to the provided input.
+            findItem:         Finds an item in the current inventory list based on the keyword typed
+                              or displays message to the user that the inventory does not have item
+                              that matches keyword.
+            filterItem:       Displays only the items that match one or more field-based conditions.
+                              Conditions can be combined using AND or OR operators.
+            transact:         Updates stock quantities after a sale or restock.
+            showHistory:      Displays a complete, numbered list of all past transactions
+                              (sales and restocks) recorded by the application.
+            listItems:        Displays all items currently in the inventory, or displays message
+                              to the user that the inventory is empty if there are no items.
+            help:             Displays summaries of each command to the user, or displays a detailed
+                              instruction of a specified command.
+            exit:             Closes the application. All saved data can be found in '/data/inventory.txt`
+                              and '/data/transaction.txt'.
 
             For further details on a particular command, specify it using 'help [COMMAND_NAME]'.
             """;
@@ -59,24 +62,27 @@ public class HelpCommand implements Command {
             Example usage: deleteItem 1
             This removes the item indexed at 1 in the inventory list.
             """;
-    private static final String HELPEDITITEMMESSAGE = """
-            editItem:
-            Edits the name and/or quantity of an existing item in the current inventory list
-            based on the provided list index. At least a name or quantity should be provided.
-            Enter 'listItems' to view the list index of the item you wish to edit.
-
-            Example usages:-
-            (Both name and quantity fields provided): editItem 1 d/Oranges q/20
-            This updates the name and quantity of the item indexed at 1 in the inventory list
-            to 'Oranges' and '20' respectively.
-
-            (Just name field provided): editItem 1 d/Oranges
-            This updates only the name of the item indexed at 1 in the inventory list to
-            'Oranges'.
-
-            (Just quantity field provided): editItem 1 q/20
-            This updates only the quantity of the item indexed at 1 in the inventory list to
-            '20'.
+    private static final String HELPEDITDESCRIPTIONMESSAGE = """
+            Edits the description of an existing item in the current inventory list based on
+            the provided list index.
+            
+            Example usage: editDescription 1  d/Sprite Bottle
+            This updates the description of the item indexed at 1 in the inventory list to
+            'Sprite Bottle'.
+            """;
+    private static final String HELPEDITPRICEMESSAGE = """
+            Edits the price of an existing item in the current inventory list based on the
+            provided list index.
+            
+            Example usage: editPrice 1 q/2
+            This updates the price of the item indexed at 1 in the inventory list to '$2'.
+            """;
+    private static final String HELPEDITQUANTITYMESSAGE = """
+            Edits the quantity of an existing item in the current inventory list based on the
+            provided list index.
+            
+            Example usage: editQuantity 1 q/50
+            This updates the quantity of the item indexed at 1 in the inventory list to '50'.
             """;
     private static final String HELPFINDITEMMESSAGE = """
             findItem:
@@ -191,7 +197,9 @@ public class HelpCommand implements Command {
     private static final Map<String, String> COMMANDMESSAGES = Map.ofEntries(
             entry("addItem", HELPADDITEMMESSAGE),
             entry("deleteItem", HELPDELETEITEMMESSAGE),
-            entry("editItem", HELPEDITITEMMESSAGE),
+            entry("editDescription", HELPEDITDESCRIPTIONMESSAGE),
+            entry("editPrice", HELPEDITPRICEMESSAGE),
+            entry("editQuantity", HELPEDITQUANTITYMESSAGE),
             entry("findItem", HELPFINDITEMMESSAGE),
             entry("filterItem", HELPFILTERITEMMESSAGE),
             entry("transact", HELPTRANSACTMESSAGE),
