@@ -95,7 +95,7 @@ Updates the quantity of an existing item in the inventory.
   ```
 
 ### 6. Viewing All Items: `listItems`
-Displays a numbered list of all items currently in your inventory.
+Displays a numbered list of all items currently in your inventory. Users can indicate to view a sorted list of items by an item property of their choice
 
 * **Format:** `listItems` or `listItems [FIELD] [ORDER]`
 * **Examples and output:**

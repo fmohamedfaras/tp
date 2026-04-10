@@ -17,7 +17,7 @@
     * [Transacting an Item](#transacting-an-item)
     * [Viewing Transaction History](#viewing-transaction-history)
     * [Viewing list of items in the inventory](#viewing-list-of-items-in-the-inventory)
-    * [Viewing help instructions of how to use commands](#Viewing-help-instructions-of-how-to-use-commands)
+    * [Viewing help messages of commands](#Viewing-help-instructions-of-how-to-use-commands)
     * [Storage System](#storage-system)
     * [Command Autocompletion (Trie & JLine)](#command-autocompletion)
     * [Typo Detection](#typo-detection)
@@ -289,7 +289,7 @@ The `ShowTransactionHistoryCommand` retrieves and displays all past transactions
 **Figure 26: List Command Sequence Diagram**
 ![List Command Sequence Diagram](diagrams/ListCommandSequenceDiagram.png)
 
-### Viewing help instructions of how to use commands
+### Viewing help messages of commands
 **Figure 27: Help Command Sequence Diagram**
 ![Show Help Command Class Diagram](diagrams/HelpCommandClassDiagram.png)
 
