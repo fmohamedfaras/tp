@@ -456,13 +456,16 @@ accuracy (clear, structured output)
 ## Instructions for manual testing
 
 1. Launch the app: `java -jar inventorybro.jar`
-2. Add items: `addItem d/Coke q/50` and `addItem d/Sprite q/30`
+2. Add items: `addItem d/Coke q/50 p/1.50` and `addItem d/Sprite q/30 p/1.20`
 3. List items: `listItems`
-4. Edit an item: `editItem 1 d/Coke Can q/45 p/1.50`
-5. Find an item: `findItem coke`
-6. Transact: `transact 1 q/-5`
-7. Delete: `deleteItem 2`
-8. Exit: `exit`
+4. Edit an item's description: `editDescription 1 d/Coke Can`
+5. Edit an item's quantity: `editQuantity 1 q/45`
+6. Edit an item's price: `editPrice 1 p/2.00`
+7. Find an item: `findItem coke`
+8. Filter items: `filterItem quantity > 10` or `filterItem description = 'Sprite' OR quantity < 5`
+9. Transact: `transact 1 q/-5`
+10. Delete: `deleteItem 2`
+11. Exit: `exit`
 
 ---
 
