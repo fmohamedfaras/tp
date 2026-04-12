@@ -3,6 +3,7 @@ package seedu.inventorybro;
 import java.util.Optional;
 
 import seedu.inventorybro.command.AddCommand;
+import seedu.inventorybro.command.AddCategoryCommand;
 import seedu.inventorybro.command.Command;
 import seedu.inventorybro.command.DeleteCommand;
 import seedu.inventorybro.command.EditDescriptionCommand;
@@ -59,6 +60,8 @@ public class Parser {
             return new ListCommand(trimmedLine);
         case "finditem":
             return new FindCommand(trimmedLine);
+        case "addcategory":
+            return new AddCategoryCommand(trimmedLine);
         case "help":
             return new HelpCommand(trimmedLine);
         case "exit":
@@ -74,7 +77,7 @@ public class Parser {
         if (suggestion.isPresent()) {
             ui.showMessage("Do you mean " + suggestion.get() + "?");
         } else {
-            ui.showError("Invalid command, please try addItem, deleteItem, editDescription, editPrice," +
+            ui.showError("Invalid command, please try addCategory, addItem, deleteItem, editDescription, editPrice," +
                     " editQuantity, transact, showHistory, listItems, help, exit");
         }
     }
