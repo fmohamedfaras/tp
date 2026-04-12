@@ -1,5 +1,6 @@
 package seedu.inventorybro.validator;
 
+import seedu.inventorybro.CategoryList;
 import seedu.inventorybro.ItemList;
 
 //@@author kenpegrasio
@@ -15,5 +16,5 @@ public interface Validator {
      * @param items The current inventory item list, provided for context-sensitive validation.
      * @throws IllegalArgumentException if the input fails validation.
      */
-    void validate(ItemList items);
+    void validate(ItemList items, CategoryList categories);
 }

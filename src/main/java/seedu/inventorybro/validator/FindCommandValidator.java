@@ -3,6 +3,7 @@ package seedu.inventorybro.validator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import seedu.inventorybro.CategoryList;
 import seedu.inventorybro.ItemList;
 
 /**
@@ -30,7 +31,7 @@ public class FindCommandValidator implements Validator {
      * @throws IllegalArgumentException if the input does not conform to the expected format.
      */
     @Override
-    public void validate(ItemList items) {
+    public void validate(ItemList items, CategoryList categories) {
         assert input != null : "Input should not be null";
         Matcher matcher = FIND_COMMAND_PATTERN.matcher(input);
 

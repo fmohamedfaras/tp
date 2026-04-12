@@ -1,5 +1,6 @@
 package seedu.inventorybro.validator;
 
+import seedu.inventorybro.CategoryList;
 import seedu.inventorybro.ItemList;
 
 /**
@@ -25,7 +26,7 @@ public class DuplicateItemValidator implements Validator {
      * @throws IllegalArgumentException if the name is already taken (case-insensitive).
      */
     @Override
-    public void validate(ItemList items) {
+    public void validate(ItemList items, CategoryList categories) {
         for (int i = 0; i < items.size(); i++) {
             if (items.getItem(i).getDescription().equalsIgnoreCase(name)) {
                 throw new IllegalArgumentException(

@@ -3,6 +3,7 @@ package seedu.inventorybro.validator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import seedu.inventorybro.CategoryList;
 import seedu.inventorybro.ItemList;
 
 //@@author kenpegrasio
@@ -34,7 +35,7 @@ public class AddCommandValidator implements Validator {
      *                                  quantity or price is not positive, or the item name already exists.
      */
     @Override
-    public void validate(ItemList items) {
+    public void validate(ItemList items, CategoryList categories) {
         Matcher matcher = ADD_COMMAND_PATTERN.matcher(input);
         if (!matcher.matches()) {
             throw new IllegalArgumentException(
@@ -53,6 +54,6 @@ public class AddCommandValidator implements Validator {
         if (name.isEmpty()) {
             throw new IllegalArgumentException("Item name cannot be empty.");
         }
-        new DuplicateItemValidator(name).validate(items);
+        new DuplicateItemValidator(name).validate(items, categories);
     }
 }
