@@ -8,7 +8,7 @@ public class Category {
 
     public Category(String name) {
         assert name != null && !name.trim().isEmpty() : "Category name cannot be null or empty";
-        this.name = name.trim();
+        this.name = name.trim().toUpperCase();
     }
 
     public String getName() {
@@ -21,7 +21,7 @@ public class Category {
     }
 
     /**
-     * Ensures categories are compared ignoring case (e.g. "Food" equals "food").
+     * Ensures categories are compared ignoring case.
      */
     @Override
     public boolean equals(Object obj) {

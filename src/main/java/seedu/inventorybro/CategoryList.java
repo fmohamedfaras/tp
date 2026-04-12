@@ -43,4 +43,11 @@ public class CategoryList {
         }
         return categories.get(0); // Safely falls back to "Others"
     }
+
+    /**
+     * Returns the full list of categories.
+     */
+    public ArrayList<Category> getCategories() {
+        return categories;
+    }
 }

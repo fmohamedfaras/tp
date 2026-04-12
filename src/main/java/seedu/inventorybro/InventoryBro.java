@@ -1,6 +1,7 @@
 package seedu.inventorybro;
 
 import seedu.inventorybro.storage.ArrayStorage;
+import seedu.inventorybro.storage.CategoryStorage;
 
 import java.io.IOException;
 //import seedu.inventorybro.storage.TransactionStorage;
@@ -10,14 +11,28 @@ public class InventoryBro {
     private ItemList items;
     private CategoryList categories;
     private final ArrayStorage arrayStorage;
+    private final CategoryStorage categoryStorage;
     //private final TransactionStorage transactionStorage;
 
     public InventoryBro() {
         ui = new Ui();
         categories = new CategoryList();
+
+        categoryStorage = new CategoryStorage();
+        loadCategories();
+
         arrayStorage = new ArrayStorage(categories);
-        //transactionStorage = new TransactionStorage();
         items = arrayStorage.loadItemList();
+
+        //transactionStorage = new TransactionStorage();
+    }
+
+    private void loadCategories() {
+        for (Category loadedCat : categoryStorage.load()) {
+            if (!categories.containsCategory(loadedCat.getName())) {
+                categories.addCategory(loadedCat);
+            }
+        }
     }
 
     public void run() {
@@ -44,6 +59,7 @@ public class InventoryBro {
             }
 
             try {
+                categoryStorage.saveCategories(categories);
                 arrayStorage.saveArray(items);
             } catch (IOException e) {
                 ui.showError(e.getMessage());
