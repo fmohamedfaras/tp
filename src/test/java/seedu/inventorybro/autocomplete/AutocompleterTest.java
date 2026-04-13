@@ -26,27 +26,30 @@ class AutocompleterTest {
     @Test
     void getMatches_partialSingleMatch_returnsCorrectKeyword() {
         List<String> matches = autocompleter.getMatches("lis");
-        assertEquals(1, matches.size());
+        assertEquals(2, matches.size());
         assertEquals("listItems", matches.get(0));
+        assertEquals("listCategories", matches.get(1));
     }
 
     @Test
     void getMatches_partialMultipleMatches_returnsAllMatches() {
         List<String> matches = autocompleter.getMatches("e");
-        assertEquals(4, matches.size()); // editDescription + editPrice + editQuantity + exit
+        assertEquals(5, matches.size()); // editDescription + editPrice + editQuantity + exit + editCategory
         assertTrue(matches.contains("editDescription"));
         assertTrue(matches.contains("editPrice"));
         assertTrue(matches.contains("editQuantity"));
+        assertTrue(matches.contains("editCategory"));
         assertTrue(matches.contains("exit"));
     }
 
     @Test
     void getMatches_editPrefix_returnsAllEditCommands() {
         List<String> matches = autocompleter.getMatches("edit");
-        assertEquals(3, matches.size());
+        assertEquals(4, matches.size());
         assertTrue(matches.contains("editDescription"));
         assertTrue(matches.contains("editPrice"));
         assertTrue(matches.contains("editQuantity"));
+        assertTrue(matches.contains("editCategory"));
     }
 
     @Test
@@ -79,7 +82,7 @@ class AutocompleterTest {
     @Test
     void getMatches_emptyString_returnsAllKeywords() {
         List<String> matches = autocompleter.getMatches("");
-        assertEquals(12, matches.size());
+        assertEquals(16, matches.size());
     }
 
     @Test
