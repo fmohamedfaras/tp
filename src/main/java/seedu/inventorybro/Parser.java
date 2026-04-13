@@ -86,7 +86,8 @@ public class Parser {
         if (suggestion.isPresent()) {
             ui.showMessage("Do you mean " + suggestion.get() + "?");
         } else {
-            ui.showError("Invalid command, please try addCategory, deleteCategory, listCategories, addItem, deleteItem, editDescription, editPrice," +
+            ui.showError("Invalid command, please try addCategory, deleteCategory, " +
+                    "listCategories, addItem, deleteItem, editDescription, editPrice," +
                     " editQuantity, transact, showHistory, listItems, help, exit");
         }
     }
