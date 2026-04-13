@@ -295,7 +295,6 @@ If you accidentally misspell a command, InventoryBRO will attempt to detect the 
 | `adItem d/Coke q/5` | `Do you mean addItem?` |
 | `deletItem 2` | `Do you mean deleteItem?` |
 | `lsitItems` | `Do you mean listItems?` |
-| `eixt` | `Do you mean exit?` |
 
 **Things to know:**
 * The suggestion is a hint only — you still need to re-enter the corrected command yourself.
