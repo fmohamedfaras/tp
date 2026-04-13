@@ -44,40 +44,48 @@ public class Parser {
 
         switch (firstWord) {
         case "additem":
-            return new AddCommand(trimmedLine);
+            return new AddCommand(normalize(trimmedLine, CommandWord.ADD_ITEM.getWord()));
         case "deleteitem":
-            return new DeleteCommand(trimmedLine);
+            return new DeleteCommand(normalize(trimmedLine, CommandWord.DELETE_ITEM.getWord()));
         case "editquantity":
-            return new EditQuantityCommand(trimmedLine);
+            return new EditQuantityCommand(normalize(trimmedLine, CommandWord.EDIT_QUANTITY.getWord()));
         case "editdescription":
-            return new EditDescriptionCommand(trimmedLine);
+            return new EditDescriptionCommand(normalize(trimmedLine, CommandWord.EDIT_DESCRIPTION.getWord()));
         case "editprice":
-            return new EditPriceCommand(trimmedLine);
+            return new EditPriceCommand(normalize(trimmedLine, CommandWord.EDIT_PRICE.getWord()));
         case "editcategory":
-            return new EditCategoryCommand(trimmedLine);
+            return new EditCategoryCommand(normalize(trimmedLine, CommandWord.EDIT_CATEGORY.getWord()));
         case "transact":
-            return new TransactCommand(trimmedLine);
+            return new TransactCommand(normalize(trimmedLine, CommandWord.TRANSACT.getWord()));
         case "filteritem":
-            return new FilterCommand(trimmedLine);
+            return new FilterCommand(normalize(trimmedLine, CommandWord.FILTER_ITEM.getWord()));
         case "showhistory":
-            return new ShowTransactionHistoryCommand(trimmedLine);
+            return new ShowTransactionHistoryCommand(normalize(trimmedLine, CommandWord.SHOW_HISTORY.getWord()));
         case "listitems":
-            return new ListCommand(trimmedLine);
+            return new ListCommand(normalize(trimmedLine, CommandWord.LIST_ITEMS.getWord()));
         case "finditem":
-            return new FindCommand(trimmedLine);
+            return new FindCommand(normalize(trimmedLine, CommandWord.FIND_ITEM.getWord()));
         case "addcategory":
-            return new AddCategoryCommand(trimmedLine);
+            return new AddCategoryCommand(normalize(trimmedLine, CommandWord.ADD_CATEGORY.getWord()));
         case "listcategories":
-            return new ListCategoriesCommand(trimmedLine);
+            return new ListCategoriesCommand(normalize(trimmedLine, CommandWord.LIST_CATEGORY.getWord()));
         case "deletecategory":
-            return new DeleteCategoryCommand(trimmedLine);
+            return new DeleteCategoryCommand(normalize(trimmedLine, CommandWord.DELETE_CATEGORY.getWord()));
         case "help":
-            return new HelpCommand(trimmedLine);
+            return new HelpCommand(normalize(trimmedLine, CommandWord.HELP.getWord()));
         case "exit":
             return new ExitCommand();
         default:
             return null;
         }
+    }
+
+    /**
+     * Replaces the first word of {@code line} with {@code canonicalWord}, preserving the rest of the input.
+     */
+    private static String normalize(String line, String canonicalWord) {
+        String firstWord = extractFirstWord(line);
+        return canonicalWord + line.substring(firstWord.length());
     }
 
     private static void handleUnknownCommand(String line, Ui ui) {

@@ -448,6 +448,7 @@ accuracy (clear, structured output)
 | v2.0    | store owner | load previously saved inventory                   | continue managing my shop from where I left off              |
 | v2.0    | store owner | view a sorted list of items                       | quickly view which items have, for example, lower quantities |
 | v2.0    | store owner | view detailed instructions for a specific command | learn how to use a command correctly                         |
+| v2.0    | store owner | filter items by attribute and condition           | quickly find items that meet specific criteria (e.g. low stock) |
 
 ---
 

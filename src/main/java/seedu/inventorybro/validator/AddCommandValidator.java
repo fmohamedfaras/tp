@@ -49,6 +49,11 @@ public class AddCommandValidator implements Validator {
         }
 
         String name = matcher.group(1).trim();
+        if (name.contains("d/") || name.contains("q/") || name.contains("p/")) {
+            throw new IllegalArgumentException(
+                    "Duplicate parameter detected. Use: addItem d/NAME q/INITIAL_QUANTITY p/PRICE"
+            );
+        }
         if (name.isEmpty()) {
             throw new IllegalArgumentException("Item name cannot be empty.");
         }
