@@ -324,7 +324,7 @@ The `HelpCommand` class handles the mechanism of displaying all command names an
 
 ## Storage System
 
-The storage system is responsible for persisting both inventory data and transaction history. It is designed using a **generic abstraction (`Storage<T>`)** to maximise reuse while allowing specialised behaviour for different data types.
+The storage system is responsible for persisting both inventory data and transaction history. 
 
 **Figure 26: Storage Class Diagram**
 ![Storage Class Diagram](diagrams/StorageClassDiagram.png)
@@ -339,6 +339,10 @@ Implements fault-tolerant loading via load()
 Defines the template methods:
 encode(T item)
 decode(String line, int lineNumber)
+
+**Design highlights:**
+* Generic abstraction (Storage<T>)
+* Template Method pattern for enocde/decode
 
 ### ArrayStorage
 

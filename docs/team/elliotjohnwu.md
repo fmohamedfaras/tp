@@ -45,7 +45,7 @@ InventoryBRO is a CLI-based inventory management application for small business 
 
 ---
 
-#### 3. Generic Storage Architecture (`Storage<T>`)
+#### 3. Storage Architecture (`Storage<T>`)
 
 * **What it does:** Provides a reusable abstraction for file-based persistence across different data types.
 * **Justification:** Avoids duplication of file I/O logic and standardises error handling across the system.
