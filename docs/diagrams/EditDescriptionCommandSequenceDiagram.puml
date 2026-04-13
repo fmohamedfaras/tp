@@ -23,12 +23,18 @@ activate Parser
 
 create EditDescriptionCommand
 Parser -> EditDescriptionCommand : new EditDescriptionCommand(input)
+activate EditDescriptionCommand
+EditDescriptionCommand --> Parser : d
+deactivate EditDescriptionCommand
 
 Parser -> EditDescriptionCommand : execute(items, ui)
 activate EditDescriptionCommand
 
 create EditDescriptionCommandValidator
 EditDescriptionCommand -> EditDescriptionCommandValidator : new EditDescriptionCommandValidator(input)
+activate EditDescriptionCommandValidator
+EditDescriptionCommandValidator --> EditDescriptionCommand : v
+deactivate EditDescriptionCommandValidator
 
 EditDescriptionCommand -> EditDescriptionCommandValidator : validate(items)
 activate EditDescriptionCommandValidator

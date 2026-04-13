@@ -23,12 +23,18 @@ activate Parser
 
 create EditPriceCommand
 Parser -> EditPriceCommand : new EditPriceCommand(input)
+activate EditPriceCommand
+EditPriceCommand --> Parser : d
+deactivate EditPriceCommand
 
 Parser -> EditPriceCommand : execute(items, ui)
 activate EditPriceCommand
 
 create EditPriceCommandValidator
 EditPriceCommand -> EditPriceCommandValidator : new EditPriceCommandValidator(input)
+activate EditPriceCommandValidator
+EditPriceCommandValidator --> EditPriceCommand : v
+deactivate EditPriceCommandValidator
 
 EditPriceCommand -> EditPriceCommandValidator : validate(items)
 activate EditPriceCommandValidator

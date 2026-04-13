@@ -54,6 +54,8 @@ deactivate Ui
 
 DeleteCommand --> Parser
 deactivate DeleteCommand
+DeleteCommand -[hidden]-> Parser
+destroy DeleteCommand
 
 <-- Parser
 deactivate Parser

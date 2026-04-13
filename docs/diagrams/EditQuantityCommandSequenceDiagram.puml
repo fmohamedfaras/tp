@@ -23,12 +23,18 @@ activate Parser
 
 create EditQuantityCommand
 Parser -> EditQuantityCommand : new EditQuantityCommand(input)
+activate EditQuantityCommand
+EditQuantityCommand --> Parser : d
+deactivate EditQuantityCommand
 
 Parser -> EditQuantityCommand : execute(items, ui)
 activate EditQuantityCommand
 
 create EditQuantityCommandValidator
 EditQuantityCommand -> EditQuantityCommandValidator : new EditQuantityCommandValidator(input)
+activate EditQuantityCommandValidator
+EditQuantityCommandValidator --> EditQuantityCommand : v
+deactivate EditQuantityCommandValidator
 
 EditQuantityCommand -> EditQuantityCommandValidator : validate(items)
 activate EditQuantityCommandValidator
