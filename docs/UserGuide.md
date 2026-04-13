@@ -29,12 +29,12 @@ If you prefer typing commands instead of clicking buttons, InventoryBRO allows y
 
 ## Quick Start
 1. Ensure you have **Java 17** or above installed on your computer.
-2. Download the `inventorybro.jar` file.
+2. Download the `inventory-bro.jar` file.
 3. Place the file in a folder of your choice.
 4. Open a terminal and navigate (`cd`) into that folder.
 5. Run the application using the following command:
    ```bash
-   java -jar inventorybro.jar
+   java -jar inventory-bro.jar
    ```
 6. Type your commands and press `Enter` to execute them!
 
@@ -299,7 +299,7 @@ InventoryBRO includes a built-in tab-completion engine so you never have to reme
 
 **Things to know:**
 * Autocompletion only works on the **command keyword** (the first word). It does not attempt to complete arguments like item names or indices.
-* Autocompletion is only available when running the application directly from the JAR file (`java -jar inventorybro.jar`). It is **not** available when running via `./gradlew run` because Gradle pipes stdin, which disables raw terminal mode.
+* Autocompletion is only available when running the application directly from the JAR file (`java -jar inventory-bro.jar`). It is **not** available when running via `./gradlew run` because Gradle pipes stdin, which disables raw terminal mode.
 * Matching is **case-insensitive** — typing `ADD` and pressing `Tab` will still complete to `addItem`.
 
 ---
