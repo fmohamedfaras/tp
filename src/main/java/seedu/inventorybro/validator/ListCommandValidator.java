@@ -1,19 +1,25 @@
 package seedu.inventorybro.validator;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import seedu.inventorybro.CategoryList;
 import seedu.inventorybro.ItemList;
 
 //@@author adbsw
 /**
  * Validates the raw input string for the listItems command.
+ * Ensures the input matches the accepted regex format and checks if a requested category actually exists.
  */
 public class ListCommandValidator implements Validator {
+    // Upgraded Regex: Captures optional category AND optional sorting parameters
+    private static final Pattern LIST_PATTERN =
+            Pattern.compile("^listItems(?:\\s+c/(.+?))?(?:\\s+(price|quantity)\\s+(high|low))?$");
     private final String input;
 
     /**
-     * Creates a list command validator from the raw user input.
+     * Constructs a ListCommandValidator with the given user input.
      *
-     * @param input The user input.
+     * @param input The raw input string to be validated.
      */
     public ListCommandValidator(String input) {
         assert input != null : "Input line should not be null";
@@ -21,50 +27,32 @@ public class ListCommandValidator implements Validator {
     }
 
     /**
-     * Validates the list command input.
+     * Executes the validation logic for the listItems command.
+     * Checks the format and throws an exception if the format is invalid or if a specified category does not exist.
      *
-     * @param items The current inventory item list, provided for context-sensitive validation.
+     * @param items      The current list of items in the inventory.
+     * @param categories The master list of categories used to verify category existence.
+     * @throws IllegalArgumentException if the format is invalid or the category is not found.
      */
     @Override
     public void validate(ItemList items, CategoryList categories) {
-        String[] words = input.split(" ", 2);
+        Matcher matcher = LIST_PATTERN.matcher(input);
 
-        if (!words[0].equals("listItems")) {
-            throw new IllegalArgumentException("Did you mean 'listItems'?");
+        if (!matcher.matches()) {
+            throw new IllegalArgumentException(
+                    "Invalid listItems format! Use: listItems [c/CATEGORY_NAME] [price/quantity] [high/low]"
+            );
         }
 
-        if (words.length == 1) {
-            return;
-        }
-
-        String[] additions = words[1].split(" ");
-
-        String field = additions[0];
-
-        boolean isValidFieldSpecified = field.equals("price") || field.equals("quantity");
-
-        if (!isValidFieldSpecified) {
-            throw new IllegalArgumentException("Invalid field specified for listItems. " +
-                    "Use 'price' or 'quantity'.");
-        }
-
-        if (additions.length < 2) {
-            throw new IllegalArgumentException("Preferred order not specified for listItems. " +
-                    "Specify 'high' or 'low'.");
-        }
-
-        String order = additions[1];
-
-        boolean isValidOrderSpecified = order.equals("high") || order.equals("low");
-
-        if (!isValidOrderSpecified) {
-            throw new IllegalArgumentException("Invalid order specified for listItems. " +
-                    "Use 'high' or 'low'.");
-        }
-
-        if (additions.length > 2) {
-            throw new IllegalArgumentException("Too many descriptors specified for listItems. " +
-                    "Use listItems [field_name] [order]");
+        // If a category was requested, make sure it actually exists!
+        String categoryInput = matcher.group(1);
+        if (categoryInput != null) {
+            categoryInput = categoryInput.trim();
+            if (!categories.containsCategory(categoryInput)) {
+                throw new IllegalArgumentException(
+                        "The category [" + categoryInput.toUpperCase() + "] does not exist!"
+                );
+            }
         }
     }
 }
