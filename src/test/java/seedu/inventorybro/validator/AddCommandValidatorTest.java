@@ -209,7 +209,8 @@ class AddCommandValidatorTest {
     void validate_duplicateQuantityFlag_throwsException() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new AddCommandValidator("addItem d/Double Test q/10 q/20 p/1.50").validate(items)
+                () -> new AddCommandValidator("addItem d/Double Test q/10 q/20 p/1.50 c/Others")
+                        .validate(items, categories)
         );
     }
 
@@ -220,7 +221,8 @@ class AddCommandValidatorTest {
     void validate_duplicateDescriptionFlag_throwsException() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new AddCommandValidator("addItem d/Test d/Real q/10 p/1.50").validate(items)
+                () -> new AddCommandValidator("addItem d/Test d/Real q/10 p/1.50 c/Others")
+                        .validate(items, categories)
         );
     }
 
@@ -231,7 +233,8 @@ class AddCommandValidatorTest {
     void validate_duplicatePriceFlag_throwsException() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new AddCommandValidator("addItem d/Test p/bad q/10 p/1.50").validate(items)
+                () -> new AddCommandValidator("addItem d/Test p/bad q/10 p/1.50 c/Others")
+                        .validate(items, categories)
         );
     }
 
