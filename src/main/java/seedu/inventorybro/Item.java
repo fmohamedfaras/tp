@@ -141,7 +141,7 @@ public class Item {
      */
     @Override
     public String toString() {
-        return category.toString() + " " + description.toLowerCase() + " (Quantity: " + quantity + ", Price: $"
+        return category.toString() + " " + description + " (Quantity: " + quantity + ", Price: $"
             + String.format("%.2f", price) + ")";
     }
 }
