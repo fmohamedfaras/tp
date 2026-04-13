@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.inventorybro.CategoryList;
 import seedu.inventorybro.ItemList;
 
 //@@author adbsw
@@ -14,13 +15,14 @@ import seedu.inventorybro.ItemList;
 class HelpCommandValidatorTest {
 
     private final ItemList items = new ItemList();
+    private final CategoryList categories = new CategoryList();
 
     /**
      * Verifies that bare "help" passes validation.
      */
     @Test
     void validate_bareHelp_noException() {
-        assertDoesNotThrow(() -> new HelpCommandValidator("help").validate(items));
+        assertDoesNotThrow(() -> new HelpCommandValidator("help").validate(items, categories));
     }
 
     /**
@@ -28,11 +30,11 @@ class HelpCommandValidatorTest {
      */
     @Test
     void validate_validCommandSpecified_noException() {
-        assertDoesNotThrow(() -> new HelpCommandValidator("help addItem").validate(items));
-        assertDoesNotThrow(() -> new HelpCommandValidator("help deleteItem").validate(items));
-        assertDoesNotThrow(() -> new HelpCommandValidator("help transact").validate(items));
-        assertDoesNotThrow(() -> new HelpCommandValidator("help listItems").validate(items));
-        assertDoesNotThrow(() -> new HelpCommandValidator("help exit").validate(items));
+        assertDoesNotThrow(() -> new HelpCommandValidator("help addItem").validate(items, categories));
+        assertDoesNotThrow(() -> new HelpCommandValidator("help deleteItem").validate(items, categories));
+        assertDoesNotThrow(() -> new HelpCommandValidator("help transact").validate(items, categories));
+        assertDoesNotThrow(() -> new HelpCommandValidator("help listItems").validate(items, categories));
+        assertDoesNotThrow(() -> new HelpCommandValidator("help exit").validate(items, categories));
     }
 
     /**
@@ -42,7 +44,7 @@ class HelpCommandValidatorTest {
     void validate_wrongCommandWord_throwsException() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new HelpCommandValidator("HELP").validate(items)
+                () -> new HelpCommandValidator("HELP").validate(items, categories)
         );
     }
 
@@ -53,7 +55,7 @@ class HelpCommandValidatorTest {
     void validate_invalidCommandSpecified_throwsException() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new HelpCommandValidator("help unknownCommand").validate(items)
+                () -> new HelpCommandValidator("help unknownCommand").validate(items, categories)
         );
     }
 
@@ -64,7 +66,7 @@ class HelpCommandValidatorTest {
     void validate_tooManyArguments_throwsException() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new HelpCommandValidator("help addItem extra").validate(items)
+                () -> new HelpCommandValidator("help addItem extra").validate(items, categories)
         );
     }
 }

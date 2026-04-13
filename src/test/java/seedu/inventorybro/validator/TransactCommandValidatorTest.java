@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.inventorybro.CategoryList;
 import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
 
@@ -13,6 +14,7 @@ import seedu.inventorybro.ItemList;
  * Validation tests for {@link TransactCommandValidator}.
  */
 class TransactCommandValidatorTest {
+    private final CategoryList categories = new CategoryList();
 
     /**
      * Verifies that a valid sale transaction passes validation.
@@ -20,9 +22,9 @@ class TransactCommandValidatorTest {
     @Test
     void validate_validSale_noException() {
         ItemList items = new ItemList();
-        items.addItem(new Item("Coke Can", 50));
+        items.addItem(new Item("Coke Can", 50, 0.0, categories.getCategory("Others")));
 
-        assertDoesNotThrow(() -> new TransactCommandValidator("transact 1 q/-5").validate(items));
+        assertDoesNotThrow(() -> new TransactCommandValidator("transact 1 q/-5").validate(items, categories));
     }
 
     /**
@@ -31,9 +33,9 @@ class TransactCommandValidatorTest {
     @Test
     void validate_validRestock_noException() {
         ItemList items = new ItemList();
-        items.addItem(new Item("Sprite Bottle", 30));
+        items.addItem(new Item("Sprite Bottle", 30, 0.0, categories.getCategory("Others")));
 
-        assertDoesNotThrow(() -> new TransactCommandValidator("transact 1 q/10").validate(items));
+        assertDoesNotThrow(() -> new TransactCommandValidator("transact 1 q/10").validate(items, categories));
     }
 
     /**
@@ -42,11 +44,11 @@ class TransactCommandValidatorTest {
     @Test
     void validate_quantityBelowZero_throwsException() {
         ItemList items = new ItemList();
-        items.addItem(new Item("Coke Can", 50));
+        items.addItem(new Item("Coke Can", 50, 0.0, categories.getCategory("Others")));
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new TransactCommandValidator("transact 1 q/-999").validate(items)
+                () -> new TransactCommandValidator("transact 1 q/-999").validate(items, categories)
         );
     }
 
@@ -56,11 +58,11 @@ class TransactCommandValidatorTest {
     @Test
     void validate_invalidIndex_throwsException() {
         ItemList items = new ItemList();
-        items.addItem(new Item("Coke Can", 50));
+        items.addItem(new Item("Coke Can", 50, 0.0, categories.getCategory("Others")));
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new TransactCommandValidator("transact 99 q/10").validate(items)
+                () -> new TransactCommandValidator("transact 99 q/10").validate(items, categories)
         );
     }
 
@@ -70,11 +72,11 @@ class TransactCommandValidatorTest {
     @Test
     void validate_missingQuantityPrefix_throwsException() {
         ItemList items = new ItemList();
-        items.addItem(new Item("Coke Can", 50));
+        items.addItem(new Item("Coke Can", 50, 0.0, categories.getCategory("Others")));
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new TransactCommandValidator("transact 1 10").validate(items)
+                () -> new TransactCommandValidator("transact 1 10").validate(items, categories)
         );
     }
 
@@ -84,11 +86,11 @@ class TransactCommandValidatorTest {
     @Test
     void validate_nonDigitIndex_throwsException() {
         ItemList items = new ItemList();
-        items.addItem(new Item("Coke Can", 50));
+        items.addItem(new Item("Coke Can", 50, 0.0, categories.getCategory("Others")));
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new TransactCommandValidator("transact abc q/10").validate(items)
+                () -> new TransactCommandValidator("transact abc q/10").validate(items, categories)
         );
     }
 
@@ -98,11 +100,11 @@ class TransactCommandValidatorTest {
     @Test
     void validate_justMinusSign_throwsException() {
         ItemList items = new ItemList();
-        items.addItem(new Item("Coke Can", 50));
+        items.addItem(new Item("Coke Can", 50, 0.0, categories.getCategory("Others")));
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new TransactCommandValidator("transact 1 q/-").validate(items)
+                () -> new TransactCommandValidator("transact 1 q/-").validate(items, categories)
         );
     }
 
@@ -112,11 +114,11 @@ class TransactCommandValidatorTest {
     @Test
     void validate_nonDigitQuantity_throwsException() {
         ItemList items = new ItemList();
-        items.addItem(new Item("Coke Can", 50));
+        items.addItem(new Item("Coke Can", 50, 0.0, categories.getCategory("Others")));
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new TransactCommandValidator("transact 1 q/abc").validate(items)
+                () -> new TransactCommandValidator("transact 1 q/abc").validate(items, categories)
         );
     }
 }

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.inventorybro.CategoryList;
 import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
 
@@ -15,13 +16,15 @@ import seedu.inventorybro.ItemList;
 class AddCommandValidatorTest {
 
     private final ItemList items = new ItemList();
+    private final CategoryList categories = new CategoryList();
 
     /**
      * Verifies that a well-formed addItem input with an integer price passes validation.
      */
     @Test
     void validate_validInputWithIntegerPrice_noException() {
-        assertDoesNotThrow(() -> new AddCommandValidator("addItem d/Apple q/10 p/5").validate(items));
+        assertDoesNotThrow(() ->
+                new AddCommandValidator("addItem d/Apple q/10 p/5 c/Others").validate(items, categories));
     }
 
     /**
@@ -29,7 +32,8 @@ class AddCommandValidatorTest {
      */
     @Test
     void validate_validInputWithDecimalPrice_noException() {
-        assertDoesNotThrow(() -> new AddCommandValidator("addItem d/Apple q/10 p/5.99").validate(items));
+        assertDoesNotThrow(() ->
+                new AddCommandValidator("addItem d/Apple q/10 p/5.99 c/Others").validate(items, categories));
     }
 
     /**
@@ -37,7 +41,8 @@ class AddCommandValidatorTest {
      */
     @Test
     void validate_multiWordNameWithPrice_noException() {
-        assertDoesNotThrow(() -> new AddCommandValidator("addItem d/Green Apple q/25 p/3.50").validate(items));
+        assertDoesNotThrow(() ->
+                new AddCommandValidator("addItem d/Green Apple q/25 p/3.50 c/Others").validate(items, categories));
     }
 
     /**
@@ -47,7 +52,7 @@ class AddCommandValidatorTest {
     void validate_emptyName_throwsException() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new AddCommandValidator("addItem d/ q/10 p/5").validate(items)
+                () -> new AddCommandValidator("addItem d/ q/10 p/5 c/Others").validate(items, categories)
         );
     }
 
@@ -58,7 +63,7 @@ class AddCommandValidatorTest {
     void validate_whitespaceOnlyName_throwsException() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new AddCommandValidator("addItem d/   q/10 p/5").validate(items)
+                () -> new AddCommandValidator("addItem d/   q/10 p/5 c/Others").validate(items, categories)
         );
     }
 
@@ -69,7 +74,7 @@ class AddCommandValidatorTest {
     void validate_missingPricePrefix_throwsException() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new AddCommandValidator("addItem d/Apple q/10").validate(items)
+                () -> new AddCommandValidator("addItem d/Apple q/10 c/Others").validate(items, categories)
         );
     }
 
@@ -80,7 +85,7 @@ class AddCommandValidatorTest {
     void validate_invalidFormat_throwsException() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new AddCommandValidator("addItem Apple 10").validate(items)
+                () -> new AddCommandValidator("addItem Apple 10 c/Others").validate(items, categories)
         );
     }
 
@@ -91,7 +96,7 @@ class AddCommandValidatorTest {
     void validate_missingQuantityPrefix_throwsException() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new AddCommandValidator("addItem d/Apple p/5").validate(items)
+                () -> new AddCommandValidator("addItem d/Apple p/5 c/Others").validate(items, categories)
         );
     }
 
@@ -102,7 +107,7 @@ class AddCommandValidatorTest {
     void validate_negativeQuantity_throwsException() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new AddCommandValidator("addItem d/Apple q/-5 p/5").validate(items)
+                () -> new AddCommandValidator("addItem d/Apple q/-5 p/5 c/Others").validate(items, categories)
         );
     }
 
@@ -113,7 +118,7 @@ class AddCommandValidatorTest {
     void validate_negativePrice_throwsException() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new AddCommandValidator("addItem d/Apple q/10 p/-1.50").validate(items)
+                () -> new AddCommandValidator("addItem d/Apple q/10 p/-1.50 c/Others").validate(items, categories)
         );
     }
 
@@ -122,7 +127,8 @@ class AddCommandValidatorTest {
      */
     @Test
     void validate_zeroQuantity_noException() {
-        assertDoesNotThrow(() -> new AddCommandValidator("addItem d/Apple q/0 p/5").validate(items));
+        assertDoesNotThrow(() ->
+                new AddCommandValidator("addItem d/Apple q/0 p/5 c/Others").validate(items, categories));
     }
 
     /**
@@ -132,7 +138,7 @@ class AddCommandValidatorTest {
     void validate_zeroPriceWithValidQuantity_throwsException() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new AddCommandValidator("addItem d/Apple q/10 p/0").validate(items)
+                () -> new AddCommandValidator("addItem d/Apple q/10 p/0 c/Others").validate(items, categories)
         );
     }
 
@@ -143,7 +149,7 @@ class AddCommandValidatorTest {
     void validate_decimalZeroPrice_throwsException() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new AddCommandValidator("addItem d/Apple q/10 p/0.00").validate(items)
+                () -> new AddCommandValidator("addItem d/Apple q/10 p/0.00 c/Others").validate(items, categories)
         );
     }
 
@@ -154,7 +160,7 @@ class AddCommandValidatorTest {
     void validate_priceTooSmallToDisplay_throwsException() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new AddCommandValidator("addItem d/Apple q/10 p/0.001").validate(items)
+                () -> new AddCommandValidator("addItem d/Apple q/10 p/0.001 c/Others").validate(items, categories)
         );
     }
 
@@ -163,11 +169,11 @@ class AddCommandValidatorTest {
      */
     @Test
     void validate_duplicateName_throwsException() {
-        items.addItem(new Item("Apple", 10));
+        items.addItem(new Item("Apple", 10, categories.getCategory("Others")));
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new AddCommandValidator("addItem d/apple q/5 p/1").validate(items)
+                () -> new AddCommandValidator("addItem d/apple q/5 p/1 c/Others").validate(items, categories)
         );
     }
 
@@ -177,24 +183,23 @@ class AddCommandValidatorTest {
      */
     @Test
     void validate_duplicateNameWithTrailingSpace_throwsException() {
-        items.addItem(new Item("Apple", 10));
+        items.addItem(new Item("Apple", 10, categories.getCategory("Others")));
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new AddCommandValidator("addItem d/Apple  q/5 p/1").validate(items)
+                () -> new AddCommandValidator("addItem d/Apple  q/5 p/1 c/Others").validate(items, categories)
         );
     }
 
     /**
      * Verifies that adding a unique name to a non-empty list passes validation.
-     * This covers the equalsIgnoreCase → false branch in DuplicateItemValidator,
-     * where the loop iterates over existing items but finds no match.
      */
     @Test
     void validate_uniqueNameWithOtherItemsPresent_noException() {
-        items.addItem(new Item("Banana", 5));
+        items.addItem(new Item("Banana", 5, categories.getCategory("Others")));
 
-        assertDoesNotThrow(() -> new AddCommandValidator("addItem d/Apple q/10 p/3").validate(items));
+        assertDoesNotThrow(() ->
+                new AddCommandValidator("addItem d/Apple q/10 p/3 c/Others").validate(items, categories));
     }
 
     /**

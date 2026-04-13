@@ -2,6 +2,8 @@ package seedu.inventorybro.storage;
 
 import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
+import seedu.inventorybro.Category;
+import seedu.inventorybro.CategoryList;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,12 +17,15 @@ import java.util.logging.Level;
 public class ArrayStorage extends Storage<Item> {
 
     private static final String FILE_PATH = "./data/inventory.txt";
-
+    private final CategoryList masterCategories;
     /**
      * Creates an ArrayStorage using the default inventory file path.
+     * @param categories The master CategoryList to link loaded items to.
      */
-    public ArrayStorage() {
+    public ArrayStorage(CategoryList categories) {
         super(FILE_PATH);
+        assert categories != null : "CategoryList should not be null";
+        this.masterCategories = categories;
     }
 
     /**
@@ -66,16 +71,26 @@ public class ArrayStorage extends Storage<Item> {
     protected Item decode(String line, int lineNumber) {
         try {
             String[] parts = line.split(" \\| ");
-            if (parts.length < 3) {
-                throw new IllegalArgumentException("Expected at least 3 parts");
+            if (parts.length < 4) {
+                throw new IllegalArgumentException("Expected at least 4 parts");
             }
+
             int quantity = Integer.parseInt(parts[0].trim());
             String description = parts[1].trim();
             double price = Double.parseDouble(parts[2].trim());
+            String categoryName = parts[3].trim();
+
             if (description.isEmpty()) {
                 throw new IllegalArgumentException("Description is empty");
             }
-            return new Item(description, quantity, price);
+            if (!masterCategories.containsCategory(categoryName)) {
+                masterCategories.addCategory(new Category(categoryName));
+            }
+
+            Category category = masterCategories.getCategory(categoryName);
+
+            return new Item(description, quantity, price, category);
+
         } catch (Exception e) {
             logger.log(Level.WARNING, "Skipping corrupted item line {0}: {1} — Reason: {2}",
                     new Object[]{lineNumber, line, e.getMessage()});

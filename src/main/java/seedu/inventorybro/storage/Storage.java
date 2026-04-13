@@ -28,6 +28,8 @@ public abstract class Storage<T> {
     public Storage(String filePath) {
         assert filePath != null && !filePath.isEmpty() : "File path should not be null or empty";
         this.filePath = filePath;
+
+        this.logger.setLevel(Level.WARNING);
     }
 
     /**

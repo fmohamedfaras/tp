@@ -3,6 +3,7 @@ package seedu.inventorybro;
 import java.util.Optional;
 
 import seedu.inventorybro.command.AddCommand;
+import seedu.inventorybro.command.AddCategoryCommand;
 import seedu.inventorybro.command.Command;
 import seedu.inventorybro.command.DeleteCommand;
 import seedu.inventorybro.command.EditDescriptionCommand;
@@ -19,9 +20,10 @@ import seedu.inventorybro.command.TransactCommand;
 public class Parser {
     private static final TypoDetector TYPO_DETECTOR = new TypoDetector();
 
-    public static void parse(String line, ItemList items, Ui ui) {
+    public static void parse(String line, ItemList items, CategoryList categories, Ui ui) {
         assert line != null : "Input line should not be null";
         assert items != null : "ItemList should not be null";
+        assert categories != null : "CategoryList should not be null";
         assert ui != null : "Ui should not be null";
 
         Command command = parseCommand(line);
@@ -30,7 +32,7 @@ public class Parser {
             return;
         }
 
-        command.execute(items, ui);
+        command.execute(items, categories, ui);
     }
 
     private static Command parseCommand(String line) {
@@ -58,6 +60,8 @@ public class Parser {
             return new ListCommand(trimmedLine);
         case "finditem":
             return new FindCommand(trimmedLine);
+        case "addcategory":
+            return new AddCategoryCommand(trimmedLine);
         case "help":
             return new HelpCommand(trimmedLine);
         case "exit":
@@ -73,7 +77,7 @@ public class Parser {
         if (suggestion.isPresent()) {
             ui.showMessage("Do you mean " + suggestion.get() + "?");
         } else {
-            ui.showError("Invalid command, please try addItem, deleteItem, editDescription, editPrice," +
+            ui.showError("Invalid command, please try addCategory, addItem, deleteItem, editDescription, editPrice," +
                     " editQuantity, transact, showHistory, listItems, help, exit");
         }
     }

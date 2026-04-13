@@ -1,5 +1,6 @@
 package seedu.inventorybro.validator;
 
+import seedu.inventorybro.CategoryList;
 import seedu.inventorybro.ItemList;
 
 //@@author adbsw
@@ -25,7 +26,7 @@ public class ListCommandValidator implements Validator {
      * @param items The current inventory item list, provided for context-sensitive validation.
      */
     @Override
-    public void validate(ItemList items) {
+    public void validate(ItemList items, CategoryList categories) {
         String[] words = input.split(" ", 2);
 
         if (!words[0].equals("listItems")) {

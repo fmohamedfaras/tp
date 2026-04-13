@@ -1,6 +1,7 @@
 package seedu.inventorybro.storage;
 
 import seedu.inventorybro.Item;
+import seedu.inventorybro.CategoryList;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -17,11 +18,13 @@ public class ArrayStorageStub extends ArrayStorage {
     private final String testFilePath;
 
     /**
-     * Creates a stub storage that uses a custom test file path.
+     * Creates a stub storage that uses a custom test file path and a category list.
      *
      * @param testFilePath Path to the test file.
+     * @param categories   The master CategoryList to link loaded items to.
      */
-    public ArrayStorageStub(String testFilePath) {
+    public ArrayStorageStub(String testFilePath, CategoryList categories) {
+        super(categories); // Passes the category list to the parent ArrayStorage
         this.testFilePath = testFilePath;
     }
 

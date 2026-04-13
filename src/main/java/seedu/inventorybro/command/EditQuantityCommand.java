@@ -2,6 +2,7 @@ package seedu.inventorybro.command;
 
 import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
+import seedu.inventorybro.CategoryList;
 import seedu.inventorybro.Ui;
 import seedu.inventorybro.validator.EditQuantityCommandValidator;
 
@@ -29,11 +30,11 @@ public class EditQuantityCommand implements Command {
      * @param ui    The UI to display messages.
      */
     @Override
-    public void execute(ItemList items, Ui ui) {
+    public void execute(ItemList items, CategoryList categories, Ui ui) {
         assert items != null : "ItemList should not be null";
         assert ui != null : "Ui should not be null";
 
-        new EditQuantityCommandValidator(input).validate(items);
+        new EditQuantityCommandValidator(input).validate(items, categories);
 
         String[] words = input.split(" ", 2);
         String[] parts = words[1].split("q/", 2);

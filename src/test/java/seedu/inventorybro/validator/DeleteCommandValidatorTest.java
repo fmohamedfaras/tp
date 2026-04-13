@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.inventorybro.CategoryList;
 import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
 
@@ -14,15 +15,17 @@ import seedu.inventorybro.ItemList;
 //@@author fmohamedfaras
 class DeleteCommandValidatorTest {
 
+    private final CategoryList categories = new CategoryList();
+
     /**
      * Verifies that a valid index within bounds passes validation.
      */
     @Test
     void validate_validIndex_noException() {
         ItemList items = new ItemList();
-        items.addItem(new Item("Apple", 10));
+        items.addItem(new Item("Apple", 10, 0.0, categories.getCategory("Others")));
 
-        assertDoesNotThrow(() -> new DeleteCommandValidator("deleteItem 1").validate(items));
+        assertDoesNotThrow(() -> new DeleteCommandValidator("deleteItem 1").validate(items, categories));
     }
 
     /**
@@ -31,11 +34,11 @@ class DeleteCommandValidatorTest {
     @Test
     void validate_indexOutOfRange_throwsException() {
         ItemList items = new ItemList();
-        items.addItem(new Item("Coke Can", 50));
+        items.addItem(new Item("Coke Can", 50, 0.0, categories.getCategory("Others")));
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new DeleteCommandValidator("deleteItem 99").validate(items)
+                () -> new DeleteCommandValidator("deleteItem 99").validate(items, categories)
         );
     }
 
@@ -45,11 +48,11 @@ class DeleteCommandValidatorTest {
     @Test
     void validate_indexZero_throwsException() {
         ItemList items = new ItemList();
-        items.addItem(new Item("Coke Can", 50));
+        items.addItem(new Item("Coke Can", 50, 0.0, categories.getCategory("Others")));
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new DeleteCommandValidator("deleteItem 0").validate(items)
+                () -> new DeleteCommandValidator("deleteItem 0").validate(items, categories)
         );
     }
 
@@ -59,11 +62,11 @@ class DeleteCommandValidatorTest {
     @Test
     void validate_missingIndex_throwsException() {
         ItemList items = new ItemList();
-        items.addItem(new Item("Coke Can", 50));
+        items.addItem(new Item("Coke Can", 50, 0.0, categories.getCategory("Others")));
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new DeleteCommandValidator("deleteItem").validate(items)
+                () -> new DeleteCommandValidator("deleteItem").validate(items, categories)
         );
     }
 
@@ -73,11 +76,11 @@ class DeleteCommandValidatorTest {
     @Test
     void validate_nonNumericIndex_throwsException() {
         ItemList items = new ItemList();
-        items.addItem(new Item("Coke Can", 50));
+        items.addItem(new Item("Coke Can", 50, 0.0, categories.getCategory("Others")));
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new DeleteCommandValidator("deleteItem abc").validate(items)
+                () -> new DeleteCommandValidator("deleteItem abc").validate(items, categories)
         );
     }
 }

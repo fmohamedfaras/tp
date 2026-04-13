@@ -1,42 +1,49 @@
 package seedu.inventorybro;
 
 /**
- * Represents an item with a description, quantity, and price.
+ * Represents an item with a description, quantity, price and category.
  */
 public class Item {
     protected String description;
     protected int quantity;
     protected double price;
+    protected Category category;
 
     /**
-     * Creates an item with the given description and quantity.
+     * Creates an item with the given description, quantity and category.
      *
      * @param description The item description.
      * @param quantity    The quantity of item.
+     * @param category    The category this item belongs to.
      */
-    public Item(String description, int quantity) {
+    public Item(String description, int quantity, Category category) {
         assert description != null && !description.isEmpty() : "Description should not be null or empty";
         assert quantity >= 0 : "Quantity should not be negative: " + quantity;
+        assert category != null : "Category should not be null";
         this.description = description;
         this.quantity = quantity;
         this.price = 0.0;
+        this.category = category;
     }
 
     //@@author elliotjohnwu
     /**
-     * Creates an item with the given description, quantity, and price.
+     * Creates an item with the given description, quantity, price and category.
      *
      * @param description The item description.
      * @param quantity    The quantity of item.
      * @param price       The price of item.
+     * @param category    The category this item belongs to.
      */
-    public Item(String description, int quantity, double price) {
+    public Item(String description, int quantity, double price, Category category) {
         assert description != null && !description.isEmpty() : "Description should not be null or empty";
         assert quantity >= 0 : "Quantity should not be negative: " + quantity;
         assert price >= 0 : "Price should not be negative: " + price;
+        assert category != null : "Category should not be null";
         this.description = description;
         this.quantity = quantity;
         this.price = price;
+        this.category = category;
     }
     //@@author
 
@@ -91,12 +98,31 @@ public class Item {
     }
 
     /**
+     * Returns the category of item.
+     *
+     * @return The category of item.
+     */
+    public Category getCategory() {
+        return this.category;
+    }
+
+    /**
+     * Sets the item category.
+     *
+     * @param category The price of item.
+     */
+    public void setCategory(Category category) {
+        assert category != null : "Category should not be null";
+        this.category = category;
+    }
+
+    /**
      * Returns the item in save file format.
      *
      * @return A string formatted for writing to the save file.
      */
     public String toSaveFormat() {
-        return (quantity) + " | " + description + " | " + String.format("%.2f", price);
+        return (quantity) + " | " + description + " | " + String.format("%.2f", price) + " | " + category.getName();
     }
 
     /**
@@ -115,6 +141,7 @@ public class Item {
      */
     @Override
     public String toString() {
-        return description + " (Quantity: " + quantity + ", Price: $" + String.format("%.2f", price) + ")";
+        return category.toString() + " " + description + " (Quantity: " + quantity + ", Price: $"
+            + String.format("%.2f", price) + ")";
     }
 }

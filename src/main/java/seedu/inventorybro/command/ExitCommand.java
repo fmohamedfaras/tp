@@ -2,6 +2,7 @@ package seedu.inventorybro.command;
 
 import seedu.inventorybro.ExitException;
 import seedu.inventorybro.ItemList;
+import seedu.inventorybro.CategoryList;
 import seedu.inventorybro.Ui;
 
 //@@author vionyp
@@ -13,7 +14,7 @@ public class ExitCommand implements Command {
      * @param ui The UI instance used to display the farewell message.
      */
     @Override
-    public void execute(ItemList items, Ui ui) {
+    public void execute(ItemList items, CategoryList categories, Ui ui) {
         ui.showMessage("Bye! See you next time.");
         throw new ExitException();
     }

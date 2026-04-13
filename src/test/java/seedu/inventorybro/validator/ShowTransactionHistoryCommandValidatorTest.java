@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.inventorybro.CategoryList;
 import seedu.inventorybro.ItemList;
 
 //@@author elliotjohnwu
@@ -13,6 +14,8 @@ import seedu.inventorybro.ItemList;
  * Validation tests for {@link ShowTransactionHistoryCommandValidator}.
  */
 class ShowTransactionHistoryCommandValidatorTest {
+
+    private final CategoryList categories = new CategoryList();
 
     /**
      * Verifies that the exact "showHistory" input passes validation.
@@ -22,7 +25,7 @@ class ShowTransactionHistoryCommandValidatorTest {
         ItemList items = new ItemList();
 
         assertDoesNotThrow(() ->
-                new ShowTransactionHistoryCommandValidator("showHistory").validate(items)
+                new ShowTransactionHistoryCommandValidator("showHistory").validate(items, categories)
         );
     }
 
@@ -35,7 +38,7 @@ class ShowTransactionHistoryCommandValidatorTest {
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new ShowTransactionHistoryCommandValidator("history").validate(items)
+                () -> new ShowTransactionHistoryCommandValidator("history").validate(items, categories)
         );
     }
 
@@ -48,7 +51,7 @@ class ShowTransactionHistoryCommandValidatorTest {
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new ShowTransactionHistoryCommandValidator("showHistory all").validate(items)
+                () -> new ShowTransactionHistoryCommandValidator("showHistory all").validate(items, categories)
         );
     }
 
@@ -61,7 +64,7 @@ class ShowTransactionHistoryCommandValidatorTest {
 
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
-                () -> new ShowTransactionHistoryCommandValidator("ShowHistory").validate(items)
+                () -> new ShowTransactionHistoryCommandValidator("ShowHistory").validate(items, categories)
         );
 
         assertEquals("Did you mean 'showHistory'?", ex.getMessage());

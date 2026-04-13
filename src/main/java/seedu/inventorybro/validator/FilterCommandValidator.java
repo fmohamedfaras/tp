@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import seedu.inventorybro.CategoryList;
 import seedu.inventorybro.ItemList;
 
 /**
@@ -47,7 +48,7 @@ public class FilterCommandValidator implements Validator {
      *                                  or if a value type does not match its field.
      */
     @Override
-    public void validate(ItemList items) {
+    public void validate(ItemList items, CategoryList categories) {
         assert input != null : "Input should not be null";
 
         if (!input.startsWith("filterItem ")) {

@@ -1,5 +1,6 @@
 package seedu.inventorybro.validator;
 
+import seedu.inventorybro.CategoryList;
 import seedu.inventorybro.ItemList;
 
 /**
@@ -17,7 +18,7 @@ public class EditQuantityCommandValidator implements Validator {
     }
 
     @Override
-    public void validate(ItemList items) {
+    public void validate(ItemList items, CategoryList categories) {
         try {
             String[] words = input.split(" ", 2);
             if (words.length < 2) {

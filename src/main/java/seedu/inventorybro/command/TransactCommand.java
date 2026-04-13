@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
+import seedu.inventorybro.CategoryList;
 import seedu.inventorybro.Ui;
 import seedu.inventorybro.validator.TransactCommandValidator;
 import seedu.inventorybro.storage.TransactionStorage;
@@ -29,7 +30,7 @@ public class TransactCommand implements Command {
     public TransactCommand(String input) {
         assert input != null : "Input should not be null";
         this.input = input;
-        transactionStorage = new TransactionStorage();;
+        transactionStorage = new TransactionStorage();
     }
 
     /**
@@ -38,13 +39,13 @@ public class TransactCommand implements Command {
      * @param items The inventory item list to update.
      */
     @Override
-    public void execute(ItemList items, Ui ui) {
+    public void execute(ItemList items, CategoryList categories, Ui ui) {
         assert items != null : "ItemList should not be null";
         assert ui != null : "Ui should not be null";
 
         logger.log(Level.INFO, "Executing transact command: {0}", input);
 
-        new TransactCommandValidator(input).validate(items);
+        new TransactCommandValidator(input).validate(items, categories);
 
         String[] words = input.split(" ", 2);
         String[] digits = words[1].split("q/", 2);

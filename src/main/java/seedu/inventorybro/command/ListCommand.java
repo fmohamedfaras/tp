@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
+import seedu.inventorybro.CategoryList;
 import seedu.inventorybro.Ui;
 import seedu.inventorybro.validator.ListCommandValidator;
 
@@ -33,8 +34,8 @@ public class ListCommand implements Command {
      * @param ui    The ui object.
      */
     @Override
-    public void execute(ItemList items, Ui ui) {
-        new ListCommandValidator(input).validate(items);
+    public void execute(ItemList items, CategoryList categories, Ui ui) {
+        new ListCommandValidator(input).validate(items, categories);
 
         if (items.isEmpty()) {
             ui.showMessage("Your inventory is empty.");

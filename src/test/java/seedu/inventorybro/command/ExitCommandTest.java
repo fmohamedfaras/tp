@@ -2,6 +2,7 @@ package seedu.inventorybro.command;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.inventorybro.CategoryList;
 import seedu.inventorybro.ExitException;
 import seedu.inventorybro.ItemList;
 import seedu.inventorybro.Ui;
@@ -10,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ExitCommandTest {
     private final Ui ui = new Ui();
+    private final CategoryList categories = new CategoryList();
 
     /**
      * Verifies that executing the exit command throws {@link ExitException}
@@ -17,6 +19,6 @@ class ExitCommandTest {
      */
     @Test
     void execute_throwsExitException() {
-        assertThrows(ExitException.class, () -> new ExitCommand().execute(new ItemList(), ui));
+        assertThrows(ExitException.class, () -> new ExitCommand().execute(new ItemList(), categories, ui));
     }
 }

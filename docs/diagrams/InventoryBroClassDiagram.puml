@@ -1,100 +1,155 @@
 @startuml
 'https://plantuml.com/class-diagram
 
-skinparam monochrome true
 skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam packageFontSize 40
+skinparam classFontSize 35
+skinparam classAttributeFontSize 46
+skinparam classStereotypeFontSize 40
+skinparam ArrowThickness 3
+skinparam backgroundColor transparent
 hide circle
 
 package "seedu.inventorybro" {
-    class InventoryBro {
+    class InventoryBro #mediumorchid {
         - ui: Ui
         - items: ItemList
         - arrayStorage: ArrayStorage
     }
-    class Ui
+
+    class Ui #mediumpurple
+    class Parser #palegoldenrod
 
 
-package "command" {
-    interface Command <<interface>>
+    package "command" {
+        interface Command <<interface>> #royalblue
 
-    class AddCommand
-    class DeleteCommand
-    class EditCommand
-    class TransactCommand
-    class ShowTransactionHistoryCommand
-    class ListCommand
-    class FindCommand
-    class HelpCommand
-    class ExitCommand
-}
+        class AddCommand #deepskyblue
+        class DeleteCommand #deepskyblue
+        class EditDescriptionCommand #deepskyblue
+        class EditPriceCommand #deepskyblue
+        class EditQuantityCommand #deepskyblue
+        class TransactCommand #deepskyblue
+        class ShowTransactionHistoryCommand #deepskyblue
+        class ListCommand #deepskyblue
+        class FindCommand #deepskyblue
+        class FilterCommand #deepskyblue
+        class HelpCommand #deepskyblue
+        class ExitCommand #deepskyblue
+    }
 
+    package "storage" {
+        abstract class Storage #mediumturquoise
+        class ArrayStorage #turquoise
+        class TransactionStorage #turquoise
+    }
 
+    class ItemList #orange
+    class Item #orangered
 
-package "storage" {
-    abstract class Storage
-    class ArrayStorage
-    class TransactionStorage
-}
+    package "validator" {
+        interface Validator <<interface>> #mediumseagreen
 
-package "validator" {
-    interface Validator <<interface>>
+        class AddCommandValidator #limegreen
+        class DeleteCommandValidator #limegreen
+        class DuplicateItemValidator #limegreen
+        class EditDescriptionCommandValidator #limegreen
+        class EditPriceCommandValidator #limegreen
+        class EditQuantityCommandValidator #limegreen
+        class FilterCommandValidator #limegreen
+        class FindCommandValidator #limegreen
+        class HelpCommandValidator #limegreen
+        class ListCommandValidator #limegreen
+        class ShowTransactionHistoryCommandValidator #limegreen
+        class TransactCommandValidator #limegreen
+    }
 
-    class AddCommandValidator
-    class DeleteCommandValidator
-    class EditCommandValidator
-    class TransactCommandValidator
-    class ShowTransactionHistoryCommandValidator
-    class ListCommandValidator
-    class HelpCommandValidator
-}
+    'main alignment
+    Ui -[hidden]down-> "storage"
+    "command" -[hidden]right-> "validator"
 
+    'Main
+    InventoryBro -down-> Parser
+    Parser -right-> Command
+    InventoryBro -down-> Ui
+    Parser -left-> Ui
+    InventoryBro --> ArrayStorage
 
-InventoryBro --> Parser
-InventoryBro --> Ui
-InventoryBro --> ArrayStorage
+    'Storage
+    ArrayStorage -up-|> Storage
+    TransactionStorage -up-|> Storage
+    ArrayStorage --|> ItemList
+    ItemList --|> Item
 
-Ui --> Parser
-Parser --> Command
+    TransactCommand -down-> TransactionStorage
+    ShowTransactionHistoryCommand -down-> TransactionStorage
 
-Command <|.. TransactCommand
-Command <|.. ShowTransactionHistoryCommand
+    'Alignment
+    AddCommand -[hidden]down-> DeleteCommand
+    DeleteCommand -[hidden]down-> EditDescriptionCommand
+    EditDescriptionCommand -[hidden]down-> EditPriceCommand
+    EditPriceCommand -[hidden]down-> EditQuantityCommand
+    EditQuantityCommand -[hidden]down-> ExitCommand
+    ExitCommand -[hidden]down-> FilterCommand
+    FilterCommand -[hidden]down-> FindCommand
+    FindCommand -[hidden]down-> HelpCommand
+    HelpCommand -[hidden]down-> ListCommand
+    ListCommand -[hidden]down-> ShowTransactionHistoryCommand
+    ShowTransactionHistoryCommand -[hidden]down-> TransactCommand
 
-Command <|.. AddCommand
-Command <|.. DeleteCommand
-Command <|.. EditCommand
-Command <|.. ListCommand
-Command <|.. FindCommand
-Command <|.. HelpCommand
-Command <|.. ExitCommand
+    AddCommandValidator -[hidden]down-> DeleteCommandValidator
+    DeleteCommandValidator -[hidden]down-> EditDescriptionCommandValidator
+    EditDescriptionCommandValidator -[hidden]down-> EditPriceCommandValidator
+    EditPriceCommandValidator -[hidden]down-> EditQuantityCommandValidator
+    EditQuantityCommandValidator -[hidden]down-> FilterCommandValidator
+    FilterCommandValidator -[hidden]down-> FindCommandValidator
+    FindCommandValidator -[hidden]down-> HelpCommandValidator
+    HelpCommandValidator -[hidden]down-> ListCommandValidator
+    ListCommandValidator -[hidden]down-> ShowTransactionHistoryCommandValidator
+    ShowTransactionHistoryCommandValidator -[hidden]down-> TransactCommandValidator
 
-TransactCommand --> ItemList
-TransactCommand --> TransactionStorage
+    'Commands to CommandValidators
+    AddCommand --> AddCommandValidator
+    DeleteCommand --> DeleteCommandValidator
+    EditDescriptionCommand --> EditDescriptionCommandValidator
+    EditPriceCommand --> EditPriceCommandValidator
+    EditQuantityCommand --> EditQuantityCommandValidator
+    FilterCommand --> FilterCommandValidator
+    FindCommand --> FindCommandValidator
+    HelpCommand --> HelpCommandValidator
+    ListCommand --> ListCommandValidator
+    ShowTransactionHistoryCommand --> ShowTransactionHistoryCommandValidator
+    TransactCommand --> TransactCommandValidator
 
-ShowTransactionHistoryCommand --> TransactionStorage
+    'Commands to Command interface
+    AddCommand .left.|> Command
+    DeleteCommand .left.|> Command
+    EditDescriptionCommand .left.|> Command
+    EditPriceCommand .left.|> Command
+    EditQuantityCommand .left.|> Command
+    ExitCommand .left.|> Command
+    FilterCommand .left.|> Command
+    FindCommand .left.|> Command
+    HelpCommand .left.|> Command
+    ListCommand .left.|> Command
+    ShowTransactionHistoryCommand .left.|> Command
+    TransactCommand .left.|> Command
 
-AddCommand --> AddCommandValidator
-DeleteCommand --> DeleteCommandValidator
-EditCommand --> EditCommandValidator
-TransactCommand --> TransactCommandValidator
-ShowTransactionHistoryCommand --> ShowTransactionHistoryCommandValidator
-ListCommand --> ListCommandValidator
-HelpCommand --> HelpCommandValidator
-
-Validator <|.. AddCommandValidator
-Validator <|.. DeleteCommandValidator
-Validator <|.. EditCommandValidator
-Validator <|.. TransactCommandValidator
-Validator <|.. ShowTransactionHistoryCommandValidator
-Validator <|.. ListCommandValidator
-Validator <|.. HelpCommandValidator
-
-Storage <|-- ArrayStorage
-Storage <|-- TransactionStorage
-
-ArrayStorage --> ItemList
-
-ItemList --> Item
-
+    'CommandValidators to Validator interface
+    DuplicateItemValidator <-- AddCommandValidator
+    Validator <|.right. AddCommandValidator
+    Validator <|.right. DuplicateItemValidator
+    Validator <|.right. DeleteCommandValidator
+    Validator <|.right. EditDescriptionCommandValidator
+    Validator <|.right. EditPriceCommandValidator
+    Validator <|.right. EditQuantityCommandValidator
+    Validator <|.right. FilterCommandValidator
+    Validator <|.right. FindCommandValidator
+    Validator <|.right. HelpCommandValidator
+    Validator <|.right. ListCommandValidator
+    Validator <|.right. ShowTransactionHistoryCommandValidator
+    Validator <|.right. TransactCommandValidator
 }
 
 @enduml

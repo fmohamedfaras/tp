@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.inventorybro.CategoryList;
 import seedu.inventorybro.ItemList;
 import seedu.inventorybro.Ui;
 import seedu.inventorybro.storage.TransactionStorageHistoryStub;
@@ -18,6 +19,7 @@ import seedu.inventorybro.storage.TransactionStorageHistoryStub;
 class ShowTransactionHistoryCommandTest {
 
     private final ItemList items = new ItemList();
+    private final CategoryList categories = new CategoryList();
     private final Ui ui = new Ui();
 
     @Test
@@ -29,7 +31,7 @@ class ShowTransactionHistoryCommandTest {
         ShowTransactionHistoryCommand command =
                 new ShowTransactionHistoryCommand("showHistory", stub);
 
-        assertDoesNotThrow(() -> command.execute(items, ui));
+        assertDoesNotThrow(() -> command.execute(items, categories, ui));
     }
 
     @Test
@@ -44,7 +46,7 @@ class ShowTransactionHistoryCommandTest {
         ShowTransactionHistoryCommand command =
                 new ShowTransactionHistoryCommand("showHistory", stub);
 
-        assertDoesNotThrow(() -> command.execute(items, ui));
+        assertDoesNotThrow(() -> command.execute(items, categories, ui));
     }
 
     @Test
@@ -61,7 +63,7 @@ class ShowTransactionHistoryCommandTest {
         ShowTransactionHistoryCommand command =
                 new ShowTransactionHistoryCommand("showHistory", stub);
 
-        assertDoesNotThrow(() -> command.execute(items, ui));
+        assertDoesNotThrow(() -> command.execute(items, categories, ui));
     }
 
     @Test
@@ -74,7 +76,7 @@ class ShowTransactionHistoryCommandTest {
                 );
 
         assertThrows(IllegalArgumentException.class,
-                () -> command.execute(items, ui));
+                () -> command.execute(items, categories, ui));
     }
 
     @Test
@@ -87,7 +89,7 @@ class ShowTransactionHistoryCommandTest {
                 );
 
         assertThrows(IllegalArgumentException.class,
-                () -> command.execute(items, ui));
+                () -> command.execute(items, categories, ui));
     }
 
     @Test
@@ -100,6 +102,6 @@ class ShowTransactionHistoryCommandTest {
                 );
 
         assertThrows(IllegalArgumentException.class,
-                () -> command.execute(items, ui));
+                () -> command.execute(items, categories, ui));
     }
 }

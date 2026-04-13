@@ -9,6 +9,7 @@ import java.io.PrintStream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import seedu.inventorybro.CategoryList;
 import seedu.inventorybro.ItemList;
 import seedu.inventorybro.Ui;
 
@@ -17,33 +18,23 @@ import seedu.inventorybro.Ui;
  */
 class HelpCommandTest {
     private final Ui ui = new Ui();
+    private final CategoryList categories = new CategoryList();
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream standardOut = System.out;
 
-    /**
-     * Redirects standard output stream to a new PrintStream with ByteArrayOutputStream to
-     * inspect printed output.
-     */
     @BeforeEach
     void setUp() {
         System.setOut(new PrintStream(outContent));
     }
 
-    /**
-     * Restores standard output stream to original state after each test to avoid affecting
-     * other tests.
-     */
     @AfterEach
     void tearDown() {
         System.setOut(standardOut);
     }
 
-    /**
-     * Verifies that the command summaries are displayed to the user when the user inputs 'help'.
-     */
     @Test
     void execute_validInputHelp_success() {
-        new HelpCommand("help").execute(new ItemList(), ui);
+        new HelpCommand("help").execute(new ItemList(), categories, ui);
 
         String expectedOutput = """
             Command names and their summaries:
@@ -76,13 +67,9 @@ class HelpCommandTest {
         assertEquals(expectedOutput, outContent.toString());
     }
 
-    /**
-     * Verifies that the correct detailed instruction of the command 'addItem' is displayed when
-     * the user specifies the command.
-     */
     @Test
     void execute_helpValidCommandName_success() {
-        new HelpCommand("help addItem").execute(new ItemList(), ui);
+        new HelpCommand("help addItem").execute(new ItemList(), categories, ui);
 
         String expectedOutput = """
             addItem:
@@ -100,34 +87,27 @@ class HelpCommandTest {
         assertEquals(expectedOutput, outContent.toString());
     }
 
-    /**
-     * Verifies that an IllegalArgumentException is thrown when an invalid command name is indicated.
-     */
     @Test
     void execute_helpInvalidCommandName_throwsException() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new HelpCommand("help invalidCommand").execute(new ItemList(), ui)
+                () -> new HelpCommand("help invalidCommand").execute(new ItemList(), categories, ui)
         );
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new HelpCommand("help addItems").execute(new ItemList(), ui)
+                () -> new HelpCommand("help addItems").execute(new ItemList(), categories, ui)
         );
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new HelpCommand("help edit").execute(new ItemList(), ui)
+                () -> new HelpCommand("help edit").execute(new ItemList(), categories, ui)
         );
     }
 
-    /**
-     * Verifies that an IllegalArgumentException is thrown when more than one argument are provided
-     * when 'help' can take in only up to one argument.
-     */
     @Test
     void execute_helpMoreThanOneArgument_throwsException() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new HelpCommand("help deleteItem transact").execute(new ItemList(), ui)
+                () -> new HelpCommand("help deleteItem transact").execute(new ItemList(), categories, ui)
         );
     }
 }

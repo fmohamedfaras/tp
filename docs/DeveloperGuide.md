@@ -71,7 +71,7 @@ The `Ui` class acts as the bridge between the user and the internal logic.
 ### Parser Component
 The `Parser` is responsible for routing user input to the correct command.
 
-**Figure 3: Parser Class Diagram**  
+**Figure 3: Parser Class Diagram**   
 ![Parser Class Diagram](diagrams/ParserClassDiagram.png)
 
 **Design highlights:**
@@ -469,7 +469,7 @@ accuracy (clear, structured output)
 
 ## Instructions for manual testing
 
-1. Launch the app: `java -jar inventorybro.jar`
+1. Launch the app: `java -jar inventory-bro.jar`
 2. Add items: `addItem d/Coke q/50 p/1.50` and `addItem d/Sprite q/30 p/1.20`
 3. List items: `listItems`
 4. Edit an item's description: `editDescription 1 d/Coke Can`

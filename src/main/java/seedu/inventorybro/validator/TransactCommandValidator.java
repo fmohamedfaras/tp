@@ -1,5 +1,6 @@
 package seedu.inventorybro.validator;
 
+import seedu.inventorybro.CategoryList;
 import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
 
@@ -16,7 +17,7 @@ public class TransactCommandValidator implements Validator {
     }
 
     @Override
-    public void validate(ItemList items) {
+    public void validate(ItemList items, CategoryList categories) {
         assert items != null : "ItemList should not be null";
 
         try {

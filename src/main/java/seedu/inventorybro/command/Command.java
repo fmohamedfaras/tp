@@ -1,5 +1,6 @@
 package seedu.inventorybro.command;
 
+import seedu.inventorybro.CategoryList;
 import seedu.inventorybro.ItemList;
 import seedu.inventorybro.Ui;
 
@@ -10,5 +11,5 @@ public interface Command {
      *
      * @param items The inventory item list to operate on.
      */
-    void execute(ItemList items, Ui ui);
+    void execute(ItemList items, CategoryList categories, Ui ui);
 }

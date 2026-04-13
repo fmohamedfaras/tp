@@ -1,6 +1,7 @@
 @startuml
 skinparam monochrome true
 skinparam shadowing false
+skinparam classAttributeIconSize 0
 hide circle
 
 class Parser {
@@ -28,7 +29,7 @@ class Ui {
     + showError(message: String): void
 }
 
-Parser ..> TypoDetector : uses
-Parser ..> Ui : uses
+Parser ..> TypoDetector : uses >
+Parser ..> Ui : uses >
 
 @enduml

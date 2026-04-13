@@ -3,6 +3,7 @@
 
 skinparam monochrome true
 skinparam shadowing false
+skinparam classAttributeIconSize 0
 hide circle
 
 interface Command <<interface>> {
@@ -31,8 +32,8 @@ class Ui {
 
 Command <|.. ShowTransactionHistoryCommand
 
-ShowTransactionHistoryCommand ..> ShowTransactionHistoryCommandValidator : creates
-ShowTransactionHistoryCommand ..> TransactionStorage : uses
-ShowTransactionHistoryCommand ..> Ui : uses
+ShowTransactionHistoryCommand ..> ShowTransactionHistoryCommandValidator : creates >
+ShowTransactionHistoryCommand ..> TransactionStorage : uses >
+ShowTransactionHistoryCommand ..> Ui : uses >
 
 @enduml

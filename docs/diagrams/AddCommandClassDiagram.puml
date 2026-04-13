@@ -1,6 +1,7 @@
 @startuml
 skinparam monochrome true
 skinparam shadowing false
+skinparam classAttributeIconSize 0
 hide circle
 
 interface Command <<interface>> {
@@ -55,11 +56,11 @@ Command <|.. AddCommand
 Validator <|.. AddCommandValidator
 Validator <|.. DuplicateItemValidator
 
-AddCommand ..> AddCommandValidator : creates
-AddCommand ..> Item : creates
-AddCommand ..> ItemList : modifies
-AddCommand ..> Ui : uses
-AddCommandValidator ..> DuplicateItemValidator : creates
-DuplicateItemValidator ..> ItemList : reads
+AddCommand ..> AddCommandValidator : creates >
+AddCommand ..> Item : creates >
+AddCommand ..> ItemList : modifies >
+AddCommand ..> Ui : uses >
+AddCommandValidator ..> DuplicateItemValidator : creates >
+DuplicateItemValidator ..> ItemList : reads >
 
 @enduml

@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.inventorybro.CategoryList;
 import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
 
@@ -14,6 +15,7 @@ import seedu.inventorybro.ItemList;
  * Validation tests for {@link ListCommandValidator}.
  */
 class ListCommandValidatorTest {
+    private final CategoryList categories = new CategoryList();
 
     /**
      * Verifies that the exact listItems input passes validation.
@@ -22,11 +24,11 @@ class ListCommandValidatorTest {
     void validate_validInput_noException() {
         ItemList items = new ItemList();
 
-        assertDoesNotThrow(() -> new ListCommandValidator("listItems").validate(items));
-        assertDoesNotThrow(() -> new ListCommandValidator("listItems quantity high").validate(items));
-        assertDoesNotThrow(() -> new ListCommandValidator("listItems quantity low").validate(items));
-        assertDoesNotThrow(() -> new ListCommandValidator("listItems price high").validate(items));
-        assertDoesNotThrow(() -> new ListCommandValidator("listItems price low").validate(items));
+        assertDoesNotThrow(() -> new ListCommandValidator("listItems").validate(items, categories));
+        assertDoesNotThrow(() -> new ListCommandValidator("listItems quantity high").validate(items, categories));
+        assertDoesNotThrow(() -> new ListCommandValidator("listItems quantity low").validate(items, categories));
+        assertDoesNotThrow(() -> new ListCommandValidator("listItems price high").validate(items, categories));
+        assertDoesNotThrow(() -> new ListCommandValidator("listItems price low").validate(items, categories));
     }
 
     /**
@@ -35,11 +37,11 @@ class ListCommandValidatorTest {
     @Test
     void validate_wrongCommandWord_throwsException() {
         ItemList items = new ItemList();
-        items.addItem(new Item("Apple", 50));
+        items.addItem(new Item("Apple", 50, 0.0, categories.getCategory("Others")));
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new ListCommandValidator("list").validate(items)
+                () -> new ListCommandValidator("list").validate(items, categories)
         );
     }
 
@@ -52,11 +54,11 @@ class ListCommandValidatorTest {
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new ListCommandValidator("listItems invalidField").validate(items)
+                () -> new ListCommandValidator("listItems invalidField").validate(items, categories)
         );
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new ListCommandValidator("listItems quantity invalidOrder").validate(items)
+                () -> new ListCommandValidator("listItems quantity invalidOrder").validate(items, categories)
         );
     }
 
@@ -69,7 +71,7 @@ class ListCommandValidatorTest {
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new ListCommandValidator("ListItems quantity price high").validate(items)
+                () -> new ListCommandValidator("ListItems quantity price high").validate(items, categories)
         );
     }
 
@@ -79,11 +81,11 @@ class ListCommandValidatorTest {
     @Test
     void validate_wrongCase_throwsException() {
         ItemList items = new ItemList();
-        items.addItem(new Item("Apple", 50));
+        items.addItem(new Item("Apple", 50, 0.0, categories.getCategory("Others")));
 
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
-                () -> new ListCommandValidator("LiStItEms").validate(items)
+                () -> new ListCommandValidator("LiStItEms").validate(items, categories)
         );
         assertEquals("Did you mean 'listItems'?", ex.getMessage());
     }

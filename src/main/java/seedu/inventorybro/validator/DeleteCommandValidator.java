@@ -1,5 +1,6 @@
 package seedu.inventorybro.validator;
 
+import seedu.inventorybro.CategoryList;
 import seedu.inventorybro.ItemList;
 
 /**
@@ -13,7 +14,7 @@ public class DeleteCommandValidator implements Validator {
     }
 
     @Override
-    public void validate(ItemList items) {
+    public void validate(ItemList items, CategoryList categories) {
         String[] words = input.split(" ");
 
         if (words.length != 2 || !words[0].equalsIgnoreCase("deleteItem")) {

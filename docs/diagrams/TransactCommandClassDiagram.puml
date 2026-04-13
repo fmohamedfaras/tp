@@ -2,6 +2,7 @@
 
 skinparam monochrome true
 skinparam shadowing false
+skinparam classAttributeIconSize 0
 hide circle
 
 interface Command <<interface>> {
@@ -15,11 +16,6 @@ class TransactCommand {
     + execute(items: ItemList, ui: Ui): void
 }
 
-class TransactCommandValidator {
-    - input: String
-    + validate(items: ItemList): void
-}
-
 class ItemList {
     + getItem(index: int): Item
 }
@@ -28,6 +24,15 @@ class Item {
     + getQuantity(): int
     + setQuantity(quantity: int): void
     + getDescription(): String
+}
+
+class TransactCommandValidator {
+    - input: String
+    + validate(items: ItemList): void
+}
+
+interface Validator <<interface>> {
+    + validate(items: ItemList): void
 }
 
 class TransactionStorage {
@@ -40,10 +45,13 @@ class Ui {
 
 Command <|.. TransactCommand
 
-TransactCommand ..> TransactCommandValidator : creates
-TransactCommand ..> ItemList : uses
-TransactCommand ..> Item : modifies
-TransactCommand ..> TransactionStorage : uses
-TransactCommand ..> Ui : uses
+TransactCommand .right.> TransactCommandValidator : creates >
+TransactCommandValidator .up.|> Validator
+TransactCommandValidator ..> ItemList : uses >
+TransactCommandValidator ..> Item : uses >
+TransactCommand .> Item : modifies >
+TransactCommand ..> ItemList : uses >
+TransactCommand ..> TransactionStorage : uses >
+TransactCommand ..> Ui : uses >
 
 @enduml
