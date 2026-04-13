@@ -1,6 +1,7 @@
 @startuml
 skinparam monochrome true
 skinparam shadowing false
+hide footbox
 
 box "Logic" #LightBlue
 participant "<<class>>\nParser" as Parser
@@ -48,6 +49,8 @@ note right of FilterCommandValidator
 end note
 FilterCommandValidator --> FilterCommand
 deactivate FilterCommandValidator
+FilterCommandValidator -[hidden]-> FilterCommand
+destroy FilterCommandValidator
 
 FilterCommand -> FilterCommand : buildAndGroups(predicates, operators)
 note right : Groups consecutive AND predicates;\nOR starts a new group
@@ -96,6 +99,8 @@ deactivate Ui
 
 FilterCommand --> Parser
 deactivate FilterCommand
+FilterCommand -[hidden]-> Parser
+destroy FilterCommand
 
 <-- Parser
 deactivate Parser

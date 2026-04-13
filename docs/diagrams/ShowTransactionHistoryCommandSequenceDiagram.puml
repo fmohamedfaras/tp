@@ -7,28 +7,29 @@ autonumber
 skinparam monochrome true
 skinparam shadowing false
 hide circle
+hide footbox
 
 actor User
-participant Parser
-participant ShowTransactionHistoryCommand
-participant ShowTransactionHistoryCommandValidator
-participant TransactionStorage
+participant Parser <<class>>
+participant ":ShowTransactionHistoryCommand"
+participant ":ShowTransactionHistoryCommandValidator"
+participant ":TransactionStorage"
 participant Ui
 
 User -> Parser: "showHistory"
 Parser -> ShowTransactionHistoryCommand: create(input)
 
-ShowTransactionHistoryCommand -> ShowTransactionHistoryCommandValidator: validate(items)
+":ShowTransactionHistoryCommand" -> ":ShowTransactionHistoryCommandValidator": validate(items)
 
-ShowTransactionHistoryCommand -> TransactionStorage: load()
-TransactionStorage --> ShowTransactionHistoryCommand: history list
+":ShowTransactionHistoryCommand" -> ":TransactionStorage": load()
+":TransactionStorage" --> ":ShowTransactionHistoryCommand": history list
 
 alt history is empty
-    ShowTransactionHistoryCommand -> Ui: "No transaction history found."
+    ":ShowTransactionHistoryCommand" -> Ui: "No transaction history found."
 else
-    ShowTransactionHistoryCommand -> Ui: "Transaction History:"
+    ":ShowTransactionHistoryCommand" -> Ui: "Transaction History:"
     loop for each entry
-        ShowTransactionHistoryCommand -> Ui: showMessage(index + entry)
+        ":ShowTransactionHistoryCommand" -> Ui: showMessage(index + entry)
     end
 end
 

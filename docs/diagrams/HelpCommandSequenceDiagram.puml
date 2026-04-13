@@ -1,7 +1,7 @@
 @startuml
-!pragma teoz true
 skinparam monochrome true
 skinparam shadowing false
+hide footbox
 
 box "Logic" #LightBlue
 participant "<<class>>\nParser" as Parser
@@ -35,6 +35,8 @@ HelpCommand -> HelpCommandValidator : validate(items)
 activate HelpCommandValidator
 HelpCommandValidator --> HelpCommand
 deactivate HelpCommandValidator
+HelpCommandValidator -[hidden]-> HelpCommand
+destroy HelpCommandValidator
 
 alt Input is only "help"
     HelpCommand -> HelpCommand : info = HELPSUMMARYMESSAGE
@@ -49,6 +51,8 @@ deactivate Ui
 
 HelpCommand --> Parser
 deactivate HelpCommand
+HelpCommand -[hidden]-> Parser
+destroy HelpCommand
 
 <-- Parser
 deactivate Parser

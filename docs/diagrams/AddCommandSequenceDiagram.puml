@@ -1,6 +1,7 @@
 @startuml
 skinparam monochrome true
 skinparam shadowing false
+hide footbox
 
 box "Logic" #LightBlue
 participant "<<class>>\nParser" as Parser
@@ -68,9 +69,13 @@ end
 
 DuplicateItemValidator --> AddCommandValidator
 deactivate DuplicateItemValidator
+DuplicateItemValidator -[hidden]-> AddCommandValidator
+destroy DuplicateItemValidator
 
 AddCommandValidator --> AddCommand
 deactivate AddCommandValidator
+AddCommandValidator -[hidden]-> AddCommand
+destroy AddCommandValidator
 
 note right of AddCommand
   Re-applies regex to extract:
@@ -97,6 +102,8 @@ deactivate Ui
 
 AddCommand --> Parser
 deactivate AddCommand
+AddCommand -[hidden]-> Parser
+destroy AddCommand
 
 <-- Parser
 deactivate Parser

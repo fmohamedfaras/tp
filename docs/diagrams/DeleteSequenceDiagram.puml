@@ -1,7 +1,7 @@
 @startuml
-!pragma teoz true
 skinparam monochrome true
 skinparam shadowing false
+hide footbox
 
 box "Logic" #LightBlue
 participant "<<class>>\nParser" as Parser
@@ -39,6 +39,8 @@ DeleteCommand -> DeleteCommandValidator : validate(items)
 activate DeleteCommandValidator
 DeleteCommandValidator --> DeleteCommand
 deactivate DeleteCommandValidator
+DeleteCommandValidator -[hidden]-> DeleteCommand
+destroy DeleteCommandValidator
 
 DeleteCommand -> ItemList : deleteItem(0)
 activate ItemList

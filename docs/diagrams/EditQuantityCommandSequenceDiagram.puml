@@ -1,6 +1,7 @@
 @startuml
 skinparam monochrome true
 skinparam shadowing false
+hide footbox
 
 box "Logic" #LightBlue
 participant "<<class>>\nParser" as Parser
@@ -37,6 +38,8 @@ note right of EditQuantityCommandValidator
 end note
 EditQuantityCommandValidator --> EditQuantityCommand
 deactivate EditQuantityCommandValidator
+EditQuantityCommandValidator -[hidden]-> EditQuantityCommand
+destroy EditQuantityCommandValidator
 
 EditQuantityCommand -> ItemList : getItem(index)
 activate ItemList
@@ -55,6 +58,8 @@ deactivate Ui
 
 EditQuantityCommand --> Parser
 deactivate EditQuantityCommand
+EditQuantityCommand -[hidden]-> Parser
+destroy EditQuantityCommand
 
 <-- Parser
 deactivate Parser

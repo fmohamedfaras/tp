@@ -1,7 +1,7 @@
 @startuml
-!pragma teoz true
 skinparam monochrome true
 skinparam shadowing false
+hide footbox
 
 box "Logic" #LightBlue
 participant "<<class>>\nParser" as Parser
@@ -39,6 +39,8 @@ ListCommand -> ListCommandValidator : validate(items)
 activate ListCommandValidator
 ListCommandValidator --> ListCommand
 deactivate ListCommandValidator
+ListCommandValidator -[hidden]-> ListCommand
+destroy ListCommandValidator
 
 alt List is empty
     ListCommand -> Ui : showMessage("Your inventory is empty.")
@@ -76,6 +78,8 @@ end
 
 ListCommand --> Parser
 deactivate ListCommand
+ListCommand -[hidden]-> Parser
+destroy ListCommand
 
 <-- Parser
 deactivate Parser

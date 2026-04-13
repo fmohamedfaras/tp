@@ -1,6 +1,5 @@
 @startuml
 'https://plantuml.com/class-diagram
-!include <office/Users/user>
 
 skinparam shadowing false
 skinparam classAttributeIconSize 0
@@ -9,7 +8,6 @@ skinparam classFontSize 35
 skinparam classAttributeFontSize 46
 skinparam classStereotypeFontSize 40
 skinparam ArrowThickness 4
-skinparam backgroundColor transparent
 hide circle
 
 package "seedu.inventorybro" {
@@ -72,8 +70,6 @@ package "seedu.inventorybro" {
         class Trie #lightskyblue
         class TrieNode #powderblue
     }
-
-    class "<$user>" as User
 
     'main alignment
     Parser -[hidden]down-> "storage"
