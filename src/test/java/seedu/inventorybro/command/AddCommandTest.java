@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import seedu.inventorybro.Category;
 import seedu.inventorybro.CategoryList;
 import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
