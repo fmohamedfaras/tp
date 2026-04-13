@@ -345,13 +345,15 @@ The storage system is responsible for persisting both inventory data and transac
 * Separation of inventory and transaction files
 * Append-only strategy for transaction history
 
+**Figure 27: Storage Sequence Diagram**
+![Storage Class Diagram](diagrams/StorageSequenceDiagram.png)
 ---
 
 ### Command Autocompletion
 
 The autocompletion mechanism is handled by the `Autocompleter` class, which wraps a `Trie` data structure and integrates with JLine's completer API to provide real-time tab-completion of command keywords in interactive terminal sessions.
 
-**Figure 27: Autocompleter Class Diagram**
+**Figure 28: Autocompleter Class Diagram**
 
 ![Autocompleter Class Diagram](diagrams/AutocompleterClassDiagram.png)
 
@@ -374,7 +376,7 @@ The autocompletion mechanism is handled by the `Autocompleter` class, which wrap
 7. The list of matching keywords is returned to `Ui.complete()`, which wraps each keyword in a `Candidate` object and adds it to JLine's `candidates` list.
 8. JLine displays the candidates to the user in the terminal (inline if only one match, or as a menu if multiple).
 
-**Figure 28: Autocompleter Sequence Diagram**
+**Figure 29: Autocompleter Sequence Diagram**
 ![Autocompleter Sequence Diagram](diagrams/AutocompleterSequenceDiagram.png)
 
 ---
@@ -383,7 +385,7 @@ The autocompletion mechanism is handled by the `Autocompleter` class, which wrap
 
 When a user enters an unknown command, InventoryBRO attempts to detect whether it is a near-miss typo and suggests the closest known command.
 
-**Figure 29: Typo Detector Class Diagram**
+**Figure 30: Typo Detector Class Diagram**
 ![Typo Detector Class Diagram](diagrams/TypoDetectorClassDiagram.png)
 
 **Step-by-step Execution:**
@@ -395,7 +397,7 @@ When a user enters an unknown command, InventoryBRO attempts to detect whether i
 6. After scoring all commands, `findClosestMatch()` calls `isBelowTypoThreshold()` on the best candidate. The threshold is `TYPO_THRESHOLD_FACTOR (0.2) * max(inputLength, commandLength)`. If the best distance is below this threshold the command name is returned as a non-empty `Optional`; otherwise an empty `Optional` is returned.
 7. Back in `handleUnknownCommand()`, if the `Optional` is present, `ui.showMessage("Do you mean " + suggestion + "?")` prompts the user with the suggested correction. If no command qualifies, `ui.showError(...)` displays the full list of valid commands.
 
-**Figure 30: Typo Detector Sequence Diagram**
+**Figure 31: Typo Detector Sequence Diagram**
 ![Typo Detector Sequence Diagram](diagrams/TypoDetectorSequenceDiagram.png)
 
 ---
