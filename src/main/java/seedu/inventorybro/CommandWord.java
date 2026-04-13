@@ -12,13 +12,18 @@ public enum CommandWord {
     EDIT_DESCRIPTION("editDescription"),
     EDIT_PRICE("editPrice"),
     EDIT_QUANTITY("editQuantity"),
+    EDIT_CATEGORY("editCategory"),
     TRANSACT("transact"),
     SHOW_HISTORY("showHistory"),
     LIST_ITEMS("listItems"),
     HELP("help"),
     EXIT("exit"),
     FIND_ITEM("findItem"),
-    FILTER_ITEM("filterItem");
+    FILTER_ITEM("filterItem"),
+    ADD_CATEGORY("addCategory"),
+    DELETE_CATEGORY("deleteCategory"),
+    LIST_CATEGORY("listCategories");
+
 
     private final String word;
 
