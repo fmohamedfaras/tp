@@ -118,26 +118,26 @@ Updates the quantity of an existing item in the inventory.
 ### 6. Viewing All Items: `listItems`
 Displays a chronologically ordered numbered list of all items currently in your inventory. Users can also indicate to view a sorted list of items by an item property and order of their choice. The properties that the items can be sorted by are `quantity` and `price` and the order which they can be sorted in are `high` and `low` to show the item with the highest and lowest of that property first respectively. 
 
-For example, to view the list sorted based on the descending order of item quantity, such that it the item with the highest quantity is displayed first, users can enter `listItems quantity high`.
+For example, to view the list sorted based on the descending order of item quantity, such that the item with the highest quantity is displayed first, users can enter `listItems quantity high`.
 
 * **Format:** `listItems` or `listItems [PROPERTY] [ORDER]`
-* **Example 1 (chronological order):** `listItems`
+* **Example 1 (chronological order of items added):** `listItems`
   ```text
   Here are your current inventory items:
-  1. Coke Can (Quantity: 50, Price: $2.00)
-  2. Sprite Bottle (Quantity: 30, Price: $1.00)
-  3. Potato Chips (Quantity: 20, Price: $3.00)
-  ```
-* **Example 2 (sorted by the property `quantity` and order `high`):** `listItems quantity high`
-  ```text
-  Here are your current inventory items based on quantity in descending order:
   1. Coke Can (Quantity: 50, Price: $2.00)
   2. Potato Chips (Quantity: 20, Price: $3.00)
   3. Sprite Bottle (Quantity: 30, Price: $1.00)
   ```
+* **Example 2 (sorted by the property `quantity` and order `high`):** `listItems quantity high`
+  ```text
+  Here are your current inventory items based on quantity in decreasing order:
+  1. Coke Can (Quantity: 50, Price: $2.00)
+  2. Sprite Bottle (Quantity: 30, Price: $1.00)
+  3. Potato Chips (Quantity: 20, Price: $3.00)
+  ```
 * **Example 3 (sorted by the property: `price` and order: `low`):** `listItems price low`
 ```text
-  Here are your current inventory items based on price in ascending order:
+  Here are your current inventory items based on price in increasing order:
   1. Sprite Bottle (Quantity: 30, Price: $1.00)
   2. Coke Can (Quantity: 50, Price: $2.00)
   3. Potato Chips (Quantity: 20, Price: $3.00)
@@ -159,11 +159,11 @@ Displays only the items that match one or more field-based predicates. Predicate
 
 Supported fields and value types:
 
-| Field | Operators | Value format |
-| :--- | :--- | :--- |
-| `description` | `=` `<` `>` | Text enclosed in **single quotes** (e.g. `'Coke'`) |
-| `quantity` | `=` `<` `>` | Non-negative integer (e.g. `10`) |
-| `price` | `=` `<` `>` | Non-negative number with at most 2 decimal places (e.g. `1.50`) |
+| Field         | Operators   | Value format                                                    |
+|:--------------|:------------|:----------------------------------------------------------------|
+| `description` | `=` `<` `>` | Text enclosed in **single quotes** (e.g. `'Coke'`)              |
+| `quantity`    | `=` `<` `>` | Non-negative integer (e.g. `10`)                                |
+| `price`       | `=` `<` `>` | Non-negative number with at most 2 decimal places (e.g. `1.50`) |
 
 * **Format:** `filterItem FIELD OPERATOR VALUE [AND|OR FIELD OPERATOR VALUE ...]`
 * **Example 1 (single predicate):** `filterItem quantity > 10`
@@ -239,7 +239,7 @@ Displays a quick-reference list of all available commands, or provides detailed 
 
 * **Format 1 (General Summary):** `help`
     * **Example:** `help`
-    * **Expected Output:** Displays a list of all commands (`addItem`, `deleteItem`, `editItem`, etc.) along with a short summary of what each one does.
+    * **Expected Output:** Displays a list of all commands (`addItem`, `deleteItem`, `editDescription`, etc.) along with a short summary of what each one does.
 
 * **Format 2 (Detailed Instruction):** `help COMMAND_NAME`
     * **Example:** `help addItem`
@@ -290,12 +290,12 @@ InventoryBRO includes a built-in tab-completion engine so you never have to reme
 
 **Examples:**
 
-| You type | You press | Result |
-| :--- | :--- | :--- |
-| `add` | `Tab` | Completes to `addItem` |
-| `del` | `Tab` | Completes to `deleteItem` |
-| `li` | `Tab` | Completes to `listItems` |
-| `f` | `Tab` | Shows `filterItem`, `findItem` |
+| You type | You press | Result                         |
+|:---------|:----------|:-------------------------------|
+| `add`    | `Tab`     | Completes to `addItem`         |
+| `del`    | `Tab`     | Completes to `deleteItem`      |
+| `li`     | `Tab`     | Completes to `listItems`       |
+| `f`      | `Tab`     | Shows `filterItem`, `findItem` |
 
 **Things to know:**
 * Autocompletion only works on the **command keyword** (the first word). It does not attempt to complete arguments like item names or indices.
@@ -314,12 +314,12 @@ If you accidentally misspell a command, InventoryBRO will attempt to detect the 
 
 **Examples:**
 
-| You type | InventoryBRO responds |
-| :--- | :--- |
-| `adItem d/Coke q/5` | `Do you mean addItem?` |
-| `deletItem 2` | `Do you mean deleteItem?` |
-| `lsitItems` | `Do you mean listItems?` |
-| `eixt` | `Do you mean exit?` |
+| You type            | InventoryBRO responds     |
+|:--------------------|:--------------------------|
+| `adItem d/Coke q/5` | `Do you mean addItem?`    |
+| `deletItem 2`       | `Do you mean deleteItem?` |
+| `lsitItems`         | `Do you mean listItems?`  |
+| `eixt`              | `Do you mean exit?`       |
 
 **Things to know:**
 * The suggestion is a hint only — you still need to re-enter the corrected command yourself.
@@ -349,10 +349,11 @@ If you accidentally misspell a command, InventoryBRO will attempt to detect the 
 ## Scope of v2.0
 InventoryBRO v2.0 officially supports:
 * Basic inventory tracking and quantity updates
+* Editing description, quantity, or prices of inventory items
 * Viewing current stock & finding specific items
 * Typo suggestions & Command Tab-autocompletion
 * Automatic background saving
 
 **Planned for Future Versions:**
-* Add price tracking to items
+* Viewing earnings
 * Low-stock automated alerts
