@@ -71,7 +71,7 @@ The `Ui` class acts as the bridge between the user and the internal logic.
 ### Parser Component
 The `Parser` is responsible for routing user input to the correct command.
 
-**Figure 3: Parser Class Diagram**  
+**Figure 3: Parser Class Diagram**   
 ![Parser Class Diagram](diagrams/ParserClassDiagram.png)
 
 **Design highlights:**

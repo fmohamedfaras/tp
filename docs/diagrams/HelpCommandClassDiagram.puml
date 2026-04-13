@@ -1,6 +1,7 @@
 @startuml
 skinparam monochrome true
 skinparam shadowing false
+skinparam classAttributeIconSize 0
 hide circle
 
 interface Command <<interface>> {
@@ -35,8 +36,11 @@ class HelpCommandValidator {
     - input: String
     + HelpCommandValidator(input: String)
     + validate(items: ItemList): void
-    - validateCommandSpecified(words: String[])
+    - validateCommandSpecified(words: String[]): void
+    - isValidCommand(word: String): boolean
 }
+
+class ItemList
 
 class Ui {
     + showMessage(message: String): void
@@ -45,7 +49,10 @@ class Ui {
 Command <|.. HelpCommand
 Validator <|.. HelpCommandValidator
 
-HelpCommand ..> HelpCommandValidator : creates
-HelpCommand ..> Ui : uses
+HelpCommand .right.> HelpCommandValidator : creates >
+HelpCommand ..> Ui : uses >
+HelpCommand ..> ItemList : uses >
+
+HelpCommandValidator ..> ItemList : uses >
 
 @enduml

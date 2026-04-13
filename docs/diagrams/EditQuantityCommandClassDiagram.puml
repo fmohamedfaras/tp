@@ -1,6 +1,7 @@
 @startuml
 skinparam monochrome true
 skinparam shadowing false
+skinparam classAttributeIconSize 0
 hide circle
 
 interface Command <<interface>> {
@@ -38,9 +39,9 @@ class Ui {
 
 Command <|.. EditQuantityCommand
 Validator <|.. EditQuantityCommandValidator
-EditQuantityCommand ..> EditQuantityCommandValidator : creates/validates
-EditQuantityCommand ..> ItemList : reads
-EditQuantityCommand ..> Item : modifies
-EditQuantityCommand ..> Ui : uses
+EditQuantityCommand ..> EditQuantityCommandValidator : create/validates >
+EditQuantityCommand ..> ItemList : reads >
+EditQuantityCommand ..> Item : modifies >
+EditQuantityCommand ..> Ui : uses >
 
 @enduml

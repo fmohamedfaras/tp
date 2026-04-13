@@ -3,59 +3,60 @@
 
 skinparam monochrome true
 skinparam shadowing false
+skinparam classAttributeIconSize 0
 hide circle
 
 
+interface Command <<interface>> {
+    + execute(items: ItemList, ui: Ui): void
+}
 
-    class Parser {
-        + parse(line: String, items: ItemList, ui: Ui): void
-        - parseCommand(line: String): Command
-        - handleUnknownCommand(line: String, ui: Ui): void
-        - extractFirstWord(line: String): String
-    }
+class Parser {
+    + parse(line: String, items: ItemList, ui: Ui): void
+    - parseCommand(line: String): Command
+    - handleUnknownCommand(line: String, ui: Ui): void
+    - extractFirstWord(line: String): String
+}
 
-    interface Command <<interface>> {
-        + execute(items: ItemList, ui: Ui): void
-    }
+class AddCommand
+class DeleteCommand
+class EditDescriptionCommand
+class EditPriceCommand
+class EditQuantityCommand
+class TransactCommand
+class ShowTransactionHistoryCommand
+class FindCommand
+class ListCommand
+class FilterCommand
+class HelpCommand
+class ExitCommand
 
-    class AddCommand
-    class DeleteCommand
-    class EditCommand
-    class TransactCommand
-    class ShowTransactionHistoryCommand
-    class ListCommand
-    class FindCommand
-    class HelpCommand
-    class ExitCommand
+class TypoDetector
 
-    class TypoDetector
+class ItemList
 
-
-
-    class ItemList
-
-
-
-    class Ui
-
+class Ui
 
 ' Relationships
-Parser --> Command : creates >
+Parser -> Command : creates >
 Parser --> TypoDetector : uses >
 Parser --> Ui : uses >
-Parser --> ItemList : passes >
+Parser -right-> ItemList : passes >
 
 Command --> Ui : uses >
-Command --> ItemList : passes >
+Command -left-> ItemList : passes >
 
-Command <|.. AddCommand
-Command <|.. DeleteCommand
-Command <|.. EditCommand
-Command <|.. TransactCommand
-Command <|.. ShowTransactionHistoryCommand
-Command <|.. ListCommand
-Command <|.. FindCommand
-Command <|.. HelpCommand
-Command <|.. ExitCommand
+AddCommand ...down|> Command
+DeleteCommand ..down|> Command
+EditDescriptionCommand ...down|> Command
+EditPriceCommand ..down|> Command
+EditQuantityCommand ...left|> Command
+TransactCommand ..up|> Command
+ShowTransactionHistoryCommand ...up|> Command
+FindCommand ..up|> Command
+ListCommand ...up|> Command
+FilterCommand ..up|> Command
+HelpCommand ...up|> Command
+ExitCommand ..up|> Command
 
 @enduml

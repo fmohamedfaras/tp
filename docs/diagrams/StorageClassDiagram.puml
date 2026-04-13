@@ -2,6 +2,8 @@
 'https://plantuml.com/class-diagram
 
 skinparam monochrome true
+skinparam classAttributeIconSize 0
+hide circle
 
 abstract class Storage<T> {
     - filePath: String
@@ -27,9 +29,9 @@ class ItemList
 Storage <|-- ArrayStorage
 Storage <|-- TransactionStorage
 
-ArrayStorage ..> Item : encodes/decodes
-ArrayStorage ..> ItemList : converts
+ArrayStorage ..> Item : encodes/decodes >
+ArrayStorage ..> ItemList : converts >
 
-TransactionStorage ..> String : stores history
+TransactionStorage ..> String : stores history >
 
 @enduml
