@@ -67,6 +67,6 @@ class ShowTransactionHistoryCommandValidatorTest {
                 () -> new ShowTransactionHistoryCommandValidator("ShowHistory").validate(items, categories)
         );
 
-        assertEquals("Did you mean 'showHistory'?", ex.getMessage());
+        assertEquals("Invalid command format. Use: showHistory", ex.getMessage());
     }
 }

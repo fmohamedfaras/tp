@@ -1,6 +1,7 @@
 package seedu.inventorybro.validator;
 
 import seedu.inventorybro.CategoryList;
+import seedu.inventorybro.CommandWord;
 import seedu.inventorybro.ItemList;
 
 //@@author elliotjohnwu
@@ -18,8 +19,11 @@ public class ShowTransactionHistoryCommandValidator implements Validator {
     @Override
     public void validate(ItemList items, CategoryList categories) {
         String[] words = input.split(" ");
-        if (!words[0].equals("showHistory") || words.length > 1) {
-            throw new IllegalArgumentException("Did you mean 'showHistory'?");
+        if (!words[0].equals(CommandWord.SHOW_HISTORY.getWord())) {
+            throw new IllegalArgumentException("Invalid command format. Use: showHistory");
+        }
+        if (words.length > 1) {
+            throw new IllegalArgumentException("showHistory does not take any arguments. Use: showHistory");
         }
     }
 }
