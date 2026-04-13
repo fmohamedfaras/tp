@@ -5,15 +5,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Detects potential typos in user-entered commands using a weighted edit distance
  * with QWERTY keyboard Manhattan distance as the substitution cost.
  */
 public class TypoDetector {
-    private static final List<String> KNOWN_COMMANDS = Arrays.asList(
-            "addItem", "deleteItem", "editItem", "transact", "listItems", "help", "exit"
-    );
+    private static final List<String> KNOWN_COMMANDS = Arrays.stream(CommandWord.values())
+            .map(CommandWord::getWord)
+            .collect(Collectors.toList());
     private static final double TYPO_THRESHOLD_FACTOR = 0.2;
     private static final Map<Character, int[]> KEY_POSITIONS = buildKeyPositions();
 
