@@ -35,26 +35,30 @@ class DuplicateItemValidatorTest {
     @Test
     public void validate_exactDuplicateName_throwsException() {
         items.addItem(new Item("Apple", 10, categories.getCategory("Others")));
-        assertThrows(IllegalArgumentException.class, () -> new DuplicateItemValidator("Apple").validate(items, categories));
+        assertThrows(IllegalArgumentException.class, () -> new
+                DuplicateItemValidator("Apple").validate(items, categories));
     }
 
     @Test
     public void validate_caseInsensitiveDuplicate_throwsException() {
         items.addItem(new Item("Apple", 10, categories.getCategory("Others")));
-        assertThrows(IllegalArgumentException.class, () -> new DuplicateItemValidator("apple").validate(items, categories));
+        assertThrows(IllegalArgumentException.class, () ->
+                new DuplicateItemValidator("apple").validate(items, categories));
     }
 
     @Test
     public void validate_caseInsensitiveDuplicateUppercase_throwsException() {
         items.addItem(new Item("apple", 10, categories.getCategory("Others")));
-        assertThrows(IllegalArgumentException.class, () -> new DuplicateItemValidator("APPLE").validate(items, categories));
+        assertThrows(IllegalArgumentException.class, () ->
+                new DuplicateItemValidator("APPLE").validate(items, categories));
     }
 
     @Test
     public void validate_duplicateErrorMessageContainsName() {
         items.addItem(new Item("Mango", 3, categories.getCategory("Others")));
         IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class, () -> new DuplicateItemValidator("Mango").validate(items, categories)
+                IllegalArgumentException.class, () ->
+                        new DuplicateItemValidator("Mango").validate(items, categories)
         );
         assertTrue(ex.getMessage().contains("Mango"));
     }
@@ -72,12 +76,14 @@ class DuplicateItemValidatorTest {
         items.addItem(new Item("Apple", 10, categories.getCategory("Others")));
         items.addItem(new Item("Orange", 5, categories.getCategory("Others")));
         items.addItem(new Item("Mango", 3, categories.getCategory("Others")));
-        assertThrows(IllegalArgumentException.class, () -> new DuplicateItemValidator("Orange").validate(items, categories));
+        assertThrows(IllegalArgumentException.class, () ->
+                new DuplicateItemValidator("Orange").validate(items, categories));
     }
 
     @Test
     public void validate_nameWithSurroundingWhitespace_treatedAsDuplicate() {
         items.addItem(new Item("Apple", 10, categories.getCategory("Others")));
-        assertThrows(IllegalArgumentException.class, () -> new DuplicateItemValidator("Apple").validate(items, categories));
+        assertThrows(IllegalArgumentException.class, () ->
+                new DuplicateItemValidator("Apple").validate(items, categories));
     }
 }

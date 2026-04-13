@@ -56,7 +56,8 @@ class ArrayStorageTest {
         ArrayStorageStub storage = new ArrayStorageStub(TEST_FILE, categories);
 
         ItemList items = new ItemList();
-        Item item = new Item("Coke Can", 50, 1.50, defaultCat);        items.addItem(item);
+        Item item = new Item("Coke Can", 50, 1.50, defaultCat);
+        items.addItem(item);
 
         storage.saveArray(items.getItems());
         ArrayList<Item> loaded = storage.load();
@@ -190,8 +191,9 @@ class ArrayStorageTest {
      */
     @Test
     void item_nullDescription_throwsAssertionError() {
-        assertThrows(AssertionError.class,
-                () -> {new Item(null, 50, defaultCat);});
+        assertThrows(AssertionError.class, () -> {
+            new Item(null, 50, defaultCat);
+        });
     }
 
     /**
@@ -200,8 +202,9 @@ class ArrayStorageTest {
      */
     @Test
     void item_negativeQuantity_throwsAssertionError() {
-        assertThrows(AssertionError.class,
-                () -> {new Item("Coke Can", -1, defaultCat);});
+        assertThrows(AssertionError.class, () -> {
+            new Item("Coke Can", -1, defaultCat);
+        });
     }
 
     /**
@@ -211,8 +214,9 @@ class ArrayStorageTest {
     @Test
     void item_negativePrice_throwsAssertionError() {
         Item item = new Item("Coke Can", 50, defaultCat);
-        assertThrows(AssertionError.class,
-                () -> {item.setPrice(-1.0);});
+        assertThrows(AssertionError.class, () -> {
+            item.setPrice(-1.0);
+        });
     }
     
 }

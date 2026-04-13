@@ -23,7 +23,8 @@ class AddCommandValidatorTest {
      */
     @Test
     void validate_validInputWithIntegerPrice_noException() {
-        assertDoesNotThrow(() -> new AddCommandValidator("addItem d/Apple q/10 p/5 c/Others").validate(items, categories));
+        assertDoesNotThrow(() ->
+                new AddCommandValidator("addItem d/Apple q/10 p/5 c/Others").validate(items, categories));
     }
 
     /**
@@ -31,7 +32,8 @@ class AddCommandValidatorTest {
      */
     @Test
     void validate_validInputWithDecimalPrice_noException() {
-        assertDoesNotThrow(() -> new AddCommandValidator("addItem d/Apple q/10 p/5.99 c/Others").validate(items, categories));
+        assertDoesNotThrow(() ->
+                new AddCommandValidator("addItem d/Apple q/10 p/5.99 c/Others").validate(items, categories));
     }
 
     /**
@@ -39,7 +41,8 @@ class AddCommandValidatorTest {
      */
     @Test
     void validate_multiWordNameWithPrice_noException() {
-        assertDoesNotThrow(() -> new AddCommandValidator("addItem d/Green Apple q/25 p/3.50 c/Others").validate(items, categories));
+        assertDoesNotThrow(() ->
+                new AddCommandValidator("addItem d/Green Apple q/25 p/3.50 c/Others").validate(items, categories));
     }
 
     /**
@@ -124,7 +127,8 @@ class AddCommandValidatorTest {
      */
     @Test
     void validate_zeroQuantity_noException() {
-        assertDoesNotThrow(() -> new AddCommandValidator("addItem d/Apple q/0 p/5 c/Others").validate(items, categories));
+        assertDoesNotThrow(() ->
+                new AddCommandValidator("addItem d/Apple q/0 p/5 c/Others").validate(items, categories));
     }
 
     /**
@@ -194,7 +198,8 @@ class AddCommandValidatorTest {
     void validate_uniqueNameWithOtherItemsPresent_noException() {
         items.addItem(new Item("Banana", 5, categories.getCategory("Others")));
 
-        assertDoesNotThrow(() -> new AddCommandValidator("addItem d/Apple q/10 p/3 c/Others").validate(items, categories));
+        assertDoesNotThrow(() ->
+                new AddCommandValidator("addItem d/Apple q/10 p/3 c/Others").validate(items, categories));
     }
 
     /**

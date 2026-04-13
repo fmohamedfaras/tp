@@ -44,7 +44,8 @@ class FilterCommandValidatorTest {
     @Test
     void validate_descriptionMultiWordValue_noException() {
         assertDoesNotThrow(() ->
-                new FilterCommandValidator("filterItem description = 'Green Apple'").validate(buildItems(), categories));
+                new FilterCommandValidator("filterItem description = 'Green Apple'")
+                        .validate(buildItems(), categories));
     }
 
     @Test

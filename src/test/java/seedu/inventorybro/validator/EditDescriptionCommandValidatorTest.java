@@ -40,7 +40,8 @@ class EditDescriptionCommandValidatorTest {
     @Test
     void validate_descriptionWithSpaces_doesNotThrow() {
         assertDoesNotThrow(() ->
-                new EditDescriptionCommandValidator("editDescription 2 d/Some Long Description Here").validate(items, categories));
+                new EditDescriptionCommandValidator("editDescription 2 d/Some Long Description Here")
+                        .validate(items, categories));
     }
 
     @Test
