@@ -7,12 +7,13 @@
 
 ### Code Contributed
 [View my code contributions on the tP Code Dashboard](https://nus-cs2113-ay2526-s2.github.io/tp-dashboard/?search=fmohamed* 
-* **Core Commands & Validation Architecture:** Implemented several core features including `DeleteCommand`and `FindCommand`.
+* **Core Commands & Validation Architecture:** Implemented several core features including `AddCategory`, `DeleteCategory`, `EditCategory`, `ListCategories`, `showHistory`, `DeleteCommand`and `FindCommand`.
 
 ### Contributions to the User Guide (UG)
 * Authored the initial markdown structure and formatting standards for the UG.
-* Wrote the detailed usage instructions, format constraints, and expected terminal outputs for `deleteItem`, `findItem`, and `transactHistory`.
-* Standardized the Quick-Reference Command Summary table.
+* Wrote the detailed usage instructions, format constraints, and expected terminal outputs for `AddCategory`, `DeleteCategory`, `EditCategory`, `ListCategories`, `showHistory`, `DeleteCommand`and `FindCommand`.
+
+* Standardised the Quick-Reference Command Summary table.
 
 ### Contributions to the Developer Guide (DG)
 * Authored the markdown structure for the Developer Guide.
@@ -23,6 +24,7 @@
     * **Sequence Diagrams:** `DeleteSequenceDiagram`, `FindSequenceDiagram`.
 
 ### Contributions to Team-Based Tasks
+* **Setup Organisation:** Helped to setup the organisation and repository with the labels and settings
 * **Build Management:** Managed the generation and troubleshooting of the standalone executable artifact for v2.0 (`tp.jar`). 
 ### Review / Mentoring Contributions
 * Reviewed and approved PRs for team members, ensuring their commands adhered to the decoupled Validator/Command architecture.

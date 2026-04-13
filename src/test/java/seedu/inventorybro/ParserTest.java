@@ -5,10 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import seedu.inventorybro.storage.TransactionStorageHistoryStub;
 
 /**
  * Tests that {@link Parser} routes commands case-insensitively, normalising the keyword
@@ -19,6 +22,7 @@ class ParserTest {
     private ItemList items;
     private CategoryList categories;
     private Ui ui;
+    private TransactionStorageHistoryStub storageStub;
     private ByteArrayOutputStream outContent;
     private PrintStream originalOut;
 
@@ -27,6 +31,7 @@ class ParserTest {
         items = new ItemList();
         categories = new CategoryList();
         ui = new Ui();
+        storageStub = new TransactionStorageHistoryStub(new ArrayList<>());
         outContent = new ByteArrayOutputStream();
         originalOut = System.out;
         System.setOut(new PrintStream(outContent));
@@ -39,7 +44,7 @@ class ParserTest {
 
     /** Runs {@code input} through the parser and asserts no ERROR line was printed. */
     private void assertParsesOk(String input) {
-        Parser.parse(input, items, categories, ui);
+        Parser.parse(input, items, categories, ui, storageStub);
         assertFalse(outContent.toString().contains("ERROR:"),
                 "Expected no error for input: \"" + input + "\"");
         outContent.reset();
@@ -398,16 +403,16 @@ class ParserTest {
 
     @Test
     void parse_exitAllUppercase_throwsExitException() {
-        assertThrows(ExitException.class, () -> Parser.parse("EXIT", items, categories, ui));
+        assertThrows(ExitException.class, () -> Parser.parse("EXIT", items, categories, ui, storageStub));
     }
 
     @Test
     void parse_exitMixedCase_throwsExitException() {
-        assertThrows(ExitException.class, () -> Parser.parse("Exit", items, categories, ui));
+        assertThrows(ExitException.class, () -> Parser.parse("Exit", items, categories, ui, storageStub));
     }
 
     @Test
     void parse_exitAnotherMixedCase_throwsExitException() {
-        assertThrows(ExitException.class, () -> Parser.parse("eXiT", items, categories, ui));
+        assertThrows(ExitException.class, () -> Parser.parse("eXiT", items, categories, ui, storageStub));
     }
 }

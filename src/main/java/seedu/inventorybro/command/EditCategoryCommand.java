@@ -32,7 +32,6 @@ public class EditCategoryCommand implements Command {
 
         item.setCategory(newCategory);
 
-        ui.showMessage("Got it! I've updated the category of this item:");
-        ui.showMessage("  " + item);
+        ui.showMessage("Item category updated: " + item);
     }
 }

@@ -35,7 +35,6 @@ public class DeleteCommand implements Command {
         int index = Integer.parseInt(words[1]) - 1;
         Item removedItem = items.deleteItem(index);
 
-        ui.showMessage("Noted, BRO. I've removed this item:\n  " + removedItem +
-                "\nNow you have " + items.size() + " items in the list.");
+        ui.showMessage("Deleted: " + removedItem);
     }
 }
