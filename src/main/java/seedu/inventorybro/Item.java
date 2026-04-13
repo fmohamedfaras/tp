@@ -116,6 +116,7 @@ public class Item {
         this.category = category;
     }
 
+    //@@author elliotjohnwu
     /**
      * Returns the item in save file format.
      *
@@ -133,7 +134,7 @@ public class Item {
     public String getDescription() {
         return description;
     }
-
+    //@@author
     /**
      * Returns the string of the item's description and quantity.
      *

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
+//@@author elliotjohnwu
 /**
  * Manages the list of items, providing operations to add and delete items.
  */
@@ -76,6 +77,16 @@ public class ItemList {
         return items.isEmpty();
     }
 
+    /**
+     * *Returns the underlying ArrayList of items.
+     *
+     * @return The item list.
+     */
+    public ArrayList<Item> getItems() {
+        return items;
+    }
+    //@@author
+
     public ArrayList<Item> getSortedItems(String field, String order) {
         ArrayList<Item> sortedItems = null;
         switch (field) {
@@ -105,14 +116,5 @@ public class ItemList {
             break;
         }
         return sortedItems;
-    }
-
-    /**
-     * *Returns the underlying ArrayList of items.
-     *
-     * @return The item list.
-     */
-    public ArrayList<Item> getItems() {
-        return items;
     }
 }
