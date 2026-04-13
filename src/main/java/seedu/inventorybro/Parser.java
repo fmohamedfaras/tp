@@ -19,17 +19,19 @@ import seedu.inventorybro.command.HelpCommand;
 import seedu.inventorybro.command.ListCommand;
 import seedu.inventorybro.command.ShowTransactionHistoryCommand;
 import seedu.inventorybro.command.TransactCommand;
+import seedu.inventorybro.storage.TransactionStorage;
 
 public class Parser {
     private static final TypoDetector TYPO_DETECTOR = new TypoDetector();
 
-    public static void parse(String line, ItemList items, CategoryList categories, Ui ui) {
+    public static void parse(String line, ItemList items, CategoryList categories, Ui ui,
+                             TransactionStorage transactionStorage) {
         assert line != null : "Input line should not be null";
         assert items != null : "ItemList should not be null";
         assert categories != null : "CategoryList should not be null";
         assert ui != null : "Ui should not be null";
 
-        Command command = parseCommand(line);
+        Command command = parseCommand(line, transactionStorage);
         if (command == null) {
             handleUnknownCommand(line, ui);
             return;
@@ -38,7 +40,7 @@ public class Parser {
         command.execute(items, categories, ui);
     }
 
-    private static Command parseCommand(String line) {
+    private static Command parseCommand(String line, TransactionStorage transactionStorage) {
         String trimmedLine = line.trim();
         String firstWord = extractFirstWord(trimmedLine).toLowerCase();
 
@@ -56,11 +58,11 @@ public class Parser {
         case "editcategory":
             return new EditCategoryCommand(trimmedLine);
         case "transact":
-            return new TransactCommand(trimmedLine);
+            return new TransactCommand(trimmedLine, transactionStorage);
         case "filteritem":
             return new FilterCommand(trimmedLine);
         case "showhistory":
-            return new ShowTransactionHistoryCommand(trimmedLine);
+            return new ShowTransactionHistoryCommand(trimmedLine, transactionStorage);
         case "listitems":
             return new ListCommand(trimmedLine);
         case "finditem":

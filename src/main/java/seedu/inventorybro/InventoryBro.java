@@ -2,9 +2,10 @@ package seedu.inventorybro;
 
 import seedu.inventorybro.storage.ArrayStorage;
 import seedu.inventorybro.storage.CategoryStorage;
+import seedu.inventorybro.storage.TransactionStorage;
 
 import java.io.IOException;
-//import seedu.inventorybro.storage.TransactionStorage;
+
 
 public class InventoryBro {
     private Ui ui;
@@ -12,7 +13,7 @@ public class InventoryBro {
     private CategoryList categories;
     private final ArrayStorage arrayStorage;
     private final CategoryStorage categoryStorage;
-    //private final TransactionStorage transactionStorage;
+    private final TransactionStorage transactionStorage;
 
     public InventoryBro() {
         ui = new Ui();
@@ -24,7 +25,7 @@ public class InventoryBro {
         arrayStorage = new ArrayStorage(categories);
         items = arrayStorage.loadItemList();
 
-        //transactionStorage = new TransactionStorage();
+        transactionStorage = new TransactionStorage();
     }
 
     private void loadCategories() {
@@ -49,7 +50,7 @@ public class InventoryBro {
             ui.showLine();
             try {
                 // Pass the ui object into the parser so the commands can use it to print!
-                Parser.parse(fullCommand, items, categories, ui);
+                Parser.parse(fullCommand, items, categories, ui, transactionStorage);
             } catch (ExitException e) {
                 ui.showLine();
                 System.exit(0);

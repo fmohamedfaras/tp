@@ -5,7 +5,7 @@ import java.util.ArrayList;
 //@@author elliotjohnwu
 /**
  * A stub for TransactionStorage used in unit testing.
- * Returns predefined transaction history instead of reading from file.
+ * Stores and returns transaction history in memory instead of reading/writing from a file.
  */
 public class TransactionStorageHistoryStub extends TransactionStorage {
 
@@ -14,14 +14,27 @@ public class TransactionStorageHistoryStub extends TransactionStorage {
     /**
      * Creates a stub with predefined transaction entries.
      *
-     * @param entries The entries that load() should return.
+     * @param entries The initial entries for the stub.
      */
     public TransactionStorageHistoryStub(ArrayList<String> entries) {
+        super(); // Calls parent constructor to satisfy inheritance
         this.entries = entries;
     }
 
     /**
-     * Returns the predefined entries instead of reading from file.
+     * Traps the save call and adds it to the internal memory list instead of a file.
+     *
+     * @param itemName The name of the item.
+     * @param change   The quantity change.
+     */
+    @Override
+    public void saveHistory(String itemName, int change) {
+        String dummyEntry = itemName + " | " + change + " | TEST_TIMESTAMP";
+        entries.add(dummyEntry);
+    }
+
+    /**
+     * Returns the in-memory entries instead of reading from a file.
      *
      * @return List of transaction history entries.
      */

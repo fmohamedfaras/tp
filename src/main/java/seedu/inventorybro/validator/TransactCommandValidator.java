@@ -16,9 +16,20 @@ public class TransactCommandValidator implements Validator {
         this.input = input;
     }
 
+    /**
+     * Executes the validation logic.
+     * Checks for correct formatting, prevents transactions of 0 quantity,
+     * and prevents selling more stock than available.
+     *
+     * @param items      The current list of items in the inventory.
+     * @param categories The master list of categories.
+     * @throws IllegalArgumentException if the format is invalid, index is out of bounds,
+     *      quantity is zero, or stock drops below zero.
+     */
     @Override
     public void validate(ItemList items, CategoryList categories) {
         assert items != null : "ItemList should not be null";
+        assert categories != null : "CategoryList should not be null when validating";
 
         try {
             String[] digits = getDigits();
@@ -31,6 +42,12 @@ public class TransactCommandValidator implements Validator {
 
             checkIfSignedDigit(digits[1].trim());
             int change = Integer.parseInt(digits[1].trim());
+
+            if (change == 0) {
+                throw new IllegalArgumentException("Transaction quantity cannot be zero! " +
+                        "Please enter a positive number to restock, or a negative number for a sale.");
+            }
+
             Item item = items.getItem(index);
             if (item.getQuantity() + change < 0) {
                 throw new IllegalArgumentException("Transaction failed. Quantity cannot go below 0.");

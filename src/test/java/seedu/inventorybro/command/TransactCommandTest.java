@@ -1,13 +1,19 @@
 package seedu.inventorybro.command;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.ArrayList;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import seedu.inventorybro.CategoryList;
 import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
 import seedu.inventorybro.Ui;
+import seedu.inventorybro.storage.TransactionStorageHistoryStub;
+
 
 //@@author elliotjohnwu
 /**
@@ -16,15 +22,25 @@ import seedu.inventorybro.Ui;
 class TransactCommandTest {
     private final Ui ui = new Ui();
     private final CategoryList categories = new CategoryList();
+    private TransactionStorageHistoryStub stub;
+
+    /**
+     * Initializes a fresh storage stub and default categories before each test.
+     */
+    @BeforeEach
+    void setUp() {
+        stub = new TransactionStorageHistoryStub(new ArrayList<>());
+    }
 
     @Test
-    void execute_validSale_quantityDecreased() {
+    void execute_validSale_quantityDecreasedAndLogged() {
         ItemList items = new ItemList();
         items.addItem(new Item("Coke Can", 50, 0.0, categories.getCategory("Others")));
 
-        new TransactCommand("transact 1 q/-5").execute(items, categories, ui);
+        new TransactCommand("transact 1 q/-5", stub).execute(items, categories, ui);
 
         assertEquals(45, items.getItem(0).getQuantity());
+        assertEquals(1, stub.load().size());
     }
 
     @Test
@@ -32,9 +48,10 @@ class TransactCommandTest {
         ItemList items = new ItemList();
         items.addItem(new Item("Sprite Bottle", 30, 0.0, categories.getCategory("Others")));
 
-        new TransactCommand("transact 1 q/10").execute(items, categories, ui);
+        new TransactCommand("transact 1 q/10", stub).execute(items, categories, ui);
 
         assertEquals(40, items.getItem(0).getQuantity());
+
     }
 
     @Test
@@ -42,18 +59,19 @@ class TransactCommandTest {
         ItemList items = new ItemList();
         items.addItem(new Item("Coke Can", 50, 0.0, categories.getCategory("Others")));
 
-        new TransactCommand("transact 1 q/-50").execute(items, categories, ui);
+        new TransactCommand("transact 1 q/-50", stub).execute(items, categories, ui);
 
         assertEquals(0, items.getItem(0).getQuantity());
     }
 
     @Test
-    void execute_zeroChange_quantityUnchanged() {
+    void execute_zeroChange_throwsException() {
         ItemList items = new ItemList();
         items.addItem(new Item("Coke Can", 50, 0.0, categories.getCategory("Others")));
 
-        new TransactCommand("transact 1 q/0").execute(items, categories, ui);
-
-        assertEquals(50, items.getItem(0).getQuantity());
+        // Now the test officially expects the Validator to throw an error!
+        assertThrows(IllegalArgumentException.class, () -> {
+            new TransactCommand("transact 1 q/0", stub).execute(items, categories, ui);
+        });
     }
 }
