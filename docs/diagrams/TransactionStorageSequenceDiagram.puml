@@ -1,0 +1,31 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+skinparam monochrome true
+skinparam shadowing false
+hide footbox
+
+participant Command
+participant TransactionStorage
+participant Storage
+participant File
+
+== Save Transaction ==
+
+Command -> TransactionStorage: saveHistory(itemName, change)
+TransactionStorage -> TransactionStorage: build entry + timestamp
+TransactionStorage -> Storage: saveHistory(entry)
+Storage -> File: append line
+File --> Storage
+Storage --> TransactionStorage
+
+== Load Transactions ==
+
+Command -> TransactionStorage: load()
+TransactionStorage -> Storage: load()
+Storage -> File: read lines
+File --> Storage
+Storage --> TransactionStorage: ArrayList<String>
+TransactionStorage --> Command
+
+@enduml

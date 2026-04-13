@@ -280,6 +280,8 @@ The `ShowTransactionHistoryCommand` retrieves and displays all past transactions
 **Figure 21: Show History Sequence Diagram**
 ![Show History Sequence Diagram](diagrams/ShowTransactionHistoryCommandSequenceDiagram.png)
 
+---
+
 ### Viewing list of items in the inventory
 
 The `ListCommand` class handles the mechanism of displaying the list of all items in the inventory to the user in the default or sorted order.
@@ -319,41 +321,116 @@ The `HelpCommand` class handles the mechanism of displaying all command names an
 ![Help Command Sequence Diagram](diagrams/HelpCommandSequenceDiagram.png)
 
 ---
-### Storage System
 
-The storage system is responsible for persisting both inventory data and transaction history.
+## Storage System
+
+The storage system is responsible for persisting both inventory data and transaction history. 
 
 **Figure 26: Storage Class Diagram**
 ![Storage Class Diagram](diagrams/StorageClassDiagram.png)
 
-**Design breakdown:**
+Key responsibilities:
 
-* **Storage (Abstract Class)**
-    * Provides generic file handling
-    * Defines `saveArray`, `saveHistory`, and `load`
+Handles file creation and directory management
+Provides two persistence strategies:
+saveArray() — overwrite entire file
+saveHistory() — append to file
+Implements fault-tolerant loading via load()
+Defines the template methods:
+encode(T item)
+decode(String line, int lineNumber)
 
-* **ArrayStorage**
-    * Handles `ItemList`
-    * Converts between `Item` and string format
+**Design highlights:**
+* Generic abstraction (Storage<T>)
+* Template Method pattern for enocde/decode
 
-* **TransactionStorage**
-    * Stores transaction history as strings
-    * Automatically generates timestamps
+### ArrayStorage
 
-**Key Design Decisions:**
-* Use of generics (`Storage<T>`) for reusability
-* Separation of inventory and transaction files
-* Append-only strategy for transaction history
+The `ArrayStorage` class extends `Storage<Item>` and handles persistence of inventory items.
 
-**Figure 27: Storage Sequence Diagram**
-![Storage Class Diagram](diagrams/StorageSequenceDiagram.png)
+**Encoding:**
+
+* Delegates to `Item.toSaveFormat()` and saves in this format
+
+  ```
+  quantity | description | price | category
+  ```
+
+**Decoding workflow:**
+
+1. Split line using `" | "`
+2. Parse fields:
+
+    * `quantity` → `int`
+    * `description` → `String`
+    * `price` → `double`
+    * `categoryName` → `String`
+3. Validate:
+
+    * Description is non-empty
+    * Numeric fields are valid
+4. Ensure category integrity:
+
+    * If category does not exist → create it
+    * Retrieve category from `CategoryList`
+5. Construct `Item` object
+
+**Load behaviour:**
+
+* Corrupted lines are skipped
+* Warnings are logged instead of crashing
+
+**Figure 27: ArrayStorage Sequence Diagram**
+![ArrayStorage Sequence Diagram](diagrams/ArrayStorageSequenceDiagram.png)
+
+---
+
+### TransactionStorage
+
+The `TransactionStorage` class extends `Storage<String>` and handles transaction history.
+
+
+**Storage format:**
+
+```
+itemName | quantityChange | timestamp
+```
+
+**Save workflow:**
+
+1. `saveHistory(itemName, change)` is called
+2. Timestamp is generated using:
+
+   ```
+   LocalDateTime.now().format(FORMATTER)
+   ```
+3. Entry string is constructed
+4. Delegates to `Storage.saveHistory(entry)`
+5. Entry is appended to file
+
+**Decode workflow:**
+
+1. Split line using `" | "`
+2. Validate:
+
+    * At least 3 components exist
+    * Quantity change is a valid integer
+3. Return valid line
+4. If invalid:
+
+    * Log warning
+    * Return `null` (skipped)
+
+**Figure 28: TransactionStorage Sequence Diagram**
+![TransactionStorage Sequence Diagram](diagrams/TransactionStorageSequenceDiagram.png)
+
 ---
 
 ### Command Autocompletion
 
 The autocompletion mechanism is handled by the `Autocompleter` class, which wraps a `Trie` data structure and integrates with JLine's completer API to provide real-time tab-completion of command keywords in interactive terminal sessions.
 
-**Figure 28: Autocompleter Class Diagram**
+**Figure 29: Autocompleter Class Diagram**
 
 ![Autocompleter Class Diagram](diagrams/AutocompleterClassDiagram.png)
 
@@ -376,7 +453,7 @@ The autocompletion mechanism is handled by the `Autocompleter` class, which wrap
 7. The list of matching keywords is returned to `Ui.complete()`, which wraps each keyword in a `Candidate` object and adds it to JLine's `candidates` list.
 8. JLine displays the candidates to the user in the terminal (inline if only one match, or as a menu if multiple).
 
-**Figure 29: Autocompleter Sequence Diagram**
+**Figure 30: Autocompleter Sequence Diagram**
 ![Autocompleter Sequence Diagram](diagrams/AutocompleterSequenceDiagram.png)
 
 ---
@@ -385,7 +462,7 @@ The autocompletion mechanism is handled by the `Autocompleter` class, which wrap
 
 When a user enters an unknown command, InventoryBRO attempts to detect whether it is a near-miss typo and suggests the closest known command.
 
-**Figure 30: Typo Detector Class Diagram**
+**Figure 31: Typo Detector Class Diagram**
 ![Typo Detector Class Diagram](diagrams/TypoDetectorClassDiagram.png)
 
 **Step-by-step Execution:**
@@ -397,7 +474,7 @@ When a user enters an unknown command, InventoryBRO attempts to detect whether i
 6. After scoring all commands, `findClosestMatch()` calls `isBelowTypoThreshold()` on the best candidate. The threshold is `TYPO_THRESHOLD_FACTOR (0.2) * max(inputLength, commandLength)`. If the best distance is below this threshold the command name is returned as a non-empty `Optional`; otherwise an empty `Optional` is returned.
 7. Back in `handleUnknownCommand()`, if the `Optional` is present, `ui.showMessage("Do you mean " + suggestion + "?")` prompts the user with the suggested correction. If no command qualifies, `ui.showError(...)` displays the full list of valid commands.
 
-**Figure 31: Typo Detector Sequence Diagram**
+**Figure 32: Typo Detector Sequence Diagram**
 ![Typo Detector Sequence Diagram](diagrams/TypoDetectorSequenceDiagram.png)
 
 ---
@@ -448,6 +525,7 @@ accuracy (clear, structured output)
 | v2.0    | store owner | load previously saved inventory                   | continue managing my shop from where I left off              |
 | v2.0    | store owner | view a sorted list of items                       | quickly view which items have, for example, lower quantities |
 | v2.0    | store owner | view detailed instructions for a specific command | learn how to use a command correctly                         |
+| v2.0    | store owner | filter items by attribute and condition           | quickly find items that meet specific criteria (e.g. low stock) |
 
 ---
 
@@ -492,3 +570,15 @@ accuracy (clear, structured output)
 Future improvements may include:
 * Undo/redo functionality
 * Backup and restore features
+
+
+
+
+
+
+
+
+
+
+
+

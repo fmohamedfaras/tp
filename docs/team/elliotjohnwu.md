@@ -20,13 +20,13 @@ InventoryBRO is a CLI-based inventory management application for small business 
 
 * **What it does:** Adjusts the quantity of an item using a signed integer (positive for restock, negative for sale) via the format `transact INDEX q/CHANGE`.
 * **Justification:** Inventory systems require accurate tracking of stock movement. A dedicated transaction command ensures all quantity changes are explicit and recorded.
-* **Highlights:**
 
     * Parses user input into item index and quantity change using controlled string splitting.
     * Updates item quantity while ensuring it does not become negative (validated beforehand).
     * Automatically records each transaction via `TransactionStorage`.
     * Integrates with `TransactCommandValidator` to enforce correct format and prevent invalid operations.
     * Logs operations using Java `Logger` for traceability.
+    * Designed to integrate directly with the storage sequence described in **DG Figure 30 (TransactionStorage Sequence Diagram)**.
 * **Files:** `TransactCommand.java`, `TransactCommandValidator.java`
 
 ---
@@ -35,21 +35,39 @@ InventoryBRO is a CLI-based inventory management application for small business 
 
 * **What it does:** Displays all past transactions stored in persistent storage.
 * **Justification:** Users need visibility into past stock changes for auditing and tracking purposes.
-* **Highlights:**
 
-    * Loads transaction history from storage using `TransactionStorage`.
+    * Loads transaction history from storage using `TransactionStorage.load()`.
     * Gracefully handles empty history by displaying a user-friendly message.
     * Outputs indexed history entries for readability.
     * Supports dependency injection for testing via an alternate constructor.
+    * Behaviour aligns with the loading flow shown in **DG Figure 30 (TransactionStorage Sequence Diagram)**.
 * **Files:** `ShowTransactionHistoryCommand.java`, `ShowTransactionHistoryCommandValidator.java`
 
 ---
 
-#### 3. Transaction Storage System
+#### 3. Storage Architecture (`Storage<T>`)
+
+* **What it does:** Provides a reusable abstraction for file-based persistence across different data types.
+* **Justification:** Avoids duplication of file I/O logic and standardises error handling across the system.
+
+    * Implements common operations:
+
+        * `saveArray()` (overwrite)
+        * `saveHistory()` (append)
+        * `load()` (read with fault tolerance)
+    * Uses abstract methods `encode()` and `decode()` for type-specific logic.
+    * Automatically creates directories if they do not exist.
+    * Integrates logging for both normal operations and failures.
+    * Central abstraction illustrated in **DG Figure 26 (Storage Class Diagram)**.
+    * Shared save/load flow reused by all subclasses, shown in **DG Figure 29 (ArrayStorage Sequence Diagram)** and **Figure 30**.
+* **Files:** `Storage.java`
+
+---
+
+#### 4. Transaction Storage System
 
 * **What it does:** Handles persistent storage of transaction history as formatted strings.
 * **Justification:** Separating transaction storage from command logic improves modularity and maintainability.
-* **Highlights:**
 
     * Stores entries in the format:
 
@@ -60,25 +78,9 @@ InventoryBRO is a CLI-based inventory management application for small business 
     * Extends a generic `Storage<String>` class to reuse file handling logic.
     * Includes validation in `decode()` to skip corrupted lines safely.
     * Logs warnings for malformed entries instead of crashing.
+    * Implements an **append-only persistence model**, as illustrated in **DG Figure 30 (TransactionStorage Sequence Diagram)**.
+    * Design is documented structurally in **DG Figure 28 (TransactionStorage Class Diagram)**.
 * **Files:** `TransactionStorage.java`
-
----
-
-#### 4. Generic Storage Architecture (`Storage<T>`)
-
-* **What it does:** Provides a reusable abstraction for file-based persistence across different data types.
-* **Justification:** Avoids duplication of file I/O logic and standardises error handling across the system.
-* **Highlights:**
-
-    * Implements common operations:
-
-        * `saveArray()` (overwrite)
-        * `saveHistory()` (append)
-        * `load()` (read with fault tolerance)
-    * Uses abstract methods `encode()` and `decode()` for type-specific logic.
-    * Automatically creates directories if they do not exist.
-    * Integrates logging for both normal operations and failures.
-* **Files:** `Storage.java`
 
 ---
 
@@ -86,7 +88,6 @@ InventoryBRO is a CLI-based inventory management application for small business 
 
 * **What it does:** Handles saving and loading of `Item` objects.
 * **Justification:** Provides persistence for the main inventory data while integrating with categories.
-* **Highlights:**
 
     * Encodes items using `Item.toSaveFormat()`.
     * Decodes items from file with validation for:
@@ -99,6 +100,9 @@ InventoryBRO is a CLI-based inventory management application for small business 
 
         * Automatically creates missing categories during loading.
     * Skips corrupted lines without interrupting the load process.
+    * Bridges between `ArrayList<Item>` and `ItemList`, aligning with the flow in **DG Figure 29 (ArrayStorage Sequence Diagram)**.
+    * Structure and relationships are documented in **DG Figure 27 (ArrayStorage Class Diagram)**.
+    * Enforces **referential integrity via shared `CategoryList`**, a key design decision highlighted in the DG.
 * **Files:** `ArrayStorage.java`
 
 ---
@@ -107,179 +111,86 @@ InventoryBRO is a CLI-based inventory management application for small business 
 
 * **What it does:** Provides isolated storage implementations for testing.
 * **Justification:** Prevents tests from modifying real data and enables deterministic testing.
-* **Highlights:**
 
     * `TransactionStorageStub` writes to a test-specific file path.
     * `TransactionStorageHistoryStub` returns predefined entries.
     * `ArrayStorageStub` redirects inventory storage to a test file.
     * Supports cleanup via test file deletion.
+    * Allows independent verification of flows shown in **DG Figures 29 and 30** without affecting production data.
 * **Files:**
   `TransactionStorageStub.java`,
   `TransactionStorageHistoryStub.java`,
   `ArrayStorageStub.java`
 
+## Contributions to the User Guide (UG)
+
+* Wrote **Transact Command (`transact`)**
+
+    * Command usage, format, and examples
+    * Explanation of positive/negative quantity changes
+
+* **Show History Command (`showHistory`)**
+
+    * User-facing behaviour and output format
+
+* **Storage & Persistence (UG sections)**
+
+    * Explained how data is saved and loaded automatically
+  
 ---
 
-## Contributions to the Developer Guide (Extracts)
+## Contributions to the Developer Guide (DG)
 
-### Transaction Command — Design & Implementation
+I contributed both **implementation documentation and UML diagrams**, focusing on the storage system and transaction pipeline.
 
-The `TransactCommand` is responsible for adjusting an item’s quantity and recording the change in persistent storage.
+### **Diagrams Added / Updated**
 
-**Execution sequence:**
+#### Command & Feature Diagrams
 
-1. The user inputs a command in the format:
+* [TransactCommand Class Diagram](diagrams/TransactCommandClassDiagram.png) *(Figure 18)*
+* [TransactCommand Sequence Diagram](diagrams/TransactCommandSequenceDiagram.png) *(Figure 19)*
+* [ShowTransactionHistoryCommand Class Diagram](diagrams/ShowTransactionHistoryCommandClassDiagram.png) *(Figure 20)*
+* [ShowTransactionHistoryCommand Sequence Diagram](diagrams/ShowTransactionHistoryCommandSequenceDiagram.png) *(Figure 21)*
 
-   ```
-   transact INDEX q/CHANGE
-   ```
-2. `TransactCommandValidator` validates:
+#### Storage System Diagrams
 
-    * Command format
-    * Index bounds
-    * That resulting quantity is not negative
-3. `TransactCommand.execute()` parses the input:
-
-    * Splits input into index and quantity change
-    * Converts both values into integers
-4. The target `Item` is retrieved from `ItemList`
-5. The new quantity is computed:
-
-   ```
-   newQuantity = currentQuantity + change
-   ```
-6. The item is updated via `item.setQuantity(newQuantity)`
-7. `TransactionStorage.saveHistory()` is called to persist the transaction
-8. `Ui` displays confirmation to the user
-
-**Design considerations:**
-
-* Validation is separated from execution (SLAP principle)
-* Quantity updates are centralized in the `Item` class
-* Transaction recording is decoupled via `TransactionStorage`
+* [Storage Class Diagram](diagrams/StorageClassDiagram.png) *(Figure 26)*
+* [ArrayStorage Sequence Diagram](diagrams/ArrayStorageSequenceDiagram.png) *(Figure 27)*
+* [TransactionStorage Sequence Diagram](diagrams/TransactionStorageSequenceDiagram.png) *(Figure 28)*
 
 ---
 
-### Transaction Storage — Design & Implementation
+### **Sections Written**
 
-The `TransactionStorage` class manages persistence of transaction history.
-
-**Save sequence:**
-
-1. `saveHistory(itemName, change)` is called
-2. A timestamp is generated using:
-
-   ```
-   LocalDateTime.now().format(FORMATTER)
-   ```
-3. A formatted string entry is created:
-
-   ```
-   itemName | change | timestamp
-   ```
-4. The entry is passed to `Storage.saveHistory()`
-5. The entry is appended to the transactions file
-
-**Load sequence:**
-
-1. `load()` reads the file line by line
-2. Each line is passed to `decode(line, lineNumber)`
-3. `decode()`:
-
-    * Splits the line using `" | "`
-    * Validates that there are at least 3 parts
-    * Ensures the quantity change is a valid integer
-4. Valid entries are added to the result list
-5. Corrupted entries are skipped with a logged warning
-
-**Design considerations:**
-
-* Transactions are stored as strings for simplicity
-* Decoding is defensive to prevent crashes from malformed data
-* Logging provides traceability for skipped entries
-
----
-
-### Generic Storage Architecture — Design & Implementation
-
-The `Storage<T>` class abstracts common file operations for all storage types.
-
-**Responsibilities:**
-
-* File creation and directory handling
-* Writing data (overwrite and append modes)
-* Reading data with corruption tolerance
-* Logging operations and failures
-
-**Save (overwrite) sequence:**
-
-1. `saveArray(items)` is called
-2. File is created if it does not exist
-3. Each item is encoded via `encode(T item)`
-4. Encoded strings are written line-by-line
-
-**Save (append) sequence:**
-
-1. `saveHistory(item)` is called
-2. File is opened in append mode
-3. Encoded item is written to the end of the file
-
-**Load sequence:**
-
-1. File is opened using `Scanner`
-2. Each line is trimmed and checked for emptiness
-3. `decode(line, lineNumber)` is called
-4. Valid objects are added to the result list
-5. Invalid lines return `null` and are skipped
-
-**Design considerations:**
-
-* Uses generics to support multiple data types
-* Delegates encoding/decoding to subclasses
-* Ensures consistent error handling across storage implementations
-
----
-
-### Inventory Storage (`ArrayStorage`) — Design & Implementation
-
-The `ArrayStorage` class extends `Storage<Item>` to handle inventory items.
-
-**Decode sequence:**
-
-1. A line is split into components:
-
-   ```
-   quantity | description | price | category
-   ```
-2. Values are parsed into appropriate types:
-
-    * `int quantity`
-    * `String description`
-    * `double price`
-    * `String categoryName`
-3. Validation checks:
-
-    * Description is not empty
-    * Category exists or is created dynamically
-4. A new `Item` object is constructed and returned
-
-**Category handling:**
-
-* Uses a shared `CategoryList` (`masterCategories`)
-* Ensures all items reference a valid category object
-* Automatically creates missing categories during load
-
-**Design considerations:**
-
-* Prevents duplicate category instances
-* Ensures referential integrity between items and categories
-* Skips corrupted lines without affecting valid data
+* Storage System (full design + justification)
+* Transact Command (implementation details)
+* Transaction History feature
+* Storage architecture and persistence design
 
 ---
 
 ## Team-Based Tasks
 
-* Set up the base storage architecture (SLAP Principle) to use for different storage classes
-* Established patterns for fault-tolerant file handling
-* Enabled safe and isolated testing through stub implementations
-* Set up the Team Github Repo and drafted UserGuide v1.0
+## Contributions to Team-Based Tasks
+
+* Designed and implemented the **storage subsystem architecture**
+* Established patterns for **fault-tolerant file handling**
+* Created and refined **UML diagrams for DG**
+* Set up the team GitHub repository
+* Drafted initial User Guide (v1.0)
+* Managed build process and resolved issues for `tp.jar` (v1.0)
+
+---
+
+### Review / Mentoring Contributions
+* Reviewed and approved PRs for team members, ensuring their commands adhered to the decoupled Validator/Command architecture.
+  *Example:* [#63](https://github.com/AY2526S2-CS2113-W09-3/tp/pull/63), [#22](https://github.com/AY2526S2-CS2113-W09-3/tp/pull/22), [#180](https://github.com/AY2526S2-CS2113-W09-3/tp/pull/180)
+
+  
+## Contributions Beyond the Project Team
+
+* Reported bugs and provided feedback on other teams’ products
+* [#17](https://github.com/NUS-CS2113-AY2526-S2/ped-elliotjohnwu/issues/17), [#8](https://github.com/NUS-CS2113-AY2526-S2/ped-elliotjohnwu/issues/8), [#1](https://github.com/NUS-CS2113-AY2526-S2/ped-elliotjohnwu/issues/1), [#7](https://github.com/NUS-CS2113-AY2526-S2/ped-elliotjohnwu/issues/7), [#4](https://github.com/NUS-CS2113-AY2526-S2/ped-elliotjohnwu/issues/4)
+
+---
+

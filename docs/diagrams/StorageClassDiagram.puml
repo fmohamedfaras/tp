@@ -1,37 +1,60 @@
 @startuml
-'https://plantuml.com/class-diagram
-
 skinparam monochrome true
+skinparam shadowing false
 skinparam classAttributeIconSize 0
+skinparam classFontSize 20
 hide circle
 
-abstract class Storage {
+abstract class "{abstract}\nStorage<T>" as Storage {
     - filePath: String
+    - logger: Logger
+    + Storage(filePath: String)
     + saveArray(items: ArrayList<T>): void
     + saveHistory(item: T): void
     + load(): ArrayList<T>
-    + encode(item: T): String
-    + decode(line: String, lineNumber: int): T
+    # encode(item: T): String
+    # decode(line: String, lineNumber: int): T
 }
 
 class ArrayStorage {
+    - masterCategories: CategoryList
+    + ArrayStorage(categories: CategoryList)
     + saveArray(items: ItemList): void
     + loadItemList(): ItemList
+    # encode(item: Item): String
+    # decode(line: String, lineNumber: int): Item
 }
 
 class TransactionStorage {
+    + TransactionStorage()
     + saveHistory(itemName: String, change: int): void
+    # encode(entry: String): String
+    # decode(line: String, lineNumber: int): String
+}
+
+class CategoryStorage {
+    + CategoryStorage()
+    + saveCategories(categories: CategoryList): void
+    # encode(category: Category): String
+    # decode(line: String, lineNumber: int): Category
 }
 
 class Item
 class ItemList
+class Category
+class CategoryList
 
 Storage <|-- ArrayStorage
 Storage <|-- TransactionStorage
+Storage <|-- CategoryStorage
 
-ArrayStorage ..> Item : encodes/decodes >
-ArrayStorage ..> ItemList : converts >
+ArrayStorage ..> Item : <<encodes/decodes>>
+ArrayStorage ..> ItemList : <<uses>>
+ArrayStorage ..> CategoryList : <<uses>>
 
-TransactionStorage ..> String : stores history >
+TransactionStorage ..> String : <<stores>>
+
+CategoryStorage ..> Category : <<encodes/decodes>>
+CategoryStorage ..> CategoryList : <<uses>>
 
 @enduml
