@@ -19,14 +19,12 @@ InventoryBRO is a CLI-based inventory management application for small business 
 #### 1. Transaction Command (`transact`)
 
 *Updates item quantity with validation and logs changes.*
-
 **Files:** `TransactCommand.java`, `TransactCommandValidator.java`
 
 
 #### 2. Transaction History Feature (`showHistory`)
 
 *Displays stored transaction logs with empty-state handling.*
-
 **Files:** `ShowTransactionHistoryCommand.java`, `ShowTransactionHistoryCommandValidator.java`
 
 
@@ -38,24 +36,18 @@ InventoryBRO is a CLI-based inventory management application for small business 
 #### 4. Transaction Storage System
 
 *Append-only persistence model for audit-safe transaction tracking.*
-
 **Files:** `TransactionStorage.java`
 
 
 #### 5. Inventory Storage (`ArrayStorage`)
 
 *Handles persistence of inventory items with encode/decode and category consistency checks.*
-
-
 **Files:** `ArrayStorage.java`
 
----
 
 #### 6. Storage Test Stubs
 
 *Mock storage layer for isolated and deterministic testing.*
-
-
 **Files:**
 `TransactionStorageStub.java`,`TransactionStorageHistoryStub.java`,`ArrayStorageStub.java`
 
@@ -72,12 +64,20 @@ InventoryBRO is a CLI-based inventory management application for small business 
 
 ### Review / Mentoring Contributions
 * Reviewed and approved PRs for team members, ensuring their commands adhered to the decoupled Validator/Command architecture.
-  *Example:* [#63](https://github.com/AY2526S2-CS2113-W09-3/tp/pull/63), [#22](https://github.com/AY2526S2-CS2113-W09-3/tp/pull/22), [#180](https://github.com/AY2526S2-CS2113-W09-3/tp/pull/180)
+* *Example:* 
+[#22](https://github.com/AY2526S2-CS2113-W09-3/tp/pull/22), 
+[#63](https://github.com/AY2526S2-CS2113-W09-3/tp/pull/63),
+[#180](https://github.com/AY2526S2-CS2113-W09-3/tp/pull/180), 
+[#190](https://github.com/AY2526S2-CS2113-W09-3/tp/pull/190#pullrequestreview-4102739741)
 
-
+ 
 ## Contributions Beyond the Project Team
 * Reported bugs and provided feedback on other teams’ products
-* [#17](https://github.com/NUS-CS2113-AY2526-S2/ped-elliotjohnwu/issues/17), [#8](https://github.com/NUS-CS2113-AY2526-S2/ped-elliotjohnwu/issues/8), [#1](https://github.com/NUS-CS2113-AY2526-S2/ped-elliotjohnwu/issues/1), [#7](https://github.com/NUS-CS2113-AY2526-S2/ped-elliotjohnwu/issues/7), [#4](https://github.com/NUS-CS2113-AY2526-S2/ped-elliotjohnwu/issues/4)
+* *Example:*
+[#17](https://github.com/NUS-CS2113-AY2526-S2/ped-elliotjohnwu/issues/17), 
+[#8](https://github.com/NUS-CS2113-AY2526-S2/ped-elliotjohnwu/issues/8), 
+[#1](https://github.com/NUS-CS2113-AY2526-S2/ped-elliotjohnwu/issues/1), 
+[#7](https://github.com/NUS-CS2113-AY2526-S2/ped-elliotjohnwu/issues/7), [#4](https://github.com/NUS-CS2113-AY2526-S2/ped-elliotjohnwu/issues/4)
 
 
 
@@ -89,7 +89,7 @@ InventoryBRO is a CLI-based inventory management application for small business 
     * Command usage, format, and examples
     * Explanation of positive/negative quantity changes
 
-* **Storage & Persistence (UG sections)**
+* **Storage Architecture (UG sections)**
 
     * Explained how data is saved and loaded automatically
 
@@ -118,11 +118,11 @@ I contributed both **implementation documentation and UML diagrams**, focusing o
 
 ### **Sections Written**
 
-* Storage System (full design + justification)
 * Transact Command (implementation details)
 * Transaction History feature
-* Storage architecture and persistence design
-
+* Storage architecture
+* Array Storage
+* TransactionStorage
 
 
 
