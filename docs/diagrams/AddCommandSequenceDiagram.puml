@@ -28,7 +28,7 @@ activate AddCommand
 AddCommand --> Parser : d
 deactivate AddCommand
 
-Parser -> AddCommand : execute(items, ui)
+Parser -> AddCommand : execute(ItemList items, CategoryList categories, Ui ui)
 activate AddCommand
 
 create AddCommandValidator
@@ -37,7 +37,7 @@ activate AddCommandValidator
 AddCommandValidator --> AddCommand : v
 deactivate AddCommandValidator
 
-AddCommand -> AddCommandValidator : validate(items)
+AddCommand -> AddCommandValidator : validate(items, categories)
 activate AddCommandValidator
 
 note right of AddCommandValidator
@@ -54,7 +54,7 @@ activate DuplicateItemValidator
 DuplicateItemValidator --> AddCommandValidator : dv
 deactivate DuplicateItemValidator
 
-AddCommandValidator -> DuplicateItemValidator : validate(items)
+AddCommandValidator -> DuplicateItemValidator : validate(items, categories)
 activate DuplicateItemValidator
 
 loop for each item in ItemList

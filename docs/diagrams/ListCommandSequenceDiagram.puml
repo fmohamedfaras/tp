@@ -11,69 +11,81 @@ end box
 
 box "Data" #LightYellow
 participant "items:ItemList" as ItemList
+participant "categories:CategoryList" as CategoryList
 end box
 
 box "UI" #LightGreen
 participant "ui:Ui" as Ui
 end box
 
--> Parser : parse("listItems", items, ui)
+-> Parser : parse("listItems c/Food price high", items, categories, ui, storage)
 activate Parser
 
 create ListCommand
-Parser -> ListCommand : new ListCommand("listItems")
+Parser -> ListCommand : new ListCommand("listItems c/Food price high")
 activate ListCommand
 ListCommand --> Parser : l
 deactivate ListCommand
 
-Parser -> ListCommand : execute(items, ui)
+Parser -> ListCommand : execute(items, categories, ui)
 activate ListCommand
 
 create ListCommandValidator
-ListCommand -> ListCommandValidator : new ListCommandValidator(""listItems")
+ListCommand -> ListCommandValidator : new ListCommandValidator("listItems c/Food price high")
 activate ListCommandValidator
 ListCommandValidator --> ListCommand : v
 deactivate ListCommandValidator
 
-ListCommand -> ListCommandValidator : validate(items)
+ListCommand -> ListCommandValidator : validate(items, categories)
 activate ListCommandValidator
+
+ListCommandValidator -> CategoryList : containsCategory("Food")
+activate CategoryList
+CategoryList --> ListCommandValidator : true
+deactivate CategoryList
+
 ListCommandValidator --> ListCommand
 deactivate ListCommandValidator
 ListCommandValidator -[hidden]-> ListCommand
 destroy ListCommandValidator
 
-alt List is empty
+alt items.isEmpty()
     ListCommand -> Ui : showMessage("Your inventory is empty.")
     activate Ui
     Ui --> ListCommand
     deactivate Ui
-else List is not empty
-    opt 'property' and 'order' to sort list by are indicated
-        ListCommand -> ItemList : getSortedItems(property, order)
+else inventory has items
+    note right of ListCommand
+      Matches regex to extract:
+      categoryInput = "Food"
+      field = "price"
+      order = "high"
+    end note
+
+    loop for each item in ItemList
+        ListCommand -> ItemList : getItem(i)
         activate ItemList
-        ItemList -> ListCommand : sortedItems
+        ItemList --> ListCommand : item
         deactivate ItemList
+
+        note right of ListCommand: Adds item to local displayList\nif category matches
     end
-    ListCommand -> Ui : showMessage("Here are your current inventory items:")
+
+    opt field and order are present
+        note right of ListCommand: displayList.sort() by price in descending order
+    end
+
+    ListCommand -> Ui : showMessage("Here are your current inventory items in [FOOD] by price in decreasing order:")
     activate Ui
     Ui --> ListCommand
     deactivate Ui
-end
-loop sortItems
-    ListCommand -> ItemList : size()
-    activate ItemList
-    ItemList --> ListCommand : size
-    deactivate ItemList
 
-    ListCommand -> ItemList : getItem(listIndex)
-    activate ItemList
-    ItemList --> ListCommand : item
-    deactivate ItemList
-
-    ListCommand -> Ui : showMessage(itemDetails)
-    activate Ui
-    Ui --> ListCommand
-    deactivate Ui
+    loop for each item in displayList
+        ListCommand -> Ui : showMessage(listIndex + ". " + item)
+        activate Ui
+        Ui --> ListCommand
+        deactivate Ui
+    end
 end
 
 ListCommand --> Parser

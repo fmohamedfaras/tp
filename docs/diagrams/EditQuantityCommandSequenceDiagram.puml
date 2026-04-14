@@ -27,7 +27,7 @@ activate EditQuantityCommand
 EditQuantityCommand --> Parser : d
 deactivate EditQuantityCommand
 
-Parser -> EditQuantityCommand : execute(items, ui)
+Parser -> EditQuantityCommand : execute(ItemList items, CategoryList categories, Ui ui)
 activate EditQuantityCommand
 
 create EditQuantityCommandValidator
@@ -36,7 +36,7 @@ activate EditQuantityCommandValidator
 EditQuantityCommandValidator --> EditQuantityCommand : v
 deactivate EditQuantityCommandValidator
 
-EditQuantityCommand -> EditQuantityCommandValidator : validate(items)
+EditQuantityCommand -> EditQuantityCommandValidator : validate(items, categories)
 activate EditQuantityCommandValidator
 note right of EditQuantityCommandValidator
   Checks format, index bounds,

@@ -27,7 +27,7 @@ activate EditPriceCommand
 EditPriceCommand --> Parser : d
 deactivate EditPriceCommand
 
-Parser -> EditPriceCommand : execute(items, ui)
+Parser -> EditPriceCommand : execute(ItemList items, CategoryList categories, Ui ui)
 activate EditPriceCommand
 
 create EditPriceCommandValidator
@@ -36,7 +36,7 @@ activate EditPriceCommandValidator
 EditPriceCommandValidator --> EditPriceCommand : v
 deactivate EditPriceCommandValidator
 
-EditPriceCommand -> EditPriceCommandValidator : validate(items)
+EditPriceCommand -> EditPriceCommandValidator : validate(items, categories)
 activate EditPriceCommandValidator
 note right of EditPriceCommandValidator
   Checks format, index bounds,

@@ -7,19 +7,19 @@ skinparam classAttributeIconSize 0
 hide circle
 
 interface Command <<interface>> {
-    + execute(items: ItemList, ui: Ui): void
+    + execute(ItemList items, CategoryList categories, Ui ui): void
 }
 
 class ShowTransactionHistoryCommand {
     - input: String
     - transactionStorage: TransactionStorage
     + ShowTransactionHistoryCommand(input: String)
-    + execute(items: ItemList, ui: Ui): void
+    + execute(ItemList items, CategoryList categories, Ui ui): void
 }
 
 class ShowTransactionHistoryCommandValidator {
     - input: String
-    + validate(items: ItemList): void
+    + validate(ItemList items, CategoryList categories): void
 }
 
 class TransactionStorage {

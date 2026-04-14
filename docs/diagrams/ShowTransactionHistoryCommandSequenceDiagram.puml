@@ -1,13 +1,9 @@
 @startuml
-'https://plantuml.com/sequence-diagram
-
-autonumber
-
-@startuml
 skinparam monochrome true
 skinparam shadowing false
 hide circle
 hide footbox
+
 
 actor User
 participant Parser <<class>>
@@ -17,19 +13,20 @@ participant ":TransactionStorage"
 participant Ui
 
 User -> Parser: "showHistory"
-Parser -> ShowTransactionHistoryCommand: create(input)
+Parser -> ":ShowTransactionHistoryCommand": create(input, storage)
 
-":ShowTransactionHistoryCommand" -> ":ShowTransactionHistoryCommandValidator": validate(items)
+":ShowTransactionHistoryCommand" -> ":ShowTransactionHistoryCommandValidator": create(input)
+":ShowTransactionHistoryCommand" -> ":ShowTransactionHistoryCommandValidator": validate(items, categories)
 
 ":ShowTransactionHistoryCommand" -> ":TransactionStorage": load()
 ":TransactionStorage" --> ":ShowTransactionHistoryCommand": history list
 
 alt history is empty
-    ":ShowTransactionHistoryCommand" -> Ui: "No transaction history found."
+    ":ShowTransactionHistoryCommand" -> Ui: showMessage("Transaction history is currently empty.")
 else
-    ":ShowTransactionHistoryCommand" -> Ui: "Transaction History:"
+    ":ShowTransactionHistoryCommand" -> Ui: showMessage("Here is your transaction history:")
     loop for each entry
-        ":ShowTransactionHistoryCommand" -> Ui: showMessage(index + entry)
+        ":ShowTransactionHistoryCommand" -> Ui: showMessage(formatted receipt card)
     end
 end
 

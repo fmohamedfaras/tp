@@ -7,13 +7,13 @@ hide circle
 
 
     interface Command <<interface>> {
-        + execute(items: ItemList, ui: Ui): void
+        + execute(ItemList items, CategoryList categories, Ui ui): void
     }
     class FindCommand {
         - {static} FIND_COMMAND_PATTERN: Pattern
         - input: String
         + FindCommand(input: String)
-        + execute(items: ItemList, ui: Ui): void
+        + execute(ItemList items, CategoryList categories, Ui ui): void
     }
 
 

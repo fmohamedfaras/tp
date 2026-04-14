@@ -14,7 +14,10 @@ package "seedu.inventorybro" {
     class InventoryBro #mediumorchid {
         - ui: Ui
         - items: ItemList
+        - categories: CategoryList
         - arrayStorage: ArrayStorage
+        - categoryStorage: CategoryStorage
+        - transactionStorage: TransactionStorage
     }
 
     class Ui #mediumpurple
@@ -26,40 +29,51 @@ package "seedu.inventorybro" {
         interface Command <<interface>> #mediumseagreen
 
         class AddCommand #limegreen
+        class AddCategoryCommand #limegreen
         class DeleteCommand #limegreen
+        class DeleteCategoryCommand #limegreen
+        class EditCategoryCommand #limegreen
         class EditDescriptionCommand #limegreen
         class EditPriceCommand #limegreen
         class EditQuantityCommand #limegreen
-        class TransactCommand #limegreen
-        class ShowTransactionHistoryCommand #limegreen
-        class ListCommand #limegreen
-        class FindCommand #limegreen
-        class FilterCommand #limegreen
-        class HelpCommand #limegreen
         class ExitCommand #limegreen
+        class FilterCommand #limegreen
+        class FindCommand #limegreen
+        class HelpCommand #limegreen
+        class ListCategoriesCommand #limegreen
+        class ListCommand #limegreen
+        class ShowTransactionHistoryCommand #limegreen
+        class TransactCommand #limegreen
     }
 
     package "storage" {
         abstract class Storage #mediumturquoise
         class ArrayStorage #turquoise
+        class CategoryStorage #turquoise
         class TransactionStorage #turquoise
     }
 
     class ItemList #lightyellow
     class Item #yellow
+    class CategoryList #lightyellow
+    class Category #yellow
 
     package "validator" {
         interface Validator <<interface>> #lightcoral
 
         class AddCommandValidator #orange
+        class AddCategoryCommandValidator #orange
         class DeleteCommandValidator #orange
+        class DeleteCategoryCommandValidator #orange
         class DuplicateItemValidator #orange
+        class EditCategoryCommandValidator #orange
         class EditDescriptionCommandValidator #orange
         class EditPriceCommandValidator #orange
         class EditQuantityCommandValidator #orange
         class FilterCommandValidator #orange
         class FindCommandValidator #orange
         class HelpCommandValidator #orange
+        class ListCategoriesCommandValidator #orange
         class ListCommandValidator #orange
         class ShowTransactionHistoryCommandValidator #orange
         class TransactCommandValidator #orange
@@ -82,16 +96,25 @@ package "seedu.inventorybro" {
     Parser .left.> Ui
     Parser -right-> TypoDetector
     InventoryBro --> ArrayStorage
+    InventoryBro --> CategoryStorage
+    InventoryBro --> TransactionStorage
     Autocompleter -up-* Ui
     Autocompleter ..> CommandWord
     HelpCommandValidator ..> CommandWord
     InventoryBro --> ItemList
+    InventoryBro --> CategoryList
 
     'storage
     ArrayStorage -up-|> Storage
+    CategoryStorage -up-|> Storage
     TransactionStorage -up-|> Storage
+
     ArrayStorage --|> ItemList
+    CategoryStorage --|> CategoryList
+
     ItemList --|> Item
+    CategoryList --|> Category
+    Item -right-> Category
 
     TransactCommand -down-> TransactionStorage
     ShowTransactionHistoryCommand -down-> TransactionStorage
@@ -100,46 +123,62 @@ package "seedu.inventorybro" {
     TrieNode -up-* Trie
     Trie -up-* Autocompleter
 
-    'Alignment
-    AddCommand -[hidden]down-> DeleteCommand
-    DeleteCommand -[hidden]down-> EditDescriptionCommand
+    'Alignment for Commands
+    AddCommand -[hidden]down-> AddCategoryCommand
+    AddCategoryCommand -[hidden]down-> DeleteCommand
+    DeleteCommand -[hidden]down-> DeleteCategoryCommand
+    DeleteCategoryCommand -[hidden]down-> EditCategoryCommand
+    EditCategoryCommand -[hidden]down-> EditDescriptionCommand
     EditDescriptionCommand -[hidden]down-> EditPriceCommand
     EditPriceCommand -[hidden]down-> EditQuantityCommand
     EditQuantityCommand -[hidden]down-> ExitCommand
     ExitCommand -[hidden]down-> FilterCommand
     FilterCommand -[hidden]down-> FindCommand
     FindCommand -[hidden]down-> HelpCommand
-    HelpCommand -[hidden]down-> ListCommand
+    HelpCommand -[hidden]down-> ListCategoriesCommand
+    ListCategoriesCommand -[hidden]down-> ListCommand
     ListCommand -[hidden]down-> ShowTransactionHistoryCommand
     ShowTransactionHistoryCommand -[hidden]down-> TransactCommand
 
-    AddCommandValidator -[hidden]down-> DeleteCommandValidator
-    DeleteCommandValidator -[hidden]down-> EditDescriptionCommandValidator
+    'Alignment for Validators
+    AddCommandValidator -[hidden]down-> AddCategoryCommandValidator
+    AddCategoryCommandValidator -[hidden]down-> DeleteCommandValidator
+    DeleteCommandValidator -[hidden]down-> DeleteCategoryCommandValidator
+    DeleteCategoryCommandValidator -[hidden]down-> EditCategoryCommandValidator
+    EditCategoryCommandValidator -[hidden]down-> EditDescriptionCommandValidator
     EditDescriptionCommandValidator -[hidden]down-> EditPriceCommandValidator
     EditPriceCommandValidator -[hidden]down-> EditQuantityCommandValidator
     EditQuantityCommandValidator -[hidden]down-> FilterCommandValidator
     FilterCommandValidator -[hidden]down-> FindCommandValidator
     FindCommandValidator -[hidden]down-> HelpCommandValidator
-    HelpCommandValidator -[hidden]down-> ListCommandValidator
+    HelpCommandValidator -[hidden]down-> ListCategoriesCommandValidator
+    ListCategoriesCommandValidator -[hidden]down-> ListCommandValidator
     ListCommandValidator -[hidden]down-> ShowTransactionHistoryCommandValidator
     ShowTransactionHistoryCommandValidator -[hidden]down-> TransactCommandValidator
 
     'Commands to CommandValidators
     AddCommand ..> AddCommandValidator
+    AddCategoryCommand ..> AddCategoryCommandValidator
     DeleteCommand ..> DeleteCommandValidator
+    DeleteCategoryCommand ..> DeleteCategoryCommandValidator
+    EditCategoryCommand ..> EditCategoryCommandValidator
     EditDescriptionCommand ..> EditDescriptionCommandValidator
     EditPriceCommand ..> EditPriceCommandValidator
     EditQuantityCommand ..> EditQuantityCommandValidator
     FilterCommand ..> FilterCommandValidator
     FindCommand ..> FindCommandValidator
     HelpCommand ..> HelpCommandValidator
+    ListCategoriesCommand ..> ListCategoriesCommandValidator
     ListCommand ..> ListCommandValidator
     ShowTransactionHistoryCommand ..> ShowTransactionHistoryCommandValidator
     TransactCommand ..> TransactCommandValidator
 
     'Commands to Command interface
     AddCommand .left.|> Command
+    AddCategoryCommand .left.|> Command
     DeleteCommand .left.|> Command
+    DeleteCategoryCommand .left.|> Command
+    EditCategoryCommand .left.|> Command
     EditDescriptionCommand .left.|> Command
     EditPriceCommand .left.|> Command
     EditQuantityCommand .left.|> Command
@@ -147,6 +186,7 @@ package "seedu.inventorybro" {
     FilterCommand .left.|> Command
     FindCommand .left.|> Command
     HelpCommand .left.|> Command
+    ListCategoriesCommand .left.|> Command
     ListCommand .left.|> Command
     ShowTransactionHistoryCommand .left.|> Command
     TransactCommand .left.|> Command
@@ -154,14 +194,18 @@ package "seedu.inventorybro" {
     'CommandValidators to Validator interface
     DuplicateItemValidator <-- AddCommandValidator
     Validator <|.right. AddCommandValidator
+    Validator <|.right. AddCategoryCommandValidator
     Validator <|.right. DuplicateItemValidator
     Validator <|.right. DeleteCommandValidator
+    Validator <|.right. DeleteCategoryCommandValidator
+    Validator <|.right. EditCategoryCommandValidator
     Validator <|.right. EditDescriptionCommandValidator
     Validator <|.right. EditPriceCommandValidator
     Validator <|.right. EditQuantityCommandValidator
     Validator <|.right. FilterCommandValidator
     Validator <|.right. FindCommandValidator
     Validator <|.right. HelpCommandValidator
+    Validator <|.right. ListCategoriesCommandValidator
     Validator <|.right. ListCommandValidator
     Validator <|.right. ShowTransactionHistoryCommandValidator
     Validator <|.right. TransactCommandValidator

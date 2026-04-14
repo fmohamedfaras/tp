@@ -6,7 +6,7 @@ skinparam classFontSize 20
 hide circle
 
 interface Command <<interface>> {
-    + execute(items: ItemList, ui: Ui): void
+    + execute(ItemList items, CategoryList categories, Ui ui): void
 }
 
 class HelpCommand {
@@ -16,6 +16,10 @@ class HelpCommand {
     {static} - HELPEDITDESCRIPTIONMESSAGE: String = "editDescription:..."
     {static} - HELPEDITPRICEMESSAGE: String = "editPrice:..."
     {static} - HELPEDITQUANTITYMESSAGE: String = "editQuantity:..."
+    {static} - HELPEDITCATEGORYMESSAGE: String = "editCategory:..."
+    {static} - HELPADDCATEGORYMESSAGE: String = "addCategory:..."
+    {static} - HELPDELETECATEGORYMESSAGE: String = "deleteCategory:..."
+    {static} - HELPLISTCATEGORIESMESSAGE: String = "listCategories:..."
     {static} - HELPFINDITEMMESSAGE: String = "findItem:..."
     {static} - HELPFILTERITEMMESSAGE: String = "filterItem:..."
     {static} - HELPTRANSACTMESSAGE: String = "transact:..."
@@ -26,17 +30,17 @@ class HelpCommand {
     {static} - COMMANDMESSAGES: Map<String, String>
     - input: String
     + HelpCommand(input: String)
-    + execute(items: ItemList, ui: Ui): void
+    + execute(ItemList items, CategoryList categories, Ui ui): void
 }
 
 interface Validator <<interface>> {
-    + validate(items: ItemList): void
+    + validate(ItemList items, CategoryList categories): void
 }
 
 class HelpCommandValidator {
     - input: String
     + HelpCommandValidator(input: String)
-    + validate(items: ItemList): void
+    + validate(ItemList items, CategoryList categories): void
     - validateCommandSpecified(words: String[]): void
     - isValidCommand(word: String): boolean
 }
@@ -44,14 +48,18 @@ class HelpCommandValidator {
 enum CommandWord <<enumeration>> {
     - word: String
     --
-    - CommandWord(word: String): String
+    - CommandWord(word: String)
     + getWord(): String
     --
-    ADD_ITEM("addItem"),
+    ADD_ITEM("addItem")
     DELETE_ITEM("deleteItem")
     EDIT_DESCRIPTION("editDescription")
     EDIT_PRICE("editPrice")
     EDIT_QUANTITY("editQuantity")
+    EDIT_CATEGORY("editCategory")
+    ADD_CATEGORY("addCategory")
+    DELETE_CATEGORY("deleteCategory")
+    LIST_CATEGORIES("listCategories")
     TRANSACT("transact")
     SHOW_HISTORY("showHistory")
     LIST_ITEMS("listItems")

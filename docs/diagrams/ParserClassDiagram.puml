@@ -6,16 +6,15 @@ skinparam shadowing false
 skinparam classAttributeIconSize 0
 hide circle
 
-
 interface Command <<interface>> {
-    + execute(items: ItemList, ui: Ui): void
+    + execute(ItemList items, CategoryList categories, Ui ui): void
 }
 
 class Parser {
-    + parse(line: String, items: ItemList, ui: Ui): void
-    - parseCommand(line: String): Command
-    - handleUnknownCommand(line: String, ui: Ui): void
-    - extractFirstWord(line: String): String
+    + {static} parse(line: String, items: ItemList, categories: CategoryList, ui: Ui, storage: TransactionStorage): void
+    - {static} parseCommand(line: String, storage: TransactionStorage): Command
+    - {static} handleUnknownCommand(line: String, ui: Ui): void
+    - {static} extractFirstWord(line: String): String
 }
 
 class AddCommand
@@ -23,6 +22,10 @@ class DeleteCommand
 class EditDescriptionCommand
 class EditPriceCommand
 class EditQuantityCommand
+class EditCategoryCommand
+class AddCategoryCommand
+class DeleteCategoryCommand
+class ListCategoriesCommand
 class TransactCommand
 class ShowTransactionHistoryCommand
 class FindCommand
@@ -32,9 +35,9 @@ class HelpCommand
 class ExitCommand
 
 class TypoDetector
-
 class ItemList
-
+class CategoryList
+class TransactionStorage
 class Ui
 
 ' Relationships
@@ -42,19 +45,27 @@ Parser -> Command : <<creates>>
 Parser --> TypoDetector : <<uses>>
 Parser --> Ui : <<uses>>
 Parser -right-> ItemList : passes >
+Parser -right-> CategoryList : passes >
+Parser -right-> TransactionStorage : passes >
 
 Command --> Ui : <<uses>>
 Command -left-> ItemList : passes >
+Command -left-> CategoryList : passes >
 
 AddCommand ...down|> Command
 DeleteCommand ..down|> Command
 EditDescriptionCommand ...down|> Command
 EditPriceCommand ..down|> Command
-EditQuantityCommand ...left|> Command
+EditQuantityCommand ...down|> Command
+EditCategoryCommand ...down|> Command
+AddCategoryCommand ...down|> Command
+DeleteCategoryCommand ...down|> Command
 TransactCommand ...down|> Command
+
 ShowTransactionHistoryCommand ...up|> Command
 FindCommand ..up|> Command
 ListCommand ...up|> Command
+ListCategoriesCommand ...up|> Command
 FilterCommand ..up|> Command
 HelpCommand ...up|> Command
 ExitCommand ..up|> Command

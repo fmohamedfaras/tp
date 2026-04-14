@@ -5,23 +5,23 @@ skinparam classAttributeIconSize 0
 hide circle
 
 interface Command <<interface>> {
-    + execute(items: ItemList, ui: Ui): void
+    + execute(ItemList items, CategoryList categories, Ui ui): void
 }
 
 class EditDescriptionCommand {
     - input: String
     + EditDescriptionCommand(input: String)
-    + execute(items: ItemList, ui: Ui): void
+    + execute(ItemList items, CategoryList categories, Ui ui): void
 }
 
 interface Validator <<interface>> {
-    + validate(items: ItemList): void
+    + validate(ItemList items, CategoryList categories): void
 }
 
 class EditDescriptionCommandValidator {
     - input: String
     + EditDescriptionCommandValidator(input: String)
-    + validate(items: ItemList): void
+    + validate(ItemList items, CategoryList categories): void
 }
 
 class ItemList {

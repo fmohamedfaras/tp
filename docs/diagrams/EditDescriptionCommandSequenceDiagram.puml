@@ -27,7 +27,7 @@ activate EditDescriptionCommand
 EditDescriptionCommand --> Parser : d
 deactivate EditDescriptionCommand
 
-Parser -> EditDescriptionCommand : execute(items, ui)
+Parser -> EditDescriptionCommand : execute(ItemList items, CategoryList categories, Ui ui)
 activate EditDescriptionCommand
 
 create EditDescriptionCommandValidator
@@ -36,7 +36,7 @@ activate EditDescriptionCommandValidator
 EditDescriptionCommandValidator --> EditDescriptionCommand : v
 deactivate EditDescriptionCommandValidator
 
-EditDescriptionCommand -> EditDescriptionCommandValidator : validate(items)
+EditDescriptionCommand -> EditDescriptionCommandValidator : validate(items, categories)
 activate EditDescriptionCommandValidator
 note right of EditDescriptionCommandValidator
   Checks format, index bounds,

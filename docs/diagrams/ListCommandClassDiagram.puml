@@ -5,30 +5,35 @@ skinparam classAttributeIconSize 0
 hide circle
 
 interface Command <<interface>> {
-    + execute(items: ItemList, ui: Ui): void
+    + execute(items: ItemList, categories: CategoryList, ui: Ui): void
 }
 
 class ListCommand {
+    - LIST_PATTERN: Pattern
     - input: String
     + ListCommand(input: String)
-    + execute(items: ItemList, ui: Ui): void
+    + execute(items: ItemList, categories: CategoryList, ui: Ui): void
 }
 
 interface Validator <<interface>> {
-    + validate(items: ItemList): void
+    + validate(items: ItemList, categories: CategoryList): void
 }
 
 class ListCommandValidator {
+    - LIST_PATTERN: Pattern
     - input: String
     + ListCommandValidator(input: String)
-    + validate(items: ItemList): void
+    + validate(items: ItemList, categories: CategoryList): void
 }
 
 class ItemList {
     + isEmpty(): boolean
     + size(): int
     + getItem(index: int): Item
-    + getSortedItems(property: String, order: String): ArrayList<Item>
+}
+
+class CategoryList {
+    + containsCategory(name: String): boolean
 }
 
 class Ui {
@@ -40,6 +45,7 @@ Validator <|.. ListCommandValidator
 
 ListCommand ..> ListCommandValidator : <<creates>>
 ListCommand ..> ItemList : reads >
+ListCommand ..> CategoryList : reads >
 ListCommand ..> Ui : <<uses>>
 
 @enduml

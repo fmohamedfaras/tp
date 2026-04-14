@@ -5,23 +5,23 @@ skinparam classAttributeIconSize 0
 hide circle
 
 interface Command <<interface>> {
-    + execute(items: ItemList, ui: Ui): void
+    + execute(ItemList items, CategoryList categories, Ui ui): void
 }
 
 class DeleteCommand {
     - input: String
     + DeleteCommand(input: String)
-    + execute(items: ItemList, ui: Ui): void
+    + execute(ItemList items, CategoryList categories, Ui ui): void
 }
 
 interface Validator <<interface>> {
-    + validate(items: ItemList): void
+    + validate(ItemList items, CategoryList categories): void
 }
 
 class DeleteCommandValidator {
     - input: String
     + DeleteCommandValidator(input: String)
-    + validate(items: ItemList): void
+    + validate(ItemList items, CategoryList categories): void
 }
 
 class ItemList {

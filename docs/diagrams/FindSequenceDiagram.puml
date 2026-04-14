@@ -27,7 +27,7 @@ activate FindCommand
 FindCommand --> Parser : f
 deactivate FindCommand
 
-Parser -> FindCommand : execute(items, ui)
+Parser -> FindCommand : execute(ItemList items, CategoryList categories, Ui ui)
 activate FindCommand
 
 opt Loop through all items

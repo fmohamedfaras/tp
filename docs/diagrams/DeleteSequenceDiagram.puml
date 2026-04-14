@@ -26,7 +26,7 @@ activate DeleteCommand
 DeleteCommand --> Parser : d
 deactivate DeleteCommand
 
-Parser -> DeleteCommand : execute(items, ui)
+Parser -> DeleteCommand : execute(ItemList items, CategoryList categories, Ui ui)
 activate DeleteCommand
 
 create DeleteCommandValidator
@@ -35,7 +35,7 @@ activate DeleteCommandValidator
 DeleteCommandValidator --> DeleteCommand : v
 deactivate DeleteCommandValidator
 
-DeleteCommand -> DeleteCommandValidator : validate(items)
+DeleteCommand -> DeleteCommandValidator : validate(items, categories)
 activate DeleteCommandValidator
 DeleteCommandValidator --> DeleteCommand
 deactivate DeleteCommandValidator

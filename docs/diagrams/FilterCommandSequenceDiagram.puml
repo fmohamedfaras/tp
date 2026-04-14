@@ -27,7 +27,7 @@ activate FilterCommand
 FilterCommand --> Parser : d
 deactivate FilterCommand
 
-Parser -> FilterCommand : execute(items, ui)
+Parser -> FilterCommand : execute(ItemList items, CategoryList categories, Ui ui)
 activate FilterCommand
 
 create FilterCommandValidator
@@ -36,7 +36,7 @@ activate FilterCommandValidator
 FilterCommandValidator --> FilterCommand : v
 deactivate FilterCommandValidator
 
-FilterCommand -> FilterCommandValidator : validate(items)
+FilterCommand -> FilterCommandValidator : validate(items, categories)
 activate FilterCommandValidator
 note right of FilterCommandValidator
   Checks input starts with "filterItem "

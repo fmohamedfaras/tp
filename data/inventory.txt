@@ -1,4 +1,11 @@
-50 | Coke Can | 2.00
-30 | Sprite Bottle | 1.00
-20 | Potato Chips | 3.50
-111 | Apple | 1000.00
+50 | Coke Can | 1.50 | BEVERAGES
+30 | Sprite Bottle | 1.50 | BEVERAGES
+20 | Green Tea | 2.50 | BEVERAGES
+22 | Potato Chips | 3.00 | SNACKS
+100 | Chocolate Bar | 1.00 | SNACKS
+15 | Instant Noodles | 1.20 | PANTRY
+10 | Loaf of Bread | 2.50 | PANTRY
+24 | Tissue Box | 1.80 | TOILETRIES
+12 | Cake | 2.50 | OTHERS
+5 | Donut | 4.00 | OTHERS
+2 | Coconut | 2.00 | OTHERS

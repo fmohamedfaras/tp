@@ -28,14 +28,27 @@ If you prefer typing commands instead of clicking buttons, InventoryBRO allows y
 * [Command Autocompletion](#command-autocompletion)
 * [Typo Detection](#typo-detection)
 * [Command Summary](#command-summary)
-* [Scope of v2.0](#scope-of-v20)
+* [Scope of v2.1](#scope-of-v21)
 
 ---
 
-## Quick Start
+## Quick Start (Without preloaded data)
 1. Ensure you have **Java 17** or above installed on your computer.
 2. Download the `inventory-bro.jar` file.
 3. Place the file in a folder of your choice.
+4. Open a terminal and navigate (`cd`) into that folder.
+5. Run the application using the following command:
+   ```bash
+   java -jar inventory-bro.jar
+   ```
+6. Type your commands and press `Enter` to execute them!
+
+---
+
+## Quick Start (With preloaded data)
+1. Ensure you have **Java 17** or above installed on your computer.
+2. Download the `inventory-bro.jar` file and the `data` folder.
+3. Place the file and data folder in a folder of your choice.
 4. Open a terminal and navigate (`cd`) into that folder.
 5. Run the application using the following command:
    ```bash

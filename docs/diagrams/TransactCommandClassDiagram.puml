@@ -1,22 +1,23 @@
 @startuml
-
 skinparam monochrome true
 skinparam shadowing false
 skinparam classAttributeIconSize 0
 hide circle
 
 interface Command <<interface>> {
-    + execute(items: ItemList, ui: Ui): void
+    + execute(items: ItemList, categories: CategoryList, ui: Ui): void
 }
 
 class TransactCommand {
+    - {static} logger: Logger
     - input: String
     - transactionStorage: TransactionStorage
-    + TransactCommand(input: String)
-    + execute(items: ItemList, ui: Ui): void
+    + TransactCommand(input: String, transactionStorage: TransactionStorage)
+    + execute(items: ItemList, categories: CategoryList, ui: Ui): void
 }
 
 class ItemList {
+    + size(): int
     + getItem(index: int): Item
 }
 
@@ -26,13 +27,14 @@ class Item {
     + getDescription(): String
 }
 
-class TransactCommandValidator {
-    - input: String
-    + validate(items: ItemList): void
+interface Validator <<interface>> {
+    + validate(items: ItemList, categories: CategoryList): void
 }
 
-interface Validator <<interface>> {
-    + validate(items: ItemList): void
+class TransactCommandValidator {
+    - input: String
+    + TransactCommandValidator(input: String)
+    + validate(items: ItemList, categories: CategoryList): void
 }
 
 class TransactionStorage {
@@ -44,13 +46,12 @@ class Ui {
 }
 
 Command <|.. TransactCommand
+Validator <|.. TransactCommandValidator
 
 TransactCommand .right.> TransactCommandValidator : <<creates>>
-TransactCommandValidator .up.|> Validator
-TransactCommandValidator ..> ItemList : <<uses>>
-TransactCommandValidator ..> Item : <<uses>>
+TransactCommandValidator ..> ItemList : reads >
 TransactCommand .> Item : modifies >
-TransactCommand ..> ItemList : <<uses>>
+TransactCommand ..> ItemList : reads >
 TransactCommand ..> TransactionStorage : <<uses>>
 TransactCommand ..> Ui : <<uses>>
 

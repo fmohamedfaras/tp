@@ -5,13 +5,13 @@ skinparam classAttributeIconSize 0
 hide circle
 
 interface Command <<interface>> {
-    + execute(items: ItemList, ui: Ui): void
+    + execute(ItemList items, CategoryList categories, Ui ui): void
 }
 
 class FilterCommand {
     - input: String
     + FilterCommand(input: String)
-    + execute(items: ItemList, ui: Ui): void
+    + execute(ItemList items, CategoryList categories, Ui ui): void
     - buildAndGroups(predicates: List, operators: List): List
     - collectMatchingItems(items: ItemList, andGroups: List): List
     - passesFilter(item: Item, andGroups: List): boolean
@@ -21,7 +21,7 @@ class FilterCommand {
 }
 
 interface Validator <<interface>> {
-    + validate(items: ItemList): void
+    + validate(ItemList items, CategoryList categories): void
 }
 
 class FilterCommandValidator {
@@ -31,7 +31,7 @@ class FilterCommandValidator {
     - NONNEG_PRICE_PATTERN: Pattern
     - input: String
     + FilterCommandValidator(input: String)
-    + validate(items: ItemList): void
+    + validate(ItemList items, CategoryList categories): void
     - validateGaps(logic: String, matchRanges: List): void
     - validatePredicates(predicates: List): void
     - validateSinglePredicate(pred: String[]): void

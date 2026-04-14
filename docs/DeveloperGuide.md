@@ -51,7 +51,7 @@ The main components are:
 * `Storage`: Handles persistence of inventory and transaction data.
 
 **Figure 1: Overall Architecture / Class Diagram**  
-![InventoryBro Class Diagram](diagrams/InventoryBroClassDiagram.png)
+![InventoryBro Class Diagram](docs/diagrams/InventoryBroClassDiagram.png)
 
 ---
 
@@ -72,7 +72,7 @@ The `Ui` class acts as the bridge between the user and the internal logic.
 The `Parser` is responsible for routing user input to the correct command.
 
 **Figure 3: Parser Class Diagram**   
-![Parser Class Diagram](diagrams/ParserClassDiagram.png)
+![Parser Class Diagram](docs/diagrams/ParserClassDiagram.png)
 
 **Design highlights:**
 * Uses switch-based factory pattern
@@ -86,13 +86,13 @@ The `Parser` is responsible for routing user input to the correct command.
 The add mechanism is handled by the `AddCommand` class. It validates the input, creates a new `Item` with a name, quantity, and price, and appends it to the inventory.
 
 **Figure 4: Add Command Class Diagram**
-![Add Command Class Diagram](diagrams/AddCommandClassDiagram.png)
+![Add Command Class Diagram](docs/diagrams/AddCommandClassDiagram.png)
 
 **Step-by-step Execution:**
 1. The user inputs `addItem d/Apple q/10 p/1.50`.
 2. `Parser` matches the `additem` prefix (case-insensitive switch) and instantiates a new `AddCommand` with the raw input string.
-3. `Parser` calls `execute(items, ui)` on the `AddCommand`.
-4. `AddCommand.execute()` immediately creates a new `AddCommandValidator` and calls `validate(items)`.
+3. `Parser` calls `execute(ItemList items, CategoryList categories, Ui ui)` on the `AddCommand`.
+4. `AddCommand.execute()` immediately creates a new `AddCommandValidator` and calls `validate(items, categories) `.
 5. `AddCommandValidator` applies the regex `^addItem d/(.*?) q/(-?\d+) p/(-?\d+(\.\d+)?)$` to the input. If it does not match, it throws `IllegalArgumentException` with `"Invalid addItem format! Use: addItem d/NAME q/INITIAL_QUANTITY p/PRICE"`. If the pattern matches, the following checks are applied in order:
    - If the parsed quantity is negative, throws `IllegalArgumentException` with `"Quantity cannot be negative."`.
    - If `Math.round(price * 100) <= 0` (i.e. the price rounds to `$0.00`), throws `IllegalArgumentException` with `"Price must be at least 0.01 when rounded"`.
@@ -103,25 +103,25 @@ The add mechanism is handled by the `AddCommand` class. It validates the input, 
 8. `ui.showMessage("Added: " + newItem)` confirms the addition to the user.
 
 **Figure 5: Add Command Sequence Diagram**
-![Add Command Sequence Diagram](diagrams/AddCommandSequenceDiagram.png)
+![Add Command Sequence Diagram](docs/diagrams/AddCommandSequenceDiagram.png)
 
 ---
 
 ### Deleting an Item
 
 **Figure 6: Delete Command Class Diagram**
-![Delete Class Diagram](diagrams/DeleteClassDiagram.png)
+![Delete Class Diagram](docs/diagrams/DeleteClassDiagram.png)
 
 **Step-by-step Execution:**
 1. When the user inputs `deleteItem 1`, the `Parser` instantiates a new `DeleteCommand` with the raw input string.
-2. The `Parser` invokes the `execute(items, ui)` method on the `DeleteCommand`.
-3. The `DeleteCommand` immediately creates a `DeleteCommandValidator` and calls `validate(items)`.
+2. The `Parser` invokes the `execute(ItemList items, CategoryList categories, Ui ui)` method on the `DeleteCommand`.
+3. The `DeleteCommand` immediately creates a `DeleteCommandValidator` and calls `validate(items, categories) `.
 4. The `DeleteCommandValidator` uses Regex (`^deleteItem\s+(\d+)$`) to ensure the format is correct. If the format is invalid or the parsed index is out of bounds, it throws an `IllegalArgumentException` which halts execution.
 5. If validation passes, `DeleteCommand` calculates the zero-based index and calls `deleteItem()` on the `ItemList`.
 6. Finally, a success message containing the removed item's details is passed to the `Ui` to be displayed to the user.
 
 **Figure 7: Delete Command Sequence Diagram**
-![Delete Sequence Diagram](diagrams/DeleteSequenceDiagram.png)
+![Delete Sequence Diagram](docs/diagrams/DeleteSequenceDiagram.png)
 
 ---
 
@@ -130,13 +130,13 @@ The add mechanism is handled by the `AddCommand` class. It validates the input, 
 The edit-description mechanism is handled by the `EditDescriptionCommand` class. It updates the description field of an existing item in the inventory.
 
 **Figure 8: Edit Description Command Class Diagram**
-![Edit Description Command Class Diagram](diagrams/EditDescriptionCommandClassDiagram.png)
+![Edit Description Command Class Diagram](docs/diagrams/EditDescriptionCommandClassDiagram.png)
 
 **Step-by-step Execution:**
 1. The user inputs `editDescription 1 d/New Name`.
 2. `Parser` matches the `editDescription` prefix and instantiates a new `EditDescriptionCommand` with the raw input string.
-3. `Parser` calls `execute(items, ui)` on the `EditDescriptionCommand`.
-4. `EditDescriptionCommand.execute()` immediately creates a new `EditDescriptionCommandValidator` and calls `validate(items)`.
+3. `Parser` calls `execute(ItemList items, CategoryList categories, Ui ui)` on the `EditDescriptionCommand`.
+4. `EditDescriptionCommand.execute()` immediately creates a new `EditDescriptionCommandValidator` and calls `validate(items, categories) `.
 5. `EditDescriptionCommandValidator.validate()` performs these checks in order:
    - Splits the input on the first space; if only one token is present (no arguments after the command word), it throws `IllegalArgumentException` with `"Invalid editDescription format. Use: editDescription INDEX d/NEW_DESCRIPTION"`.
    - Splits the argument portion on `d/`; if the `d/` delimiter is absent, it throws `IllegalArgumentException` with the same format error message.
@@ -145,7 +145,7 @@ The edit-description mechanism is handled by the `EditDescriptionCommand` class.
 6. If validation passes, `EditDescriptionCommand` performs the same parse: splits on the first space, then on `d/`, converts the index to zero-based, and trims the new description string. It calls `items.getItem(index)` to retrieve the target `Item`, then calls `item.setDescription(newDescription)` to update it in-place. Finally, it calls `ui.showMessage("Item description updated: " + item)` to confirm the change to the user.
 
 **Figure 9: Edit Description Command Sequence Diagram**
-![Edit Description Command Sequence Diagram](diagrams/EditDescriptionCommandSequenceDiagram.png)
+![Edit Description Command Sequence Diagram](docs/diagrams/EditDescriptionCommandSequenceDiagram.png)
 
 ---
 
@@ -154,13 +154,13 @@ The edit-description mechanism is handled by the `EditDescriptionCommand` class.
 The edit-price mechanism is handled by the `EditPriceCommand` class. It updates the price field of an existing item in the inventory.
 
 **Figure 10: Edit Price Command Class Diagram**
-![Edit Price Command Class Diagram](diagrams/EditPriceCommandClassDiagram.png)
+![Edit Price Command Class Diagram](docs/diagrams/EditPriceCommandClassDiagram.png)
 
 **Step-by-step Execution:**
 1. The user inputs `editPrice INDEX p/NEW_PRICE`.
 2. `Parser` matches the `editPrice` prefix (via the `"editprice"` case in its switch statement) and instantiates a new `EditPriceCommand` with the raw input string.
-3. `Parser` calls `execute(items, ui)` on the `EditPriceCommand`.
-4. `EditPriceCommand.execute()` immediately creates a new `EditPriceCommandValidator` and calls `validate(items)`.
+3. `Parser` calls `execute(ItemList items, CategoryList categories, Ui ui)` on the `EditPriceCommand`.
+4. `EditPriceCommand.execute()` immediately creates a new `EditPriceCommandValidator` and calls `validate(items, categories) `.
 5. `EditPriceCommandValidator.validate()` performs these checks in order:
    - Splits the input on the first space; if only one token is present (no arguments after the command word), it throws `IllegalArgumentException` with `"Invalid editPrice format. Use: editPrice INDEX p/NEW_PRICE"`.
    - Splits the argument portion on `p/`; if the `p/` delimiter is absent, it throws `IllegalArgumentException` with the same format error message.
@@ -169,7 +169,7 @@ The edit-price mechanism is handled by the `EditPriceCommand` class. It updates 
 6. If validation passes, `EditPriceCommand` performs the same parse: splits on the first space, then on `p/`, converts the index to zero-based, and parses the new price as a `double`. It calls `items.getItem(index)` to retrieve the target `Item`, then calls `item.setPrice(newPrice)` to update it in-place. Finally, it calls `ui.showMessage("Item price updated: " + item)` to confirm the change to the user.
 
 **Figure 11: Edit Price Command Sequence Diagram**
-![Edit Price Command Sequence Diagram](diagrams/EditPriceCommandSequenceDiagram.png)
+![Edit Price Command Sequence Diagram](docs/diagrams/EditPriceCommandSequenceDiagram.png)
 
 ---
 
@@ -178,13 +178,13 @@ The edit-price mechanism is handled by the `EditPriceCommand` class. It updates 
 The edit-quantity mechanism is handled by the `EditQuantityCommand` class. It updates the quantity field of an existing item in the inventory.
 
 **Figure 12: Edit Quantity Command Class Diagram**
-![Edit Quantity Command Class Diagram](diagrams/EditQuantityCommandClassDiagram.png)
+![Edit Quantity Command Class Diagram](docs/diagrams/EditQuantityCommandClassDiagram.png)
 
 **Step-by-step Execution:**
 1. The user inputs `editQuantity INDEX q/NEW_QUANTITY`.
 2. `Parser` matches the `editQuantity` prefix (via the `"editquantity"` case in its switch statement) and instantiates a new `EditQuantityCommand` with the raw input string.
-3. `Parser` calls `execute(items, ui)` on the `EditQuantityCommand`.
-4. `EditQuantityCommand.execute()` immediately creates a new `EditQuantityCommandValidator` and calls `validate(items)`.
+3. `Parser` calls `execute(ItemList items, CategoryList categories, Ui ui)` on the `EditQuantityCommand`.
+4. `EditQuantityCommand.execute()` immediately creates a new `EditQuantityCommandValidator` and calls `validate(items, categories) `.
 5. `EditQuantityCommandValidator.validate()` performs these checks in order:
    - Splits the input on the first space; if only one token is present (no arguments after the command word), it throws `IllegalArgumentException` with `"Invalid editQuantity format. Use: editQuantity INDEX q/NEW_QUANTITY"`.
    - Splits the argument portion on `q/`; if the `q/` delimiter is absent, it throws `IllegalArgumentException` with the same format error message.
@@ -193,24 +193,24 @@ The edit-quantity mechanism is handled by the `EditQuantityCommand` class. It up
 6. If validation passes, `EditQuantityCommand` performs the same parse: splits on the first space, then on `q/`, converts the index to zero-based, and parses the new quantity as an integer. It calls `items.getItem(index)` to retrieve the target `Item`, then calls `item.setQuantity(newQuantity)` to update it in-place. Finally, it calls `ui.showMessage("Item quantity updated: " + item)` to confirm the change to the user.
 
 **Figure 13: Edit Quantity Command Sequence Diagram**
-![Edit Quantity Command Sequence Diagram](diagrams/EditQuantityCommandSequenceDiagram.png)
+![Edit Quantity Command Sequence Diagram](docs/diagrams/EditQuantityCommandSequenceDiagram.png)
 
 ---
 
 ### Finding an Item
 
 **Figure 14: Find Command Class Diagram**
-![Find Class Diagram](diagrams/FindClassDiagram.png)
+![Find Class Diagram](docs/diagrams/FindClassDiagram.png)
 
 **Step-by-step Execution:**
 1. When the user inputs `findItem keyword`, the `Parser` instantiates a new `FindCommand`.
-2. The `Parser` calls `execute(items, ui)` on the command.
+2. The `Parser` calls `execute(ItemList items, CategoryList categories, Ui ui)` on the command.
 3. The `FindCommand` uses a Regex pattern (`^findItem\s+(.+)$`) to extract the search keyword. If the format is invalid, it throws an `IllegalArgumentException`.
 4. The command iterates through the `ItemList`, retrieving each `Item` and checking if its description contains the target keyword.
 5. Matching items are immediately passed to the `Ui` to be displayed. If no items match by the end of the loop, a "not found" message is displayed instead.
 
 **Figure 15: Find Command Sequence Diagram**
-![Find Sequence Diagram](diagrams/FindSequenceDiagram.png)
+![Find Sequence Diagram](docs/diagrams/FindSequenceDiagram.png)
 
 ---
 
@@ -219,12 +219,12 @@ The edit-quantity mechanism is handled by the `EditQuantityCommand` class. It up
 The filter mechanism is handled by the `FilterCommand` class. It evaluates one or more field-operator-value predicates — joined by `AND` / `OR` — against every item in the inventory and displays all matching results.
 
 **Figure 16: Filter Command Class Diagram**
-![Filter Command Class Diagram](diagrams/FilterCommandClassDiagram.png)
+![Filter Command Class Diagram](docs/diagrams/FilterCommandClassDiagram.png)
 
 **Step-by-step Execution:**
 1. The user inputs a command such as `filterItem quantity > 10` or `filterItem description = 'Apple' OR quantity < 5`. The `Parser` instantiates a new `FilterCommand` with the raw input string.
-2. The `Parser` calls `execute(items, ui)` on the `FilterCommand`.
-3. Inside `execute()`, `FilterCommand` immediately creates a `FilterCommandValidator` and calls `validate(items)`.
+2. The `Parser` calls `execute(ItemList items, CategoryList categories, Ui ui)` on the `FilterCommand`.
+3. Inside `execute()`, `FilterCommand` immediately creates a `FilterCommandValidator` and calls `validate(items, categories) `.
 4. `FilterCommandValidator` first checks that the input starts with `"filterItem "`. It then applies the predicate regex `(description|quantity|price) (=|<|>) ('.*?'|[^\s']+)` to extract all predicate matches and their positions.
 5. The validator checks every gap between consecutive matches: the first gap must be empty, each subsequent gap must be exactly `AND` or `OR`, and no trailing text may follow the last predicate. A bad gap throws `IllegalArgumentException` (e.g. `"Expected AND or OR between predicates, found: '...'"` ). It then validates each predicate's value type: `description` values must be single-quoted; `quantity` values must match `^\d+$` (non-negative integer); `price` values must match `^\d+(\.\d{1,2})?$` (non-negative number with at most 2 decimal places). A type mismatch throws `IllegalArgumentException`.
 6. Back in `execute()`, the same regex builds a flat list of `[field, operator, value]` arrays and a corresponding list of joining operators.
@@ -233,7 +233,7 @@ The filter mechanism is handled by the `FilterCommand` class. It evaluates one o
 9. If no items match, `Ui` displays `"No items match the given filter."`. Otherwise it displays `"Here are the filtered items:"` followed by a numbered list of matching items in their original inventory order.
 
 **Figure 17: Filter Command Sequence Diagram**
-![Filter Command Sequence Diagram](diagrams/FilterCommandSequenceDiagram.png)
+![Filter Command Sequence Diagram](docs/diagrams/FilterCommandSequenceDiagram.png)
 
 ---
 
@@ -242,7 +242,7 @@ The filter mechanism is handled by the `FilterCommand` class. It evaluates one o
 The transact mechanism is handled by the `TransactCommand` class. It updates an item's quantity and records the transaction.
 
 **Figure 18: Transact Command Class Diagram**
-![Transact Class Diagram](diagrams/TransactCommandClassDiagram.png)
+![Transact Class Diagram](docs/diagrams/TransactCommandClassDiagram.png)
 
 **Step-by-step Execution:**
 1. User inputs `transact 1 q/-5`
@@ -258,7 +258,7 @@ The transact mechanism is handled by the `TransactCommand` class. It updates an 
 9. UI displays updated quantity
 
 **Figure 19: Transact Command Sequence Diagram**
-![Transact Sequence Diagram](diagrams/TransactCommandSequenceDiagram.png)
+![Transact Sequence Diagram](docs/diagrams/TransactCommandSequenceDiagram.png)
 
 ---
 
@@ -267,7 +267,7 @@ The transact mechanism is handled by the `TransactCommand` class. It updates an 
 The `ShowTransactionHistoryCommand` retrieves and displays all past transactions.
 
 **Figure 20: Show History Class Diagram**
-![Show History Class Diagram](diagrams/ShowTransactionHistoryCommandClassDiagram.png)
+![Show History Class Diagram](docs/diagrams/ShowTransactionHistoryCommandClassDiagram.png)
 
 **Step-by-step Execution:**
 1. User inputs `showHistory`
@@ -278,7 +278,7 @@ The `ShowTransactionHistoryCommand` retrieves and displays all past transactions
 6. Otherwise → iterate and print all entries
 
 **Figure 21: Show History Sequence Diagram**
-![Show History Sequence Diagram](diagrams/ShowTransactionHistoryCommandSequenceDiagram.png)
+![Show History Sequence Diagram](/docs/diagrams/ShowTransactionHistoryCommandSequenceDiagram.png)
 
 ---
 
@@ -287,7 +287,7 @@ The `ShowTransactionHistoryCommand` retrieves and displays all past transactions
 The `ListCommand` class handles the mechanism of displaying the list of all items in the inventory to the user in the default or sorted order.
 
 **Figure 22: List Command Class Diagram**
-![Show List Command Class Diagram](diagrams/ListCommandClassDiagram.png)
+![Show List Command Class Diagram](docs/diagrams/ListCommandClassDiagram.png)
 
 **Step-by-step Execution:**
 1. When the user inputs `listItems` or `listItems price high`, the parser instantiates a new `ListCommand` with the raw input string.
@@ -299,14 +299,14 @@ The `ListCommand` class handles the mechanism of displaying the list of all item
 7. Else, it passes the default order of the list of items to the `ui` to display to the user.
 
 **Figure 23: List Command Sequence Diagram**
-![List Command Sequence Diagram](diagrams/ListCommandSequenceDiagram.png)
+![List Command Sequence Diagram](docs/diagrams/ListCommandSequenceDiagram.png)
 
 ### Viewing help messages of commands
 
 The `HelpCommand` class handles the mechanism of displaying all command names and their summaries or detailed instructions of a particular command indicated by the user.
 
 **Figure 24: Help Command Sequence Diagram**
-![Show Help Command Class Diagram](diagrams/HelpCommandClassDiagram.png)
+![Show Help Command Class Diagram](/docs/diagrams/HelpCommandClassDiagram.png)
 
 **Step-by-step Execution:**
 1. The user inputs `help` or specifies a particular command and inputs `help [command_name]`.
@@ -318,7 +318,7 @@ The `HelpCommand` class handles the mechanism of displaying all command names an
     * If no, which means the user input is only `help`, then the command names and their summaries are passed to the `ui` to display to the user.
 
 **Figure 25: Help Command Sequence Diagram**
-![Help Command Sequence Diagram](diagrams/HelpCommandSequenceDiagram.png)
+![Help Command Sequence Diagram](docs/diagrams/HelpCommandSequenceDiagram.png)
 
 ---
 
@@ -422,7 +422,7 @@ itemName | quantityChange | timestamp
     * Return `null` (skipped)
 
 **Figure 28: TransactionStorage Sequence Diagram**
-![TransactionStorage Sequence Diagram](diagrams/TransactionStorageSequenceDiagram.png)
+![TransactionStorage Sequence Diagram](docs/diagrams/TransactionStorageSequenceDiagram.png)
 
 ---
 
@@ -510,22 +510,24 @@ accuracy (clear, structured output)
 
 ## User Stories
 
-| Version | As a ...    | I want to ...                                     | So that I can ...                                            |
-|---------|-------------|---------------------------------------------------|--------------------------------------------------------------|
-| v1.0    | new user    | see usage instructions                            | refer to them when I forget how to use the application       |
-| v1.0    | store owner | add items                                         | keep track of new products in my inventory                   |
-| v1.0    | store owner | delete items                                      | remove products that are no longer sold                      |
-| v1.0    | store owner | edit item details                                 | update product name or quantity when needed                  |
-| v1.0    | store owner | view all items                                    | know information of products I currently have                |
-| v1.0    | store owner | update item quantity via transactions             | record sales or restocking accurately                        |
-| v1.0    | store owner | exit the application                              | safely close the program after use                           |
-| v2.0    | store owner | find items by keyword                             | locate items quickly without scanning the full list          |
-| v2.0    | store owner | view transaction history                          | review past transactions for tracking and reference          |
-| v2.0    | store owner | have my inventory automatically saved             | avoid losing data when I close the application               |
-| v2.0    | store owner | load previously saved inventory                   | continue managing my shop from where I left off              |
-| v2.0    | store owner | view a sorted list of items                       | quickly view which items have, for example, lower quantities |
-| v2.0    | store owner | view detailed instructions for a specific command | learn how to use a command correctly                         |
+| Version | As a ...    | I want to ...                                     | So that I can ...                                               |
+|---------|-------------|---------------------------------------------------|-----------------------------------------------------------------|
+| v1.0    | new user    | see usage instructions                            | refer to them when I forget how to use the application          |
+| v1.0    | store owner | add items                                         | keep track of new products in my inventory                      |
+| v1.0    | store owner | delete items                                      | remove products that are no longer sold                         |
+| v1.0    | store owner | edit item details                                 | update product name or quantity when needed                     |
+| v1.0    | store owner | view all items                                    | know information of products I currently have                   |
+| v1.0    | store owner | update item quantity via transactions             | record sales or restocking accurately                           |
+| v1.0    | store owner | exit the application                              | safely close the program after use                              |
+| v2.0    | store owner | find items by keyword                             | locate items quickly without scanning the full list             |
+| v2.0    | store owner | view transaction history                          | review past transactions for tracking and reference             |
+| v2.0    | store owner | have my inventory automatically saved             | avoid losing data when I close the application                  |
+| v2.0    | store owner | load previously saved inventory                   | continue managing my shop from where I left off                 |
+| v2.0    | store owner | view a sorted list of items                       | quickly view which items have, for example, lower quantities    |
+| v2.0    | store owner | view detailed instructions for a specific command | learn how to use a command correctly                            |
 | v2.0    | store owner | filter items by attribute and condition           | quickly find items that meet specific criteria (e.g. low stock) |
+| v2.1    | store owner | categorise my items                               | to tag and search for items quickly                             |
+
 
 ---
 
