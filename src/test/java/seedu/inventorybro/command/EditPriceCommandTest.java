@@ -45,10 +45,15 @@ class EditPriceCommandTest {
     }
 
     @Test
-    void execute_validZeroPrice_setsZero() {
-        new EditPriceCommand("editPrice 2 p/0.0").execute(items, categories, ui);
+    void execute_zeroPrice_throwsIllegalArgument() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new EditPriceCommand("editPrice 2 p/0.0").execute(items, categories, ui));
+    }
 
-        assertEquals(0.0, items.getItem(1).getPrice());
+    @Test
+    void execute_priceTooSmallToRound_throwsIllegalArgument() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new EditPriceCommand("editPrice 1 p/0.001").execute(items, categories, ui));
     }
 
     @Test

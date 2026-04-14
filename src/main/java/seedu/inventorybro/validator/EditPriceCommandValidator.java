@@ -40,13 +40,13 @@ public class EditPriceCommandValidator implements Validator {
             if (Double.isNaN(newPrice)) {
                 throw new IllegalArgumentException("Price must be a valid number, not 'NaN'.");
             }
-            
+
             if (Double.isInfinite(newPrice)) {
                 throw new IllegalArgumentException("Price is too large to be processed by the system.");
             }
 
-            if (newPrice < 0) {
-                throw new IllegalArgumentException("Price cannot be negative.");
+            if (Math.round(newPrice * 100) <= 0) {
+                throw new IllegalArgumentException("Price must be at least 0.01 when rounded.");
             }
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Index must be a number and price must be a valid decimal.");

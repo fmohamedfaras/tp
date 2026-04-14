@@ -46,6 +46,10 @@ public class EditDescriptionCommandValidator implements Validator {
             throw new IllegalArgumentException("Item description cannot be empty.");
         }
 
+        if (newDescription.contains("'")) {
+            throw new IllegalArgumentException("Item description cannot contain single quotes (').");
+        }
+
         // Checks if any *other* item in the list already has this exact description
         for (int i = 0; i < items.size(); i++) {
             if (i != (index - 1) && items.getItem(i).getDescription().trim().equalsIgnoreCase(newDescription)) {

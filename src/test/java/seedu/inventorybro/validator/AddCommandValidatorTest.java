@@ -239,6 +239,42 @@ class AddCommandValidatorTest {
     }
 
     /**
+     * Verifies that a quantity exceeding Integer.MAX_VALUE is rejected.
+     */
+    @Test
+    void validate_quantityOverflow_throwsException() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new AddCommandValidator("addItem d/Apple q/99999999999999999999 p/1.50 c/Others")
+                        .validate(items, categories)
+        );
+    }
+
+    /**
+     * Verifies that a price large enough to produce Infinity is rejected.
+     */
+    @Test
+    void validate_priceOverflow_throwsException() {
+        String hugePrice = "9".repeat(400);
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new AddCommandValidator("addItem d/Apple q/10 p/" + hugePrice + " c/Others")
+                        .validate(items, categories)
+        );
+    }
+
+    /**
+     * Verifies that a name containing a single quote is rejected.
+     */
+    @Test
+    void validate_nameWithSingleQuote_throwsException() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new AddCommandValidator("addItem d/Coke's Can q/10 p/1.50 c/Others").validate(items, categories)
+        );
+    }
+
+    /**
      * Verifies that passing null as input to the constructor triggers an AssertionError.
      */
     @Test

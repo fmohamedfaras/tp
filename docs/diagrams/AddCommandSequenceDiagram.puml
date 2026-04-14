@@ -12,6 +12,7 @@ end box
 
 box "Data" #LightYellow
 participant "items:ItemList" as ItemList
+participant "categories:CategoryList" as CategoryList
 participant "newItem:Item" as Item
 end box
 
@@ -19,20 +20,21 @@ box "UI" #LightGreen
 participant "ui:Ui" as Ui
 end box
 
--> Parser : parse("addItem d/Apple q/10 p/1.50", items, ui)
+-> Parser : parse("addItem d/Apple q/10 p/1.50 c/Others", items, categories, ui)
 activate Parser
 
 create AddCommand
-Parser -> AddCommand : new AddCommand("addItem d/Apple q/10 p/1.50")
+Parser -> AddCommand : new AddCommand("addItem d/Apple q/10 p/1.50 c/Others")
 activate AddCommand
 AddCommand --> Parser : d
 deactivate AddCommand
 
 Parser -> AddCommand : execute(ItemList items, CategoryList categories, Ui ui)
+Parser -> AddCommand : execute(items, categories, ui)
 activate AddCommand
 
 create AddCommandValidator
-AddCommand -> AddCommandValidator : new AddCommandValidator("addItem d/Apple q/10 p/1.50")
+AddCommand -> AddCommandValidator : new AddCommandValidator("addItem d/Apple q/10 p/1.50 c/Others")
 activate AddCommandValidator
 AddCommandValidator --> AddCommand : v
 deactivate AddCommandValidator
@@ -41,11 +43,18 @@ AddCommand -> AddCommandValidator : validate(items, categories)
 activate AddCommandValidator
 
 note right of AddCommandValidator
-  1. Applies regex:
-     ^addItem d/(.*?) q/(-?\d+) p/(-?\d+(\.\d+)?)$
-  2. quantity < 0 → "Quantity cannot be negative."
-  3. Math.round(price * 100) <= 0 → "Price must be at least 0.01 when rounded"
-  4. name.isEmpty() → "Item name cannot be empty."
+  Applies regex:
+  ^addItem\s+d/(.+?)\s+q/(\d+)\s+p/(\d+(\.\d+)?)\s+c/(.+)$
+  Checks in order:
+  1. name contains d/, q/, or p/ → "Duplicate parameter detected."
+  2. name.isEmpty() → "Item name cannot be empty."
+  3. name.contains("'") → "Item description cannot contain single quotes."
+  4. DuplicateItemValidator (case-insensitive name check)
+  5. Integer overflow on quantity → "Quantity is too large..."
+  6. quantity < 0 → "Quantity cannot be negative."
+  7. price is Infinity → "Price is too large..."
+  8. Math.round(price * 100) <= 0 → "Price must be at least 0.01 when rounded"
+  9. category not in CategoryList → "The category [...] does not exist!"
 end note
 
 create DuplicateItemValidator
@@ -79,13 +88,19 @@ destroy AddCommandValidator
 
 note right of AddCommand
   Re-applies regex to extract:
-  name     = group(1).trim()
-  quantity = Integer.parseInt(group(2))
-  price    = Double.parseDouble(group(3))
+  name         = group(1).trim()
+  quantity     = Integer.parseInt(group(2))
+  price        = Double.parseDouble(group(3))
+  categoryName = group(5).trim()
 end note
 
+AddCommand -> CategoryList : getCategory("Others")
+activate CategoryList
+CategoryList --> AddCommand : targetCategory
+deactivate CategoryList
+
 create Item
-AddCommand -> Item : new Item("Apple", 10, 1.50)
+AddCommand -> Item : new Item("Apple", 10, 1.50, targetCategory)
 activate Item
 Item --> AddCommand : newItem
 deactivate Item
@@ -95,7 +110,7 @@ activate ItemList
 ItemList --> AddCommand
 deactivate ItemList
 
-AddCommand -> Ui : showMessage("Added: Apple (Quantity: 10, Price: $1.50)")
+AddCommand -> Ui : showMessage("Added: [OTHERS] Apple (Quantity: 10, Price: $1.50)")
 activate Ui
 Ui --> AddCommand
 deactivate Ui

@@ -90,4 +90,10 @@ class EditDescriptionCommandTest {
         assertThrows(IllegalArgumentException.class, () ->
                 new EditDescriptionCommand("editDescription abc d/Name").execute(items, categories, ui));
     }
+
+    @Test
+    void execute_descriptionWithSingleQuote_throwsIllegalArgument() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new EditDescriptionCommand("editDescription 1 d/Coke's Can").execute(items, categories, ui));
+    }
 }

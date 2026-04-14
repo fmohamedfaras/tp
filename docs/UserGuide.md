@@ -88,6 +88,7 @@ Adds a new product with a name, quantity, price, and an optional category into t
 * Quantity must be `0` or greater — negative values are rejected.
 * Price must be at least `0.01` when rounded to 2 decimal places (e.g. `p/0.001` is rejected).
 * Name cannot be empty or whitespace only.
+* Name cannot contain single quotes (`'`).
 * An item with the same name (case-insensitive) cannot be added twice.
 * If a category is specified, that category **must already exist** (see `addCategory`).
 
@@ -110,6 +111,7 @@ Updates the description of an existing item in the inventory.
   ```text
   Item description updated: [BEVERAGES] Sprite Bottle (Quantity: 50, Price: $1.50)
   ```
+* Description cannot contain single quotes (`'`).
   ### 4. Editing an Item's Price: `editPrice`
 Updates the price of an existing item in the inventory.
 
@@ -119,6 +121,7 @@ Updates the price of an existing item in the inventory.
   ```text
   Item price updated: [BEVERAGES] Coke Can (Quantity: 50, Price: $2.50)
   ```
+* Price can be given with any number of decimal places, but it is rounded to 2 decimal places internally. The rounded value must be at least `0.01` (e.g. `p/0.001` is rejected, but `p/0.005` is accepted as it rounds to `0.01`).
 
 ### 5. Editing an Item's Quantity: `editQuantity`
 Updates the quantity of an existing item in the inventory.
@@ -257,6 +260,8 @@ Supported fields and value types:
   ```
 
 > **Note:** Description values must always be wrapped in single quotes. Quantity values must be whole numbers — decimals are not accepted. Price values accept up to 2 decimal places (e.g. `1.50`); values with more than 2 decimal places (e.g. `1.999`) are rejected. Comparison is done on the price rounded to 2 decimal places.
+>
+> **Description comparisons (`<` and `>`) are lexicographic (alphabetical order).** For example, `description < 'Milo'` matches any item whose description comes before `'Milo'` alphabetically — so `'Coke Can'` would match but `'Sprite Bottle'` would not. This is the same ordering used in a dictionary: comparison proceeds character by character from left to right, using each character's Unicode value. Uppercase letters come before lowercase letters (e.g. `'Apple'` < `'apple'`).
 
 ### 13. Recording a Transaction: `transact`
 Updates the stock quantity after a sale or restock.

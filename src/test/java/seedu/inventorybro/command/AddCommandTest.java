@@ -92,6 +92,15 @@ class AddCommandTest {
     }
 
     /**
+     * Verifies that a name containing a single quote is rejected.
+     */
+    @Test
+    void execute_nameWithSingleQuote_throwsIllegalArgument() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new AddCommand("addItem d/Coke's Can q/10 p/1.50 c/Others").execute(items, categories, ui));
+    }
+
+    /**
      * Verifies that passing null as input to the constructor triggers an AssertionError.
      */
     @Test

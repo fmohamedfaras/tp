@@ -6,6 +6,7 @@ hide circle
 
 interface Command <<interface>> {
     + execute(ItemList items, CategoryList categories, Ui ui): void
+    + execute(items: ItemList, categories: CategoryList, ui: Ui): void
 }
 
 class FilterCommand {
@@ -21,7 +22,7 @@ class FilterCommand {
 }
 
 interface Validator <<interface>> {
-    + validate(ItemList items, CategoryList categories): void
+    + validate(items: ItemList, categories: CategoryList): void
 }
 
 class FilterCommandValidator {
@@ -31,7 +32,7 @@ class FilterCommandValidator {
     - NONNEG_PRICE_PATTERN: Pattern
     - input: String
     + FilterCommandValidator(input: String)
-    + validate(ItemList items, CategoryList categories): void
+    + validate(items: ItemList, categories: CategoryList): void
     - validateGaps(logic: String, matchRanges: List): void
     - validatePredicates(predicates: List): void
     - validateSinglePredicate(pred: String[]): void
@@ -44,6 +45,9 @@ class Item {
     + getDescription(): String
     + getQuantity(): int
     + getPrice(): double
+}
+
+class CategoryList {
 }
 
 class ItemList {

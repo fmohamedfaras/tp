@@ -58,14 +58,26 @@ public class AddCommandValidator implements Validator {
             throw new IllegalArgumentException("Item name cannot be empty.");
         }
 
+        if (name.contains("'")) {
+            throw new IllegalArgumentException("Item description cannot contain single quotes (').");
+        }
+
         new DuplicateItemValidator(name).validate(items, categories);
 
-        int quantity = Integer.parseInt(matcher.group(2));
+        int quantity;
+        try {
+            quantity = Integer.parseInt(matcher.group(2));
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Quantity is too large to be processed by the system.");
+        }
         if (quantity < 0) {
             throw new IllegalArgumentException("Quantity cannot be negative.");
         }
 
         double price = Double.parseDouble(matcher.group(3));
+        if (Double.isInfinite(price)) {
+            throw new IllegalArgumentException("Price is too large to be processed by the system.");
+        }
         if (Math.round(price * 100) <= 0) {
             throw new IllegalArgumentException("Price must be at least 0.01 when rounded");
         }

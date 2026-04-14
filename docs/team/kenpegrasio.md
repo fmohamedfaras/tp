@@ -18,13 +18,17 @@ InventoryBRO is a CLI-based inventory management application for small business 
 
 #### 1. Add Item Command (`addItem`)
 
-- **What it does:** Allows the user to add a new item to the inventory with a name, an initial quantity, and a mandatory price using the format `addItem d/NAME q/INITIAL_QUANTITY p/PRICE`.
+- **What it does:** Allows the user to add a new item to the inventory with a name, an initial quantity, a mandatory price, and a category using the format `addItem d/NAME q/INITIAL_QUANTITY p/PRICE c/CATEGORY`.
 - **Justification:** This is the core create operation of the inventory — without it, there is nothing to manage. Price was made mandatory so every item has a meaningful value from the moment it is created.
 - **Highlights:**
-  - Format is enforced via a strict regex (`^addItem d/(.*?) q/(-?\d+) p/(-?\d+(\.\d+)?)$`) shared between `AddCommand` and `AddCommandValidator`. Negative numbers are intentionally allowed through the pattern so that specific, actionable error messages ("Quantity cannot be negative." / "Price must be at least 0.01 when rounded") are shown instead of the generic format error.
+  - Format is enforced via a strict regex (`^addItem\s+d/(.+?)\s+q/(\d+)\s+p/(\d+(\.\d+)?)\s+c/(.+)$`) shared between `AddCommand` and `AddCommandValidator`. Large-but-valid digit strings are passed through the pattern so that specific, actionable error messages are shown instead of the generic format error.
+  - Validation checks are applied in a deliberate order: duplicate prefix flag → empty name → single-quote in name → duplicate item → quantity integer overflow → negative quantity → price double overflow → price rounding → category existence.
   - Price validation uses `Math.round(price * 100) <= 0` to reject values like `0.001` that display as `$0.00`, giving the user a clear display-aware error rather than silently accepting a misleading price.
+  - Integer overflow on quantity is caught explicitly via `NumberFormatException` (thrown by `Integer.parseInt` when the value exceeds `Integer.MAX_VALUE`) and reported as `"Quantity is too large to be processed by the system."`.
+  - Double overflow on price is detected via `Double.isInfinite()` (returned by `Double.parseDouble` when the value exceeds `Double.MAX_VALUE`) and reported as `"Price is too large to be processed by the system."`.
+  - Name cannot be empty, whitespace-only, or contain single quotes (`'`) — the trimmed name is checked after regex match. Single quotes are forbidden because `filterItem` uses them as value delimiters for description predicates, which would cause parsing bugs.
+  - The specified category must already exist in `CategoryList`; if not, an error directs the user to create it first via `addCategory`.
   - Quantity must be 0 or greater (not strictly positive), allowing items to be pre-registered before stock arrives.
-  - Name cannot be empty or whitespace-only — the trimmed name is checked after regex match.
   - Duplicate name detection is handled by `DuplicateItemValidator`, which performs a case-insensitive comparison against all existing items. This prevents silent data corruption from near-identical names like `Apple` and `apple`.
   - Validation is fully separated from execution following the project's SLAP principle: `AddCommandValidator` throws `IllegalArgumentException` before any mutation occurs.
 - **Files:** `AddCommand.java`, `AddCommandValidator.java`, `AddCommandTest.java`, `AddCommandValidatorTest.java`
@@ -76,7 +80,7 @@ InventoryBRO is a CLI-based inventory management application for small business 
 I authored the following sections of the User Guide:
 
 - **Section 1 — Adding an Item (`addItem`):** format, constraints, and example output
-- **Section 8 — Filtering Items (`filterItem`):** format, operator reference table, and five worked examples (single predicate, AND, OR, integer price filter, decimal price filter); updated to reflect that price accepts up to 2 decimal places
+- **Section 12 — Filtering Items (`filterItem`):** format, operator reference table, and five worked examples (single predicate, AND, OR, integer price filter, decimal price filter); updated to reflect that price accepts up to 2 decimal places; added note on lexicographic ordering for description `<`/`>`
 - **Command Autocompletion section:** how tab-completion works, the behavior table, and the limitations note (JAR-only, keyword-only, case-insensitive)
 - **Typo Detection section:** explanation of the QWERTY distance model, the suggestion behavior table, and the note that it runs automatically
 
@@ -123,18 +127,19 @@ Raised the following bugs and improvement requests to help teammates improve the
 
 Adds a new item to the inventory.
 
-**Format:** `addItem d/NAME q/INITIAL_QUANTITY p/PRICE`
+**Format:** `addItem d/NAME q/INITIAL_QUANTITY p/PRICE c/CATEGORY`
 
 | Parameter | Meaning |
 |---|---|
-| `NAME` | The item's display name. Must not be empty and must not already exist in the inventory (case-insensitive). |
-| `INITIAL_QUANTITY` | A non-negative integer (0 or greater) representing the starting stock level. |
-| `PRICE` | A decimal price of at least `0.01` when rounded to 2 decimal places (e.g. `0.001` is rejected). |
+| `NAME` | The item's display name. Must not be empty, must not contain single quotes (`'`), and must not already exist in the inventory (case-insensitive). |
+| `INITIAL_QUANTITY` | A non-negative integer (0 or greater) representing the starting stock level. Must not exceed `Integer.MAX_VALUE`. |
+| `PRICE` | A decimal price of at least `0.01` when rounded to 2 decimal places (e.g. `0.001` is rejected). Must not exceed `Double.MAX_VALUE`. |
+| `CATEGORY` | The category to assign the item to. The category must already exist (use `addCategory` to create it first). |
 
-**Example:** `addItem d/Coke Can q/50 p/1.50`
+**Example:** `addItem d/Coke Can q/50 p/1.50 c/Beverages`
 
 ```
-Added: Coke Can (Quantity: 50, Price: $1.50)
+Added: [BEVERAGES] Coke Can (Quantity: 50, Price: $1.50)
 ```
 
 ---
@@ -191,10 +196,11 @@ The `Autocompleter` derives its word list from `CommandWord` — the single sour
 
 ### Typo Detection
 
-When a user enters an unrecognised command, `InventoryBro.handleUnknownCommand()` extracts the first word and calls `TypoDetector.findClosestMatch()`.
+When a user enters an unrecognised command, `Parser.handleUnknownCommand()` extracts the first word and calls `TypoDetector.findClosestMatch()`.
 
 **Algorithm:**
 - Computes a **QWERTY-weighted edit distance** for each known command using dynamic programming (Wagner–Fischer). The substitution cost between two characters is their Manhattan distance on a standard QWERTY keyboard layout, so physically adjacent key swaps cost less than arbitrary substitutions.
+- The set of known commands (`KNOWN_COMMANDS`) is built at class-load time from `CommandWord.values()` — the single source of truth — so it always reflects the current set of supported commands with no hard-coded list to maintain.
 - Selects the command with the lowest weighted distance.
 - Applies a threshold (`0.2 × max(inputLength, commandLength)`): only suggests if the best distance is below this threshold, preventing false positives for completely unrelated input.
 

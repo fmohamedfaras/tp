@@ -18,7 +18,7 @@ box "UI" #LightGreen
 participant "ui:Ui" as Ui
 end box
 
--> Parser : parse("filterItem quantity > 10", items, ui)
+-> Parser : parse("filterItem quantity > 10", items, categories, ui)
 activate Parser
 
 create FilterCommand
@@ -27,7 +27,7 @@ activate FilterCommand
 FilterCommand --> Parser : d
 deactivate FilterCommand
 
-Parser -> FilterCommand : execute(ItemList items, CategoryList categories, Ui ui)
+Parser -> FilterCommand : execute(items, categories, ui)
 activate FilterCommand
 
 create FilterCommandValidator

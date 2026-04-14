@@ -13,7 +13,7 @@ box "UI" #LightGreen
 participant "ui:Ui" as Ui
 end box
 
--> Parser : parse("adItem d/Apple q/5", items, ui)
+-> Parser : parse("adItem d/Apple q/5", items, categories, ui, transactionStorage)
 activate Parser
 
 Parser -> Parser : parseCommand("adItem d/Apple q/5")

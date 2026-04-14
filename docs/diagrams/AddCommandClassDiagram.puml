@@ -35,11 +35,22 @@ class Item {
     # description: String
     # quantity: int
     # price: double
+    # category: Category
     + Item(description: String, quantity: int, price: double, category: Category)
     + getDescription(): String
     + getQuantity(): int
     + getPrice(): double
     + getCategory(): Category
+}
+
+class Category {
+    - name: String
+    + getName(): String
+}
+
+class CategoryList {
+    + getCategory(name: String): Category
+    + containsCategory(name: String): boolean
 }
 
 class ItemList {
@@ -67,11 +78,14 @@ Validator <|.. DuplicateItemValidator
 
 AddCommand ..> AddCommandValidator : <<creates>>
 AddCommand ..> Item : <<creates>>
+AddCommand ..> CategoryList : reads >
 AddCommand ..> ItemList : modifies >
 AddCommand ..> CategoryList : reads >
 AddCommand ..> Ui : <<uses>>
 AddCommandValidator ..> DuplicateItemValidator : <<creates>>
+AddCommandValidator ..> CategoryList : reads >
 DuplicateItemValidator ..> ItemList : reads >
 Item --> "1" Category : belongs to >
+Item --> Category
 
 @enduml

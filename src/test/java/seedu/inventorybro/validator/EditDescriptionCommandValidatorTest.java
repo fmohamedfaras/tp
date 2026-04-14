@@ -101,4 +101,11 @@ class EditDescriptionCommandValidatorTest {
                 new EditDescriptionCommandValidator("editDescription 1 d/   ").validate(items, categories));
         assertEquals("Item description cannot be empty.", ex.getMessage());
     }
+
+    @Test
+    void validate_descriptionWithSingleQuote_throwsSingleQuoteError() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
+                new EditDescriptionCommandValidator("editDescription 1 d/Coke's Can").validate(items, categories));
+        assertEquals("Item description cannot contain single quotes (').", ex.getMessage());
+    }
 }

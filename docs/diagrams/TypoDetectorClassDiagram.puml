@@ -6,10 +6,11 @@ hide circle
 
 class Parser {
     - TYPO_DETECTOR: TypoDetector
-    + {static} parse(line: String, items: ItemList, ui: Ui): void
-    - {static} parseCommand(line: String): Command
+    + {static} parse(line: String, items: ItemList, categories: CategoryList, ui: Ui, transactionStorage: TransactionStorage): void
+    - {static} parseCommand(line: String, transactionStorage: TransactionStorage): Command
     - {static} handleUnknownCommand(line: String, ui: Ui): void
     - {static} extractFirstWord(line: String): String
+    - {static} normalize(line: String, canonicalWord: String): String
 }
 
 class TypoDetector {

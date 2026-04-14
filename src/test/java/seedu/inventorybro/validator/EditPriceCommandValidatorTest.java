@@ -38,9 +38,17 @@ class EditPriceCommandValidatorTest {
     }
 
     @Test
-    void validate_validZeroPrice_doesNotThrow() {
-        assertDoesNotThrow(() ->
+    void validate_zeroPrice_throwsTooSmallError() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
                 new EditPriceCommandValidator("editPrice 2 p/0.0").validate(items, categories));
+        assertEquals("Price must be at least 0.01 when rounded.", ex.getMessage());
+    }
+
+    @Test
+    void validate_priceTooSmallToRound_throwsTooSmallError() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
+                new EditPriceCommandValidator("editPrice 1 p/0.001").validate(items, categories));
+        assertEquals("Price must be at least 0.01 when rounded.", ex.getMessage());
     }
 
     @Test
@@ -94,10 +102,10 @@ class EditPriceCommandValidatorTest {
     }
 
     @Test
-    void validate_negativePrice_throwsNegativePriceError() {
+    void validate_negativePrice_throwsTooSmallError() {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
                 new EditPriceCommandValidator("editPrice 1 p/-1.00").validate(items, categories));
-        assertEquals("Price cannot be negative.", ex.getMessage());
+        assertEquals("Price must be at least 0.01 when rounded.", ex.getMessage());
     }
 
     @Test

@@ -96,10 +96,22 @@ The add mechanism is handled by the `AddCommand` class. It validates the input, 
 5. `AddCommandValidator` applies the regex `^addItem d/(.*?) q/(-?\d+) p/(-?\d+(\.\d+)?)$` to the input. If it does not match, it throws `IllegalArgumentException` with `"Invalid addItem format! Use: addItem d/NAME q/INITIAL_QUANTITY p/PRICE"`. If the pattern matches, the following checks are applied in order:
    - If the parsed quantity is negative, throws `IllegalArgumentException` with `"Quantity cannot be negative."`.
    - If `Math.round(price * 100) <= 0` (i.e. the price rounds to `$0.00`), throws `IllegalArgumentException` with `"Price must be at least 0.01 when rounded"`.
+1. The user inputs `addItem d/Apple q/10 p/1.50 c/Others`.
+2. `Parser` matches the `addItem` prefix and instantiates a new `AddCommand` with the raw input string.
+3. `Parser` calls `execute(items, categories, ui)` on the `AddCommand`.
+4. `AddCommand.execute()` immediately creates a new `AddCommandValidator` and calls `validate(items, categories)`.
+5. `AddCommandValidator` applies the regex `^addItem\s+d/(.+?)\s+q/(\d+)\s+p/(\d+(\.\d+)?)\s+c/(.+)$` to the input. If it does not match, it throws `IllegalArgumentException` with `"Invalid addItem format! Use: addItem d/NAME q/INITIAL_QUANTITY p/PRICE c/CATEGORY"`. If the pattern matches, the following checks are applied in order:
+   - If the name (group 1, trimmed) contains `d/`, `q/`, or `p/`, throws `IllegalArgumentException` with `"Duplicate parameter detected."`.
    - If the trimmed name is empty, throws `IllegalArgumentException` with `"Item name cannot be empty."`.
+   - If the name contains a single quote (`'`), throws `IllegalArgumentException` with `"Item description cannot contain single quotes (')"`.
    - Delegates to `DuplicateItemValidator`, which iterates the `ItemList` performing a case-insensitive name comparison; a match throws `IllegalArgumentException` with `"An item named '<NAME>' already exists in the inventory."`.
-6. If validation passes, `AddCommand` re-applies the same regex to extract the trimmed name, quantity (parsed as `int`), and price (parsed as `double`).
-7. A new `Item` is constructed via `new Item(name, quantity, price)` and appended to the `ItemList` via `items.addItem(newItem)`.
+   - Attempts `Integer.parseInt` on the quantity string; if it throws `NumberFormatException` (value exceeds `Integer.MAX_VALUE`), throws `IllegalArgumentException` with `"Quantity is too large to be processed by the system."`.
+   - If the parsed quantity is negative, throws `IllegalArgumentException` with `"Quantity cannot be negative."`.
+   - Calls `Double.parseDouble` on the price string; if the result is `Infinity` (value exceeds `Double.MAX_VALUE`), throws `IllegalArgumentException` with `"Price is too large to be processed by the system."`.
+   - If `Math.round(price * 100) <= 0` (i.e. the price rounds to `$0.00`), throws `IllegalArgumentException` with `"Price must be at least 0.01 when rounded"`.
+   - If the category name (group 5, trimmed) does not exist in `CategoryList`, throws `IllegalArgumentException` with `"The category [NAME] does not exist!"`.
+6. If validation passes, `AddCommand` re-applies the same regex to extract the trimmed name, quantity (parsed as `int`), price (parsed as `double`), and category name.
+7. The category is retrieved via `categories.getCategory(categoryName)`. A new `Item` is constructed via `new Item(name, quantity, price, targetCategory)` and appended to the `ItemList` via `items.addItem(newItem)`.
 8. `ui.showMessage("Added: " + newItem)` confirms the addition to the user.
 
 **Figure 5: Add Command Sequence Diagram**
@@ -470,7 +482,7 @@ When a user enters an unknown command, InventoryBRO attempts to detect whether i
 2. `Parser.parseCommand()` evaluates the first word against all known command keywords in the switch statement and returns `null` because no branch matches.
 3. `Parser.parse()` detects the `null` result and calls `handleUnknownCommand(line, ui)`.
 4. `handleUnknownCommand()` extracts the first word from the raw input and calls `TYPO_DETECTOR.findClosestMatch(firstWord)`.
-5. `TypoDetector.findClosestMatch()` converts the input to lowercase and iterates over `KNOWN_COMMANDS` (`addItem`, `deleteItem`, `editDescription`, `editPrice`, `editQuantity`, `transact`, `filterItem`, `showHistory`, `listItems`, `findItem`, `help`, `exit`). For each known command it calls `calculateWeightedEditDistance()`, which uses dynamic programming with QWERTY keyboard Manhattan distance as the substitution cost: adjacent keys on the same row cost less than keys far apart, encouraging the algorithm to prefer swaps of physically close keys over arbitrary substitutions.
+5. `TypoDetector.findClosestMatch()` converts the input to lowercase and iterates over `KNOWN_COMMANDS` (built at class-load time from `CommandWord.values()`, so it always reflects the current set of supported commands — no hard-coded list). For each known command it calls `calculateWeightedEditDistance()`, which uses dynamic programming with QWERTY keyboard Manhattan distance as the substitution cost: adjacent keys on the same row cost less than keys far apart, encouraging the algorithm to prefer swaps of physically close keys over arbitrary substitutions.
 6. After scoring all commands, `findClosestMatch()` calls `isBelowTypoThreshold()` on the best candidate. The threshold is `TYPO_THRESHOLD_FACTOR (0.2) * max(inputLength, commandLength)`. If the best distance is below this threshold the command name is returned as a non-empty `Optional`; otherwise an empty `Optional` is returned.
 7. Back in `handleUnknownCommand()`, if the `Optional` is present, `ui.showMessage("Do you mean " + suggestion + "?")` prompts the user with the suggested correction. If no command qualifies, `ui.showError(...)` displays the full list of valid commands.
 
@@ -546,6 +558,9 @@ accuracy (clear, structured output)
 * **Index** - The 1-based position of an item in the inventory list.
 * **Transaction** - A change in item quantity, either positive (restock) or negative (sale).
 * **CLI** - Command Line Interface; a text-based way to interact with the application.
+* **Trie** - A tree-shaped data structure where each node represents a single character. Words are stored by tracing a path from the root through one node per character; nodes marked as end-of-word indicate a complete word. Used in InventoryBRO to enable O(k) prefix lookups for tab-autocompletion, where k is the length of the typed prefix.
+* **Manhattan Distance** - The distance between two points measured as the sum of the absolute differences of their coordinates (|row₁ − row₂| + |col₁ − col₂|), named after the grid-like street layout of Manhattan. Used in InventoryBRO's typo detector to measure how far apart two keys are on a QWERTY keyboard, so that adjacent-key substitutions (e.g. `s` → `d`) are penalised less than distant-key substitutions (e.g. `s` → `p`).
+* **Predicate** - A field–operator–value condition used in `filterItem` to test an item (e.g. `quantity > 10`). A predicate evaluates to true or false for each item. Multiple predicates can be combined with `AND`/`OR` to form a compound filter expression.
 
 ---
 

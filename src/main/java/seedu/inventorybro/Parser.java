@@ -1,6 +1,8 @@
 package seedu.inventorybro;
 
+import java.util.Arrays;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import seedu.inventorybro.command.AddCommand;
 import seedu.inventorybro.command.AddCategoryCommand;
@@ -97,9 +99,10 @@ public class Parser {
         if (suggestion.isPresent()) {
             ui.showMessage("Do you mean " + suggestion.get() + "?");
         } else {
-            ui.showError("Invalid command, please try addCategory, deleteCategory, " +
-                    "listCategories, addItem, deleteItem, editDescription, editPrice," +
-                    " editQuantity, transact, showHistory, listItems, help, exit");
+            String validCommands = Arrays.stream(CommandWord.values())
+                    .map(CommandWord::getWord)
+                    .collect(Collectors.joining(", "));
+            ui.showError("Invalid command, please try " + validCommands);
         }
     }
 
