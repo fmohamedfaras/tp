@@ -199,6 +199,8 @@ Supported fields and value types:
   ```
 
 > **Note:** Description values must always be wrapped in single quotes. Quantity values must be whole numbers — decimals are not accepted. Price values accept up to 2 decimal places (e.g. `1.50`); values with more than 2 decimal places (e.g. `1.999`) are rejected. Comparison is done on the price rounded to 2 decimal places.
+>
+> **Description comparisons (`<` and `>`) are lexicographic (alphabetical order).** For example, `description < 'Milo'` matches any item whose description comes before `'Milo'` alphabetically — so `'Coke Can'` would match but `'Sprite Bottle'` would not. This is the same ordering used in a dictionary: comparison proceeds character by character from left to right, using each character's Unicode value. Uppercase letters come before lowercase letters (e.g. `'Apple'` < `'apple'`).
 
 ### 9. Recording a Transaction: `transact`
 Updates the stock quantity after a sale or restock.
